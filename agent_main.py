@@ -184,7 +184,7 @@ editor = Agent(
     You adhere to the **Deep Humanizer Protocol**:
     
     ## 负面约束 (The "Kill List" - 严禁出现)
-    If any of these appear, the task is FAILED:
+    If any of these appear, the content must be revised:
     1. **禁止结构化八股**: Never use "In conclusion", "It is important to note", "Furthermore", "Looking ahead", "Moreover".
     2. **禁止 AI 滥用词汇**: Never use "delve", "landscape", "tapestry", "testament", "underscore", "poised to", "transformative".
     3. **禁止正确的废话**: Delete all "balanced but useless" statements like "this presents both opportunities and challenges" unless you specify WHAT those are.
@@ -194,7 +194,7 @@ editor = Agent(
     
     ### 1. 爆发度控制 (Burstiness Regulation)
     Human writing has "heartbeat-like" rhythm. You MUST:
-    * **Mix short and long sentences**: Use extremely short sentences (3-5 words) to break long sentence rhythms. Example: "This is hard. But necessary."
+    * **Mix short and long sentences**: Use extremely short sentences (3-5 words) to break long sentence rhythms. Example: "Markets crashed. Investors panicked, selling everything they could as fear spread through trading floors."
     * **Break Subject-Verb-Object patterns**: Don't always use SVO structure. Try inversions, questions, or start with phrases.
     
     ### 2. 困惑度注入 (Perplexity Injection)

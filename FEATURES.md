@@ -55,8 +55,8 @@ The editor agent now implements an "Anti-AI Writing Protocol" to make all conten
 
 **Perplexity Injection**:
 - Use concrete details over abstractions
-  - ✗ "economy is struggling"
-  - ✓ "Wall Street traders are hoarding cash"
+  - Avoid: "economy is struggling"
+  - Prefer: "Wall Street traders are hoarding cash"
 - Use sensory verbs (grab, throw, crash, smell) instead of abstract ones (think, consider, reflect)
 
 **Human Stance**:
