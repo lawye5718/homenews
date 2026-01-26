@@ -98,6 +98,14 @@ TBD
 
 1. **NVIDIA_API_KEY**: NVIDIA API密钥 (从 build.nvidia.com 获取)
 2. **SERPER_API_KEY**: Serper.dev API密钥
+3. **DEEPSEEK_API_KEY**: DeepSeek API密钥 (可选，用于第三备用模型)
+
+**模型故障转移机制**：
+- 主模型: `deepseek-ai/deepseek-v3.2` (NVIDIA API)
+- 第二备用: `nvidia/llama-3.3-nemotron-super-49b-v1.5` (NVIDIA API)
+- 第三备用: `deepseek-chat` (DeepSeek 官方 API)
+
+系统会在主模型失败时自动切换到备用模型，确保服务稳定性。
 
 ### 部署指南
 
