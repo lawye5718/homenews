@@ -14,7 +14,7 @@ nvidia_llm = LLM(
     api_key=os.environ.get("NVIDIA_API_KEY"),
     temperature=0.7,
     top_p=0.95,
-    max_tokens=8192,
+    max_tokens=32000,  # Increased to support longer, detailed outputs
     stream=True,
     timeout=600
 )
@@ -27,7 +27,7 @@ deepseek_llm = LLM(
     api_key=os.environ.get("DEEPSEEK_API_KEY"),
     temperature=0.7,
     top_p=0.95,
-    max_tokens=8192,
+    max_tokens=32000,  # Increased to support longer, detailed outputs
     stream=True,
     timeout=600
 )
@@ -39,7 +39,7 @@ backup_llm = LLM(
     api_key=os.environ.get("NVIDIA_API_KEY"),
     temperature=0.7,
     top_p=0.95,
-    max_tokens=8192,
+    max_tokens=32000,  # Increased to support longer, detailed outputs
     stream=True,
     timeout=600
 )
@@ -82,7 +82,7 @@ HUMANIZER_PROTOCOL = """
 # 【Chinese Media Editor】 - Multi-source integration + Neutral objective tone
 china_scout = Agent(
     role='News Editor for Chinese Media',
-    goal='Select 5 newsworthy stories from Chinese-language sources with 3+ source verification',
+    goal='Select 5 newsworthy stories from Chinese-language sources with 3+ source verification and comprehensive 1000+ word summaries',
     backstory=f"""
     You are an experienced news editor with 10 years of editorial experience.
     
@@ -91,12 +91,15 @@ china_scout = Agent(
     2. Focus on substantive topics: employment, education, technology, and public welfare.
     3. Deep perspective: Look beyond trending topics to find meaningful stories.
     4. Multi-source integration: Each story must integrate at least 3 different perspectives.
+    5. **Comprehensive reporting**: Each news summary must be at least 1000 words with detailed analysis.
+    6. **Source documentation**: Include original URLs for every source cited (news articles, official documents, social media posts).
     
     Style Guidelines:
     - Maintain objective, neutral journalistic tone
     - Use factual, descriptive language
     - Focus on concrete events and developments
     - Avoid inflammatory or controversial terminology
+    - Always provide clickable source links
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -108,7 +111,7 @@ china_scout = Agent(
 # 【全球情报官】 - 强制英文源 + 多源整合
 global_scout = Agent(
     role='International News Analyst (English Sources)',
-    goal='Identify Top 5 Global events using ONLY English primary sources, with 3+ sources per story',
+    goal='Identify Top 5 Global events using ONLY English primary sources, with 3+ sources per story and comprehensive 1000+ word analysis',
     backstory=f"""
     You strictly adhere to English-language primary sources.
     Your Logic:
@@ -116,6 +119,8 @@ global_scout = Agent(
     2. Geopolitics: Focus on strategic implications and factual developments.
     3. CRITICAL: You MUST retain the original English Headlines to avoid translation loss.
     4. Multi-Source: Each story must synthesize 3+ reputable sources (Reuters, Bloomberg, NYT, Nature, Foreign Affairs, Stratechery).
+    5. **Comprehensive reporting**: Each news summary must be at least 1000 words with detailed analysis and context.
+    6. **Source documentation**: Include original URLs for every source cited (news articles, research papers, analysis pieces).
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -127,13 +132,15 @@ global_scout = Agent(
 # 【法律情报官】 - 多源整合
 legal_scout = Agent(
     role='Global Legal News Curator',
-    goal='Identify 5 landmark legal events (SCOTUS, EU CJEU, China SPC) with multi-source verification',
+    goal='Identify 5 landmark legal events (SCOTUS, EU CJEU, China SPC) with multi-source verification and comprehensive 1000+ word legal analysis',
     backstory=f"""
     Focus on "Hard Law" developments:
     1. Landmark Rulings: Supreme Court decisions that change precedent.
     2. Major Legislation: EU AI Act, GDPR, Antitrust laws.
     3. Corporate Litigation: Significant Big Tech lawsuits.
     4. Multi-Source: Each legal development must include court documents, expert commentary, and news coverage.
+    5. **Comprehensive reporting**: Each legal news summary must be at least 1000 words with detailed legal analysis.
+    6. **Source documentation**: Include original URLs for court documents, legislation texts, expert analyses, and news articles.
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -145,7 +152,7 @@ legal_scout = Agent(
 # 【健康与运动新闻情报官】 - 新增：科学期刊来源
 health_sports_scout = Agent(
     role='Health & Sports Science Reporter',
-    goal='Identify Top 5 health and sports science news from peer-reviewed sources',
+    goal='Identify Top 5 health and sports science news from peer-reviewed sources with comprehensive 1000+ word scientific summaries',
     backstory=f"""
     You are a science journalist specializing in health and sports research.
     Your priority sources (in order):
@@ -160,6 +167,8 @@ health_sports_scout = Agent(
     - Prioritize studies with large sample sizes and robust methodology
     - Include both breaking research and emerging trends
     - Avoid sensationalized health claims without scientific backing
+    - **Comprehensive reporting**: Each news summary must be at least 1000 words with detailed scientific background and analysis
+    - **Source documentation**: Include original URLs for journal articles, research papers, and scientific publications
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -171,17 +180,24 @@ health_sports_scout = Agent(
 # 【健康分析师】 - 新增：深度分析报告
 health_analyst = Agent(
     role='Health Science Analyst',
-    goal='Generate 300-500 word deep analysis reports for top 3 health/sports stories',
+    goal='Generate comprehensive 5000+ word deep analysis reports for top 3 health/sports stories',
     backstory=f"""
-    You are an expert science communicator who makes complex research accessible.
+    You are an expert science communicator who makes complex research accessible through detailed, comprehensive analysis.
     
-    For each of the Top 3 health/sports stories, create a comprehensive analysis including:
-    1. **Background**: Scientific context with concrete examples
-    2. **Methods**: Research methodology explained in accessible language
-    3. **Findings**: Key discoveries with specific data points ("subjects ran 15% faster" not "performance improved")
-    4. **Implications**: Impact on public health, sports, or fitness with real-world applications
-    5. **Practical Applications**: Actionable advice for readers
-    6. **Limitations**: Caveats and areas for further research
+    For each of the Top 3 health/sports stories, create a comprehensive 5000+ word analysis including:
+    1. **Executive Summary**: Overview of significance with engaging prose
+    2. **Background & Context**: Historical and scientific context with concrete examples
+    3. **Methodology**: Research design and methods explained in accessible yet thorough detail
+    4. **Findings & Results**: Key discoveries with specific data points, statistical analysis ("subjects ran 15% faster" not "performance improved")
+    5. **Scientific Implications**: Impact on scientific understanding and future research directions
+    6. **Practical Applications**: Detailed actionable advice for readers with real-world applications
+    7. **Critical Analysis**: Comprehensive evaluation of strengths, limitations, and caveats
+    8. **Conclusion**: Summary and future directions
+    
+    **Critical Requirements**:
+    - Minimum 5000 words per analysis report
+    - Include ALL original source URLs (research papers, journals, related studies)
+    - Provide comprehensive, detailed analysis - not superficial summaries
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -193,7 +209,7 @@ health_analyst = Agent(
 # 【法律学者】 - 新增：法律评论文章分析
 legal_scholar = Agent(
     role='Comparative Law Scholar',
-    goal='Analyze law review articles from top US law schools related to current US-China hot topics',
+    goal='Analyze law review articles from top US law schools with 5000+ word comprehensive analyses',
     backstory=f"""
     You are a comparative law expert specializing in US-China legal issues.
     
@@ -204,12 +220,19 @@ legal_scholar = Agent(
        - Columbia Law Review, University of Chicago Law Review, NYU Law Review
        - Penn Law Review, Michigan Law Review, Virginia Law Review, Berkeley Law Review
     3. Select the 3 most relevant and recent articles
-    4. For each article, generate an 800-1000 word analysis:
-       - Article Overview (200 words): Thesis with engaging, concrete language
-       - Legal Framework (150 words): Legal doctrines with real-world examples
-       - Key Arguments (200 words): Specific cases and implications
-       - Connection to Hot Topics (150 words): Relate to current events
-       - Practical Implications (100 words): Real-world legal consequences
+    4. For each article, generate a comprehensive 5000+ word analysis:
+       - Article Overview & Introduction (700-900 words): Thesis and context with engaging language
+       - Legal Framework & Doctrinal Background (900-1100 words): Legal doctrines with real-world examples
+       - Key Arguments & Analysis (1200-1500 words): Detailed breakdown with specific cases and implications
+       - Comparative Perspective (700-900 words): US-China legal comparison
+       - Connection to Hot Topics (700-900 words): Relate to current events with concrete details
+       - Practical & Policy Implications (600-800 words): Real-world legal consequences
+       - Critical Assessment (200-400 words): Evaluate strengths and weaknesses
+    
+    **Critical Requirements**:
+    - Minimum 5000 words per analysis report
+    - Include ALL original source URLs (law review articles, cases, statutes, related sources)
+    - Provide comprehensive, detailed legal analysis - not superficial summaries
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -221,15 +244,17 @@ legal_scholar = Agent(
 # 【深度研究员】 - 架构师（更新：整合5个板块）
 researcher = Agent(
     role='Chief Researcher & Architect',
-    goal='Synthesize all inputs into a cohesive, structured report with 5 sections',
+    goal='Synthesize all inputs into a cohesive, structured report with 5 sections, preserving all source URLs',
     backstory=f"""
     You are responsible for the structural integrity of the report.
     You ensure:
     1. All FIVE sections are present: China, Global, Legal News, Health/Sports, Legal Scholarship (Law Review Articles)
-    2. Data is accurate and sources are cited
+    2. Data is accurate and sources are cited with original URLs preserved
     3. English headlines are preserved for Global news
-    4. Deep analysis reports are properly integrated
-    5. Multi-source information is clearly presented
+    4. Deep analysis reports (5000+ words each) are properly integrated
+    5. Multi-source information is clearly presented with all source links
+    6. **Source URLs**: Preserve ALL original document URLs from all scouts and analysts
+    7. **Comprehensive content**: Ensure all 1000+ word summaries and 5000+ word analyses are complete
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -241,9 +266,9 @@ researcher = Agent(
 # 【主编】 - Humanizer (去 AI 味 & UI 设计) - 更新：五栏布局
 editor = Agent(
     role='Lead Editor & Humanizer (Anti-AI Style)',
-    goal='Generate a Daily Briefing with 5 sections that sounds 100% Human and looks stunning',
+    goal='Generate a Daily Briefing with 5 sections that sounds 100% Human with beautiful card-based UI and smooth animations',
     backstory=f"""
-    You are a veteran editor who hates "AI-sounding" text. 
+    You are a veteran editor who hates "AI-sounding" text and loves beautiful, user-friendly design.
     You adhere to the **Deep Humanizer Protocol**:
     
     1. **Kill the "AI Voice"**: 
@@ -257,20 +282,30 @@ editor = Agent(
     3. **Show, Don't Tell**: 
        - Instead of "The situation is tense", say "Diplomats slammed doors and refused to shake hands."
     
-    4. **UI/UX Design (Tailwind CSS)**:
-       - You act as a Frontend Engineer.
-       - Use Tailwind CSS via CDN.
+    4. **UI/UX Design (Tailwind CSS + Custom CSS)**:
+       - You act as a Frontend Engineer specializing in beautiful, modern web design.
+       - Use Tailwind CSS via CDN for rapid styling.
        - Font: 'Merriweather' (Serif) for headlines, 'Inter' (Sans) for body.
-       - Layout: Modern Bento Grid style with 5 sections. Dark/Professional theme.
-       - Responsive design: Desktop shows grid, mobile stacks vertically.
-       - Include collapsible sections for deep analysis content.
+       - **Card-Based Layout**: Every news item and analysis in its own card with:
+         * Subtle shadows and elegant hover effects (shadow-lg hover:shadow-xl)
+         * Smooth transitions and animations
+         * Rounded corners and clean spacing
+         * White/light cards on dark gradient backgrounds
+       - **Collapsible Groups**: Group related news with smooth expand/collapse animations
+       - **Responsive Design**: Perfect on desktop, tablet, and mobile
+       - Include custom CSS for smooth animations (fadeIn, slideDown, hover effects)
     
-    5. **Five Section Layout**:
-       - Section 1: Chinese-language News (中文新闻)
-       - Section 2: Global News (全球新闻)
-       - Section 3: Legal News (法律新闻)
-       - Section 4: Health & Sports News + Deep Analysis (健康与运动)
-       - Section 5: Legal Analysis & Law Review Articles (法律学术分析)
+    5. **Five Section Layout with Cards**:
+       - Section 1: Chinese-language News (中文新闻) - Blue gradient with white cards
+       - Section 2: Global News (全球新闻) - Purple gradient with white cards, **English Headlines** prominent
+       - Section 3: Legal News (法律新闻) - Indigo gradient with white cards
+       - Section 4: Health & Sports News + Deep Analysis (健康与运动) - Green gradient with expandable cards
+       - Section 5: Legal Analysis & Law Review Articles (法律学术分析) - Amber gradient with expandable cards
+    
+    6. **Source Links Display**:
+       - Display all source URLs as clickable badges/chips
+       - Use different colors for different source types (official, news, academic)
+       - Make links prominent and easy to click
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -286,8 +321,10 @@ task_china = Task(
     2. Sources: Major news outlets and reputable media platforms.
     3. Requirements: Focus on factual reporting, emphasize technology and public welfare topics.
     4. Multi-source integration: Each story must integrate at least 3 different source perspectives.
+    5. **Word count requirement**: Each news summary must be at least 1000 words, providing comprehensive detail.
+    6. **Source links required**: Include original document links (URLs) for each source cited.
     """,
-    expected_output="5 curated news stories from Chinese media, each with multi-source integration and source links.",
+    expected_output="5 curated news stories from Chinese media (1000+ words each), each with multi-source integration and source links.",
     agent=china_scout
 )
 
@@ -297,8 +334,10 @@ task_global = Task(
     2. Select 5 events with global structural impact.
     3. RETURN FORMAT: English Headline + Chinese Contextual Summary.
     4. Multi-Source: Each story must synthesize 3+ sources (Reuters, Bloomberg, NYT, Nature, etc).
+    5. **Word count requirement**: Each news summary must be at least 1000 words, providing comprehensive analysis.
+    6. **Source links required**: Include original document links (URLs) for each source cited.
     """,
-    expected_output="5 Global news items with English Titles and multi-source verification.",
+    expected_output="5 Global news items (1000+ words each) with English Titles and multi-source verification, including source URLs.",
     agent=global_scout
 )
 
@@ -307,8 +346,10 @@ task_legal = Task(
     Search for today's most significant court rulings or legislative drafts (US/EU/CN).
     Focus on IP, Antitrust, AI Regulation.
     Multi-Source: Each legal development must include court documents, expert commentary, and news coverage.
+    **Word count requirement**: Each legal news summary must be at least 1000 words, providing comprehensive legal analysis.
+    **Source links required**: Include original document links (URLs) - court documents, legislation, expert analysis, and news articles.
     """,
-    expected_output="5 Key Legal Updates with multi-source citations.",
+    expected_output="5 Key Legal Updates (1000+ words each) with multi-source citations and original document URLs.",
     agent=legal_scout
 )
 
@@ -323,8 +364,10 @@ task_health_sports = Task(
        - Exercise and fitness studies
        - Nutrition research
     4. Include the journal/source name, publication date, and key findings.
+    5. **Word count requirement**: Each news summary must be at least 1000 words, providing comprehensive scientific detail.
+    6. **Source links required**: Include original document links (URLs) - journal articles, research papers, and scientific publications.
     """,
-    expected_output="5 Health/Sports Science news items with source citations and key findings.",
+    expected_output="5 Health/Sports Science news items (1000+ words each) with source citations, key findings, and original document URLs.",
     agent=health_sports_scout
 )
 
@@ -332,18 +375,23 @@ task_health_sports = Task(
 task_health_analysis = Task(
     description="""
     Select the TOP 3 most impactful health/sports stories from the collected news.
-    For each of the 3 stories, generate a 300-500 word deep analysis report including:
+    For each of the 3 stories, generate a comprehensive in-depth analysis report of at least 5000 words including:
     
-    1. **Background** (50-80 words): Scientific context with concrete examples
-    2. **Methods** (40-60 words): Research methodology explained accessibly
-    3. **Findings** (80-120 words): Key discoveries with specific data points
-    4. **Implications** (60-80 words): Impact on public health/fitness
-    5. **Practical Applications** (50-80 words): Actionable advice for readers
-    6. **Limitations** (30-50 words): Caveats and further research needs
+    1. **Executive Summary** (500-700 words): Overview of the research and its significance
+    2. **Background & Context** (800-1000 words): Scientific context with concrete examples, historical perspective
+    3. **Methodology** (600-800 words): Research methodology explained in detail yet accessibly
+    4. **Findings & Results** (1200-1500 words): Key discoveries with specific data points, statistics, and analysis
+    5. **Scientific Implications** (600-800 words): Impact on scientific understanding and future research
+    6. **Practical Applications** (700-900 words): How people can use this information, actionable advice for readers
+    7. **Critical Analysis** (400-600 words): Strengths, limitations, caveats and areas for further research
+    8. **Conclusion** (200-300 words): Summary of key takeaways and future directions
+    
+    **Word count requirement**: Each analysis report must be at least 5000 words total.
+    **Source links required**: Include all original research paper URLs, journal links, and related references.
     
     IMPORTANT: Follow the Deep Humanizer Protocol. No AI clichés. Use concrete examples and varied sentence structure.
     """,
-    expected_output="3 in-depth analysis reports (300-500 words each) for top health/sports stories.",
+    expected_output="3 comprehensive in-depth analysis reports (5000+ words each) for top health/sports stories with all source URLs.",
     agent=health_analyst,
     context=[task_health_sports]
 )
@@ -360,16 +408,21 @@ task_legal_analysis = Task(
     
     Phase 3: Select the 3 most relevant and recent articles.
     
-    Phase 4: For each article, generate an 800-1000 word comprehensive analysis:
-    1. **Article Overview** (200 words): Summarize thesis with engaging, concrete language
-    2. **Legal Framework** (150 words): Explain legal doctrines using real-world examples
-    3. **Key Arguments** (200 words): Break down arguments with specific cases
-    4. **Connection to Hot Topics** (150 words): Relate to current events
-    5. **Practical Implications** (100 words): Real-world legal consequences
+    Phase 4: For each article, generate a comprehensive in-depth analysis of at least 5000 words:
+    1. **Article Overview & Introduction** (700-900 words): Summarize thesis with engaging, concrete language and context
+    2. **Legal Framework & Doctrinal Background** (900-1100 words): Explain legal doctrines, precedents, and theoretical foundations using real-world examples
+    3. **Key Arguments & Analysis** (1200-1500 words): Break down arguments in detail with specific cases, statutory analysis, and implications
+    4. **Comparative Perspective** (700-900 words): Compare US and China legal approaches if applicable
+    5. **Connection to Hot Topics** (700-900 words): Relate article to current events with concrete details and real-world examples
+    6. **Practical & Policy Implications** (600-800 words): Real-world legal consequences, policy recommendations
+    7. **Critical Assessment** (200-400 words): Strengths, weaknesses, gaps in the analysis
+    
+    **Word count requirement**: Each analysis report must be at least 5000 words total.
+    **Source links required**: Include original law review article URLs, case citations with links, and all referenced sources.
     
     IMPORTANT: Follow the Deep Humanizer Protocol. Technical precision with readable prose. Avoid jargon overload.
     """,
-    expected_output="Analysis of 3 law review articles (800-1000 words each) connected to current US-China topics.",
+    expected_output="Analysis of 3 law review articles (5000+ words each) connected to current US-China topics with all source URLs.",
     agent=legal_scholar,
     context=[task_china, task_global, task_legal]
 )
@@ -378,19 +431,21 @@ task_legal_analysis = Task(
 task_research = Task(
     description="""
     Compile ALL inputs from the 5 sections:
-    1. Chinese-language News (中文新闻)
-    2. Global News (全球新闻)
-    3. Legal News (法律新闻)
-    4. Health & Sports News + Deep Analysis (健康与运动)
-    5. Legal Analysis & Law Review Articles (法律学术分析)
+    1. Chinese-language News (中文新闻) - with 1000+ word summaries
+    2. Global News (全球新闻) - with 1000+ word summaries
+    3. Legal News (法律新闻) - with 1000+ word summaries
+    4. Health & Sports News + Deep Analysis (健康与运动) - with 1000+ word summaries and 5000+ word analyses
+    5. Legal Analysis & Law Review Articles (法律学术分析) - with 5000+ word analyses
     
     Verify that ALL FIVE SECTIONS exist with complete data.
     Ensure strict separation of content between sections.
     Add a "Key Takeaway" one-liner for every major news item.
-    Preserve all deep analysis reports in their entirety.
+    Preserve all deep analysis reports in their entirety (5000+ words each).
     Ensure English headlines are preserved for Global news.
+    **CRITICAL**: Preserve ALL original source URLs from all sections - news articles, research papers, court documents, law review articles, etc.
+    Format source URLs clearly so they can be displayed as clickable links in the final HTML.
     """,
-    expected_output="Master Report Markdown with all 5 sections and deep analysis reports.",
+    expected_output="Master Report Markdown with all 5 sections, complete analyses, and all source URLs preserved.",
     agent=researcher,
     context=[task_china, task_global, task_legal, task_health_sports, task_health_analysis, task_legal_analysis]
 )
@@ -406,29 +461,76 @@ task_publish = Task(
     1. Include `<script src="https://cdn.tailwindcss.com"></script>` in `<head>`.
     2. Import fonts: Google Fonts (Inter, Merriweather).
     3. Use `font-serif` for titles, `font-sans` for body.
+    4. Add smooth CSS transitions and animations for all interactive elements.
     
-    **Design Language**:
-    - **Header**: "Daily Insight" | {current_date} | Minimalist.
-    - **Layout**: 
-      - Use a **CSS Grid** (Bento Box style) for the news cards.
-      - **Five Section Layout**:
-        1. 中文新闻 (Chinese-language News) - Gradient blue theme
-        2. 全球新闻 (Global News) - Must display **English Headline** prominently
-        3. 法律新闻 (Legal News) - Gradient purple theme
-        4. 健康与运动 (Health & Sports) - Gradient green theme, with collapsible deep analysis
-        5. 法律学术分析 (Legal Analysis) - Gradient amber theme, with collapsible article analysis
-      - **Tags**: Use small pill-shaped tags for categories (e.g., "Tech", "Law", "Society", "Health", "Academic").
-      - **Collapsible Panels**: Use `<details>` and `<summary>` for deep analysis content to keep the page clean.
-      - **Responsive Design**: 
-        - Desktop: 2-column grid for Chinese/Global, then full-width sections
+    **Design Language - Card-Based Layout**:
+    - **Header**: "Daily Insight" | {current_date} | Minimalist with gradient background.
+    - **Layout Style**: 
+      - **Card-Based Design**: Each news item and analysis should be in its own distinct card with:
+        - Subtle shadow and hover effects (shadow-lg hover:shadow-xl transition-shadow)
+        - Rounded corners (rounded-xl)
+        - Clean padding and spacing
+        - White/light background on dark page for contrast
+      - **Responsive Grid Layout**:
+        - Desktop: Multi-column grid (2-3 columns) for news cards
         - Tablet: 2-column grid
         - Mobile: Single column stacked layout
-    - **Tone Check**: Ensure the summary text sounds human-written (punchy, avoiding AI clichés).
+      - **Five Section Layout**:
+        1. 中文新闻 (Chinese-language News) - Gradient blue theme with card layout
+        2. 全球新闻 (Global News) - Must display **English Headline** prominently in cards
+        3. 法律新闻 (Legal News) - Gradient purple theme with card layout
+        4. 健康与运动 (Health & Sports) - Gradient green theme with card layout
+        5. 法律学术分析 (Legal Analysis) - Gradient amber theme with card layout
+      
+    **Collapsible & Animation Features**:
+      - **Collapsible News Groups**: Group related news stories together with collapsible sections
+        - Use `<details>` and `<summary>` elements for native collapsible behavior
+        - Add CSS transitions for smooth expand/collapse animations
+        - Style summary with hover effects and indicator icons (▶/▼)
+      - **Expandable Analysis Cards**: Deep analysis content (5000+ words) should be collapsible
+        - Initially show only title and first 200 words
+        - "Read More" button to expand full content with smooth slide-down animation
+        - Add CSS for max-height transitions and opacity fading
+      - **Animation Effects**:
+        - Fade-in animation for cards on page load (use @keyframes fadeIn)
+        - Smooth height transitions for collapsible sections (transition: max-height 0.3s ease)
+        - Hover animations for cards (transform: translateY(-4px))
+        - Rotation animation for expand/collapse icons (transition: transform 0.2s)
+      
+    **UI/UX Details**:
+      - **Tags**: Use small pill-shaped tags for categories (e.g., "Tech", "Law", "Society", "Health", "Academic").
+      - **Source Links**: Display source URLs as clickable badges/chips at the bottom of each card
+      - **Typography**: 
+        - Headlines: Merriweather (serif), bold, larger size
+        - Body: Inter (sans), comfortable line-height (1.6-1.8)
+        - Analysis sections: Clear hierarchy with h3, h4 headings
+      - **Color Scheme**: 
+        - Dark/Professional theme with gradient backgrounds
+        - Light cards on dark background for readability
+        - Distinct gradient colors for each section (blue, purple, green, amber, etc.)
+      - **Spacing**: Generous padding and margins for readability (p-6, gap-4, space-y-4)
+      - **Tone Check**: Ensure the summary text sounds human-written (punchy, avoiding AI clichés).
+    
+    **Code Structure**:
+    Include these key CSS animations in a `<style>` tag:
+    ```css
+    @keyframes fadeIn {{
+      from {{ opacity: 0; transform: translateY(20px); }}
+      to {{ opacity: 1; transform: translateY(0); }}
+    }}
+    .card {{ animation: fadeIn 0.5s ease-out; }}
+    details[open] summary ~ * {{ animation: slideDown 0.3s ease; }}
+    @keyframes slideDown {{
+      from {{ opacity: 0; max-height: 0; }}
+      to {{ opacity: 1; max-height: 5000px; }}
+    }}
+    ```
     
     **Output**: 
     - ONLY the raw HTML code, starting with `<!DOCTYPE html>`.
+    - Complete, production-ready HTML with all animations and card-based styling.
     """,
-    expected_output="Final HTML String with 5 sections and responsive layout.",
+    expected_output="Final HTML String with 5 sections, card-based responsive layout, collapsible groups, and smooth animations.",
     agent=editor,
     context=[task_research]
 )
