@@ -17,8 +17,8 @@ nvidia_llm = LLM(
     max_tokens=8192,
     stream=True,
     timeout=600,
-    # DeepSeek-V3.2 的思维模式配置
-    thinking={"chat_template_kwargs": {"thinking": True}}
+    # DeepSeek-V3.2 的思维模式配置 (通过 extra_body 传递)
+    extra_body={"chat_template_kwargs": {"thinking": True}}
 )
 
 # --- 2. 初始化工具 ---
