@@ -59,6 +59,16 @@ global_scout = Agent(
     verbose=True
 )
 
+# 法律新闻情报官
+legal_scout = Agent(
+    role='国际法律新闻分析师',
+    goal='捕捉全球Top 5法律新闻热点',
+    backstory="你专注于重大法律事件，包括美国最高法院判决、中国及欧美热点涉法事件，寻找具有法律意义和社会影响力的案例。",
+    tools=[tool for tool in [search_tool, scrape_tool] if tool is not None],
+    llm=deepseek_llm,
+    verbose=True
+)
+
 # 深度研究员
 researcher = Agent(
     role='资深调查记者',
@@ -73,7 +83,7 @@ researcher = Agent(
 editor = Agent(
     role='数字新闻主编',
     goal='生成 HTML 单页报告',
-    backstory="你擅长HTML/CSS，能生成适配移动端的双栏布局新闻网页。",
+    backstory="你擅长HTML/CSS，能生成适配移动端的现代化响应式新闻网页，精通三栏布局和美观的UI设计。",
     llm=deepseek_llm,  # 使用配置好的LLM
     verbose=True
 )
@@ -91,17 +101,34 @@ task_global = Task(
     agent=global_scout
 )
 
+task_legal = Task(
+    description="""
+    搜索并列出今日全球5大法律新闻热点，重点关注：
+    1. 美国最高法院的重要判决
+    2. 中国的热点涉法事件
+    3. 欧洲的重大法律案件
+    含标题、来源、案件概要。
+    """,
+    expected_output="5个法律新闻热点列表",
+    agent=legal_scout
+)
+
 task_research = Task(
     description="""
-    对上述10个热点进行深度研究：
+    对上述15个热点（中国5个、全球5个、法律5个）进行深度研究：
     1. Fact Check (核实真伪)。
     2. 提供背景上下文。
     3. 保留原始链接。
-    按【中国】和【全球】分类撰写。
+    
+    特别要求：
+    - 对于法律类新闻，如果是中国热点，务必研究美国或欧洲是否有类似的经典判决或法律文献可供参考。
+    - 对于法律类新闻，提供相关法律条文和判例背景。
+    
+    按【中国】、【全球】和【法律】三个类别分类撰写。
     """,
     expected_output="一份包含深度分析和链接的研究简报",
     agent=researcher,
-    context=[task_china, task_global]
+    context=[task_china, task_global, task_legal]
 )
 
 current_date = datetime.now().strftime("%Y-%m-%d")
@@ -110,9 +137,16 @@ task_publish = Task(
     将研究简报转换为 index.html。
     要求：
     - 标题: Daily Briefing {current_date}
-    - 布局: CSS Grid 双栏 (左边China, 右边Global)
+    - 布局: CSS Grid 三栏布局 (左边China, 中间Global, 右边Legal)
+    - 样式: 
+      * 使用现代化的配色方案（渐变背景，卡片阴影）
+      * 优雅的字体排版
+      * 响应式设计，移动端自动切换为单栏
+      * 每个新闻卡片有悬停效果
     - 交互: 使用 <details> 标签折叠长文，默认只显示摘要。
+    - 添加页脚版权信息
     - 仅输出 HTML 代码，不要 Markdown 标记。
+    - 确保HTML完整，包含<!DOCTYPE html>、<head>和完整的CSS样式。
     """,
     expected_output="完整的 index.html 文件内容",
     agent=editor,
@@ -131,8 +165,8 @@ def run():
         print("⚠️ SERPER_API_KEY is missing! Search functionality may be limited.")
     
     news_crew = Crew(
-        agents=[china_scout, global_scout, researcher, editor],
-        tasks=[task_china, task_global, task_research, task_publish],
+        agents=[china_scout, global_scout, legal_scout, researcher, editor],
+        tasks=[task_china, task_global, task_legal, task_research, task_publish],
         process=Process.sequential,
         verbose=True
     )
