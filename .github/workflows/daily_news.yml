@@ -1,8 +1,8 @@
 name: Daily News Agent
 
-on:
+"on":
   schedule:
-    - cron: '0 23 * * *' # 建议调整：UTC 23:00 是北京时间早上 7:00，适合发日报
+    - cron: '0 23 * * *'  # 建议调整：UTC 23:00 是北京时间早上 7:00，适合发日报
   workflow_dispatch:
 
 permissions:
@@ -13,7 +13,7 @@ permissions:
 jobs:
   run-agent-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -42,7 +42,7 @@ jobs:
           if [ -f "index.html" ]; then
             echo "✅ HTML generated successfully."
             # 打印前50行以检查是否有 <!DOCTYPE html> 和头部信息
-            head -n 50 index.html 
+            head -n 50 index.html
           else
             echo "❌ HTML not found! Agent failed to produce output."
             exit 1
