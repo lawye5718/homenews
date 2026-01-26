@@ -1,11 +1,7 @@
-# Full dependencies for the HomeNews backend API
-# Note: For the AI news agent only, use requirements-agent.txt instead (much faster installation)
-
 crewai[tools]>=0.28.0
 python-dotenv>=1.0.0
-litellm>=1.61.15
-fastapi==0.104.1
-uvicorn==0.24.0
-sqlalchemy==2.0.23
-pydantic==2.5.0
-python-multipart==0.0.6
+litellm>=1.35.0
+fastapi>=0.104.0
+uvicorn>=0.24.0
+sqlalchemy>=2.0.23
+pydantic>=2.5.0
