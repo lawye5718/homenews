@@ -5,7 +5,7 @@
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                         HomeNews AI Agent System                    │
-│                    (Powered by NVIDIA GLM-4.7 + CrewAI)            │
+│                    (Powered by NVIDIA DeepSeek-V3.2 + CrewAI)      │
 └─────────────────────────────────────────────────────────────────────┘
 
                               ┌─────────────┐
@@ -179,5 +179,5 @@
 ### Environment
 - Python 3.11
 - CrewAI framework
-- NVIDIA GLM-4.7 LLM
+- NVIDIA DeepSeek-V3.2 LLM
 - SerperDev search API

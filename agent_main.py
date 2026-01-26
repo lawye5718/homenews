@@ -6,14 +6,19 @@ from crewai_tools import ScrapeWebsiteTool, SerperDevTool
 
 # --- 1. 配置 LLM (NVIDIA NIM) ---
 # 替换为 NVIDIA API 配置
-# 使用 NVIDIA GLM-4.7 模型，避免 DeepSeek 的 Content Exists Risk 问题
+# 使用 NVIDIA DeepSeek-V3.2 模型
+# 参考 NVIDIA 官方示范代码配置
 nvidia_llm = LLM(
-    model="openai/z-ai/glm-4.7",  # 使用 openai/ 前缀强制 LiteLLM 使用兼容模式
+    model="deepseek-ai/deepseek-v3.2",
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=os.environ.get("NVIDIA_API_KEY"),
-    temperature=0.7,
-    max_tokens=1024,
-    timeout=600
+    temperature=1,
+    top_p=0.95,
+    max_tokens=8192,
+    stream=True,
+    timeout=600,
+    # DeepSeek-V3.2 的思维模式配置 (通过 extra_body 传递)
+    extra_body={"chat_template_kwargs": {"thinking": True}}
 )
 
 # --- 2. 初始化工具 ---

@@ -36,7 +36,7 @@ TBD
 
 ## 新增功能：AI自动化新闻简报系统
 
-本项目集成了一个使用NVIDIA GLM-4.7和CrewAI的自动化新闻简报系统。
+本项目集成了一个使用NVIDIA DeepSeek-V3.2和CrewAI的自动化新闻简报系统。
 
 ### 功能特点
 
@@ -88,7 +88,7 @@ TBD
 ### 技术栈
 
 - **AI框架**: CrewAI
-- **语言模型**: NVIDIA GLM-4.7
+- **语言模型**: NVIDIA DeepSeek-V3.2
 - **搜索工具**: SerperDevTool
 - **部署**: GitHub Actions + GitHub Pages
 
