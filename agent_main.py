@@ -735,24 +735,6 @@ def run():
                 verbose=True
             )
             
-            legal_scholar_backup = Agent(
-                role=legal_scholar.role,
-                goal=legal_scholar.goal,
-                backstory=legal_scholar.backstory,
-                tools=legal_scholar.tools,
-                llm=backup_llm,
-                verbose=True
-            )
-            
-            researcher_backup = Agent(
-                role=researcher.role,
-                goal=researcher.goal,
-                backstory=researcher.backstory,
-                tools=researcher.tools,
-                llm=backup_llm,
-                verbose=True
-            )
-            
             # 重新创建任务（跳过 task_china），使用第二备用 agents
             task_global_deepseek = Task(
                 description=task_global.description,
@@ -852,66 +834,75 @@ def run():
             # 使用第三备用模型重试 (nvidia/llama-3.3-nemotron-super-49b-v1.5)
             try:
                 
-                # 重新创建 agents（跳过 china_scout），使用第三备用 LLM
-                global_scout_deepseek = Agent(
+                # 重新创建 agents 使用第三备用 LLM (backup_llm)
+                china_scout_backup = Agent(
+                    role=china_scout.role,
+                    goal=china_scout.goal,
+                    backstory=china_scout.backstory,
+                    tools=china_scout.tools,
+                    llm=backup_llm,
+                    verbose=True
+                )
+                
+                global_scout_backup = Agent(
                     role=global_scout.role,
                     goal=global_scout.goal,
                     backstory=global_scout.backstory,
                     tools=global_scout.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                legal_scout_deepseek = Agent(
+                legal_scout_backup = Agent(
                     role=legal_scout.role,
                     goal=legal_scout.goal,
                     backstory=legal_scout.backstory,
                     tools=legal_scout.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                health_sports_scout_deepseek = Agent(
+                health_sports_scout_backup = Agent(
                     role=health_sports_scout.role,
                     goal=health_sports_scout.goal,
                     backstory=health_sports_scout.backstory,
                     tools=health_sports_scout.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                health_analyst_deepseek = Agent(
+                health_analyst_backup = Agent(
                     role=health_analyst.role,
                     goal=health_analyst.goal,
                     backstory=health_analyst.backstory,
                     tools=health_analyst.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                legal_scholar_deepseek = Agent(
+                legal_scholar_backup = Agent(
                     role=legal_scholar.role,
                     goal=legal_scholar.goal,
                     backstory=legal_scholar.backstory,
                     tools=legal_scholar.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                researcher_deepseek = Agent(
+                researcher_backup = Agent(
                     role=researcher.role,
                     goal=researcher.goal,
                     backstory=researcher.backstory,
                     tools=researcher.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                editor_deepseek = Agent(
+                editor_backup = Agent(
                     role=editor.role,
                     goal=editor.goal,
                     backstory=editor.backstory,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
