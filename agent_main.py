@@ -688,17 +688,11 @@ def run():
                 sys.exit(1)
             
             # 使用第三备用模型（DeepSeek 官方 API）重试
+            # 注意：跳过中国新闻部分以避免内容审查问题
             try:
-                # 重新创建所有 agents，使用第三备用 LLM
-                china_scout_deepseek = Agent(
-                    role=china_scout.role,
-                    goal=china_scout.goal,
-                    backstory=china_scout.backstory,
-                    tools=china_scout.tools,
-                    llm=deepseek_llm,
-                    verbose=True
-                )
+                print("⚠️ Note: Skipping Chinese news section to avoid content policy issues with DeepSeek API")
                 
+                # 重新创建 agents（跳过 china_scout），使用第三备用 LLM
                 global_scout_deepseek = Agent(
                     role=global_scout.role,
                     goal=global_scout.goal,
@@ -761,13 +755,7 @@ def run():
                     verbose=True
                 )
                 
-                # 重新创建任务，使用第三备用 agents
-                task_china_deepseek = Task(
-                    description=task_china.description,
-                    expected_output=task_china.expected_output,
-                    agent=china_scout_deepseek
-                )
-                
+                # 重新创建任务（跳过 task_china），使用第三备用 agents
                 task_global_deepseek = Task(
                     description=task_global.description,
                     expected_output=task_global.expected_output,
@@ -797,15 +785,15 @@ def run():
                     description=task_legal_analysis.description,
                     expected_output=task_legal_analysis.expected_output,
                     agent=legal_scholar_deepseek,
-                    context=[task_china_deepseek, task_global_deepseek, task_legal_deepseek]
+                    context=[task_global_deepseek, task_legal_deepseek]  # 跳过中国新闻上下文
                 )
                 
                 task_research_deepseek = Task(
                     description=task_research.description,
                     expected_output=task_research.expected_output,
                     agent=researcher_deepseek,
-                    context=[task_china_deepseek, task_global_deepseek, task_legal_deepseek, 
-                            task_health_sports_deepseek, task_health_analysis_deepseek, task_legal_analysis_deepseek]
+                    context=[task_global_deepseek, task_legal_deepseek, 
+                            task_health_sports_deepseek, task_health_analysis_deepseek, task_legal_analysis_deepseek]  # 跳过中国新闻
                 )
                 
                 task_publish_deepseek = Task(
@@ -815,10 +803,9 @@ def run():
                     context=[task_research_deepseek]
                 )
                 
-                # 创建新的 Crew，使用第三备用模型
+                # 创建新的 Crew，使用第三备用模型（跳过中国新闻）
                 news_crew_deepseek = Crew(
                     agents=[
-                        china_scout_deepseek, 
                         global_scout_deepseek, 
                         legal_scout_deepseek, 
                         health_sports_scout_deepseek,
@@ -828,7 +815,6 @@ def run():
                         editor_deepseek
                     ],
                     tasks=[
-                        task_china_deepseek, 
                         task_global_deepseek, 
                         task_legal_deepseek, 
                         task_health_sports_deepseek,
@@ -855,12 +841,11 @@ def run():
                     f.write(final_html.strip())
                 
                 print(f"✅ Report generated successfully with third backup model (DeepSeek Official API): {output_path}")
-                print("📊 Report includes 5 sections:")
-                print("   1. 中文新闻 (Chinese-language News)")
-                print("   2. 全球新闻 (Global News)")
-                print("   3. 法律新闻 (Legal News)")
-                print("   4. 健康与运动 (Health & Sports + Deep Analysis)")
-                print("   5. 法律学术分析 (Legal Analysis & Law Review Articles)")
+                print("📊 Report includes 4 sections (Chinese news skipped to avoid content policy issues):")
+                print("   1. 全球新闻 (Global News)")
+                print("   2. 法律新闻 (Legal News)")
+                print("   3. 健康与运动 (Health & Sports + Deep Analysis)")
+                print("   4. 法律学术分析 (Legal Analysis & Law Review Articles)")
                 
             except Exception as deepseek_error:
                 print(f"❌ Critical Error: All three models failed.")
