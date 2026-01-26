@@ -33,7 +33,7 @@ except ImportError:
 
 # 1. 配置 LLM (DeepSeek)
 # 确保 DEEPSEEK_API_KEY 已在环境变量中设置
-DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
+DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "").strip()
 if not DEEPSEEK_API_KEY:
     raise ValueError("❌ DEEPSEEK_API_KEY environment variable is required!")
 
@@ -247,9 +247,13 @@ def extract_html_from_markdown(text: str) -> str:
     return text.strip()
 
 
-def run() -> None:
+def run(exit_on_error: bool = True) -> None:
     """
     Main execution function for the daily news agent.
+    
+    Args:
+        exit_on_error: Whether to call sys.exit() on error (default: True).
+                      Set to False when importing this module to handle errors differently.
     
     Raises:
         ValueError: If required API keys are missing or crew execution fails
@@ -286,7 +290,10 @@ def run() -> None:
         
     except Exception as e:
         logger.error(f"Error during execution: {e}")
-        sys.exit(1)
+        if exit_on_error:
+            sys.exit(1)
+        else:
+            raise
 
 if __name__ == "__main__":
     run()
