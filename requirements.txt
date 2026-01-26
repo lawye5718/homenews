@@ -1,9 +1,6 @@
-# AI Agent dependencies (primary functionality)
 crewai[tools]>=0.28.0
 python-dotenv>=1.0.0
 litellm>=1.35.0
-
-# Backend API dependencies (optional - for future expansion)
 fastapi==0.104.1
 uvicorn==0.24.0
 sqlalchemy==2.0.23

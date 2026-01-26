@@ -4,187 +4,158 @@ from crewai import Agent, Task, Crew, Process, LLM
 from crewai_tools import ScrapeWebsiteTool, SerperDevTool
 
 # 1. 配置 LLM
-# 增加 timeout 防止长任务中断
+# 增加 timeout 到 600秒，因为深度分析和生成长HTML需要较长时间
 deepseek_llm = LLM(
     model="deepseek/deepseek-chat", 
     base_url="https://api.deepseek.com",
     api_key=os.environ.get("DEEPSEEK_API_KEY"),
-    temperature=0.7,
-    timeout=120 
+    temperature=0.6, #稍微降低温度以提高学术严谨性
+    timeout=600 
 )
 
 # 2. 初始化工具
-search_tool = SerperDevTool(n_results=10) # 增加搜索结果数量以获取更多优质源
+search_tool = SerperDevTool(n_results=15) # 增加搜索广度
 scrape_tool = ScrapeWebsiteTool()
 
 # 3. 定义智能体 (Agents)
 
-# --- 中国情报官 (去伪存真) ---
+# --- 中国情报官 ---
 china_scout = Agent(
-    role='中国社会深度观察员',
-    goal='挖掘今日中国互联网最具公共价值的Top 5社会议题',
+    role='Chief China Societal Analyst',
+    goal='挖掘中国社会深层议题，拒绝表面热度',
     backstory="""
-    你是一名有新闻理想的资深编辑。你痛恨营销号制造的焦虑、明星八卦以及毫无信息量的官方通稿。
-    你的选材标准：
-    1. 【拒绝通稿】：如果新闻只是"某某会议召开"而无实质政策变动，丢弃。
-    2. 【拒绝伪热点】：如果热搜是"某明星过生日"或"猫咪跳舞"，丢弃。
-    3. 【关注民生】：关注就业、法律公义、重大政策调整、科技对普通人的影响。
+    你是一名具有社会学背景的资深媒体人。
+    你的核心任务是【去伪存真】。
+    1. 过滤：绝对忽略明星八卦、网络口水战、无实质内容的官方通稿。
+    2. 聚焦：关注系统性问题（如人口结构、就业趋势）、司法公正（争议判决）、科技伦理。
+    3. 深度：不仅看发生了什么，要看它反映了什么社会情绪。
     """,
     tools=[search_tool, scrape_tool],
     llm=deepseek_llm,
     verbose=True
 )
 
-# --- 全球情报官 (强制英文源) ---
+# --- 全球情报官 ---
 global_scout = Agent(
-    role='International News Analyst (Source: English Media)',
-    goal='Identify Top 5 Global events using ONLY English sources (NYT, Reuters, Bloomberg)',
+    role='International Geopolitics & Tech Analyst',
+    goal='Curate Top 5 Global events via English Premier Sources',
     backstory="""
-    You are a rigorous international analyst. 
-    CRITICAL RULE: You MUST search in English and read English sources.
-    Do NOT use Chinese media summaries for international news because they are often delayed or biased.
-    Focus on: US Politics, Global Economy, AI/Tech Breakthroughs (OpenAI, SpaceX), and Major Geopolitical Conflicts.
-    Reject: TikTok challenges, minor celebrity gossip.
+    You strictly adhere to English-language primary sources (Reuters, Bloomberg, NYT, Nature).
+    Your Logic:
+    1. If it's a tech breakthrough, is it a PR stunt or a fundamental shift? (Focus on the latter).
+    2. If it's a conflict, what is the strategic implication?
+    3. You MUST retain the original English terminology/Headlines to avoid translation loss.
     """,
     tools=[search_tool, scrape_tool],
     llm=deepseek_llm,
     verbose=True
 )
 
-# --- 法律情报官 (判例导向) ---
+# --- 法律情报官 (全球法治动态) ---
 legal_scout = Agent(
-    role='Global Legal Researcher',
-    goal='Find Top 5 significant legal cases or legislations globally',
+    role='Global Legal News Curator',
+    goal='Identify 5 landmark legal events (SCOTUS, EU CJEU, China SPC)',
     backstory="""
-    Focus on:
-    1. US Supreme Court (SCOTUS) rulings or major oral arguments.
-    2. EU Tech Regulation (AI Act, GDPR penalties).
-    3. China's Supreme Court guiding cases (not petty crimes).
-    Provide the specific case name or statute name.
+    Focus on "Hard Law" developments:
+    1. Landmark Rulings: Supreme Court decisions that change precedent.
+    2. Major Legislation: EU AI Act, GDPR, Antitrust laws.
+    3. Strategic Litigation: Big Tech lawsuits, Sovereign disputes.
     """,
     tools=[search_tool, scrape_tool],
     llm=deepseek_llm,
     verbose=True
 )
 
-# --- 运动健康情报官 (科学导向) ---
+# --- 运动健康情报官 (循证医学) ---
 health_sports_scout = Agent(
-    role='Health & Sports Science Reporter',
-    goal='Find Top 5 health and sports news with focus on scientific sources',
+    role='Evidence-Based Health Researcher',
+    goal='Find health/performance news backed by peer-reviewed studies',
     backstory="""
-    You are a science journalist specializing in health and sports.
-    PRIORITY SOURCES:
-    1. Scientific American (health, sports science, fitness)
-    2. Nature (medical research, sports physiology)
-    3. Science Magazine (health studies, exercise science)
-    4. The Lancet, JAMA, NEJM (medical journals)
-    5. Sports Medicine journals
-    
+    You are allergic to pseudoscience. 
+    Sources MUST be: The Lancet, JAMA, NEJM, Cell, Nature, or authoritative sports science journals.
     Focus on:
-    - New medical research findings
-    - Sports science breakthroughs
-    - Exercise and fitness studies
-    - Public health developments
-    - Athletic performance research
-    
-    Reject: Celebrity fitness routines, weight loss fads, unscientific health tips.
-    Always cite the original research or scientific source.
+    1. Meta-analyses and Systematic Reviews (highest evidence).
+    2. Randomized Controlled Trials (RCTs).
+    3. Physiological mechanism breakthroughs.
     """,
     tools=[search_tool, scrape_tool],
     llm=deepseek_llm,
     verbose=True
 )
 
-# --- 法律学术分析师 (法学院期刊研究) ---
+# --- 法律学术分析师 (核心优化：学术深度) ---
 legal_scholar = Agent(
-    role='Law Review Article Analyst',
-    goal='Identify key legal points from US-China hot topics and find relevant law review articles',
+    role='Comparative Law Scholar',
+    goal='Conduct deep jurisprudential analysis on US-China legal frictions or trends',
     backstory="""
-    You are a legal scholar with expertise in comparative law.
+    You are a Professor of Comparative Law.
     
-    Your task:
-    1. Analyze current US and China hot topics to identify key legal issues
-    2. Search for law review articles from top 10 US law schools:
-       - Yale Law Journal
-       - Harvard Law Review
-       - Stanford Law Review
-       - Columbia Law Review
-       - University of Chicago Law Review
-       - NYU Law Review
-       - University of Pennsylvania Law Review
-       - Michigan Law Review
-       - Virginia Law Review
-       - Berkeley Law Review
+    Since full law review PDFs are often paywalled, you utilize:
+    1. SSRN (Social Science Research Network) abstracts and working papers.
+    2. High-level legal analysis blogs (Lawfare, SCOTUSblog, Just Security, Volokh Conspiracy).
+    3. Open-access Law Review repositories.
     
-    3. Find the 3 most relevant articles related to the identified legal issues
-    4. For each article, provide:
-       - Article title and author
-       - Publication and year
-       - Key legal arguments
-       - Relevance to current hot topics
-    
-    Use academic databases and law school journal websites.
+    Methodology (IRAC):
+    - Issue: What is the core legal conflict?
+    - Rule: What statutes or precedents are involved?
+    - Analysis: How do scholars interpret this? What are the opposing arguments?
+    - Conclusion: What is the theoretical impact?
     """,
     tools=[search_tool, scrape_tool],
     llm=deepseek_llm,
     verbose=True
 )
 
-# --- 健康运动深度分析师 ---
+# --- 健康运动深度分析师 (核心优化：科学解释) ---
 health_analyst = Agent(
-    role='Health & Sports Deep Analysis Specialist',
-    goal='Provide in-depth analysis of top 3 health/sports news',
+    role='Senior Science Communicator',
+    goal='Translate complex papers into actionable, scientifically accurate advice',
     backstory="""
-    You are a science writer who excels at explaining complex research in simple terms.
-    
-    For each of the top 3 health/sports news items:
-    1. Explain the scientific background and methodology
-    2. Discuss the implications for public health or athletic performance
-    3. Provide context from related research
-    4. Explain practical applications
-    5. Note any limitations or controversies
-    
-    Write in an accessible, engaging style that makes science understandable.
+    You bridge the gap between the lab and the living room.
+    Structure your analysis:
+    1. **The Study**: Sample size? Duration? Subjects (Mice or Humans)?
+    2. **The Mechanism**: How does it work biologically?
+    3. **Critical Assessment**: Is the effect size significant? Correlation vs Causation?
+    4. **Application**: How should a professional athlete or regular person apply this?
     """,
     tools=[search_tool, scrape_tool],
     llm=deepseek_llm,
     verbose=True
 )
 
-# --- 深度研究员 (汇总与核查) ---
+# --- 深度研究员 (架构师) ---
 researcher = Agent(
-    role='Chief Editor & Fact Checker',
-    goal='Compile a 5-section report (China, Global, Legal, Health/Sports, Legal Analysis) with strict fact-checking',
+    role='Chief Editor & Architect',
+    goal='Synthesize all inputs into a coherent, structured JSON-like Markdown report',
     backstory="""
-    You strictly organize the data from the scouts.
-    Structure your report into five distinct sections:
-    1. CHINA NEWS
-    2. GLOBAL NEWS (Must retain English Headlines)
-    3. LEGAL NEWS
-    4. HEALTH & SPORTS NEWS
-    5. LEGAL ANALYSIS & LAW REVIEW ARTICLES
-    If any section is missing, you must state "No significant news found" instead of omitting the section.
+    You are responsible for the structural integrity of the report.
+    You ensure:
+    1. No section is missing.
+    2. The "Deep Analysis" sections are truly deep (not just summaries).
+    3. Sources are cited.
+    4. English headlines are preserved for Global news.
     """,
-    tools=[scrape_tool], # 允许它在必要时自己再查一下原文
+    tools=[scrape_tool],
     llm=deepseek_llm,
     verbose=True
 )
 
-# --- 主编 (HTML 生成) ---
+# --- 主编 (UI/UX 专家) ---
 editor = Agent(
-    role='HTML Frontend Developer',
-    goal='Generate a responsive, modern HTML5 Daily News page',
+    role='Senior Frontend Engineer (Tailwind Specialist)',
+    goal='Generate a distinct, high-end HTML5 Daily Briefing',
     backstory="""
-    You are an expert in Tailwind CSS and modern web design. 
-    You will receive a text report and must convert it into a beautiful single-page HTML file.
-    The layout MUST have 5 sections (or stacked sections on mobile) corresponding to the 5 news categories:
-    1. China News
-    2. Global News
-    3. Legal News
-    4. Health & Sports News
-    5. Legal Analysis & Law Review Articles
+    You are an award-winning web designer.
+    You DO NOT use basic HTML. You use **Tailwind CSS** via CDN.
     
-    Use a grid layout for desktop and stack vertically on mobile.
+    Design Language: "Digital Economist" or "Modern Bloomberg".
+    - Font: 'Merriweather' for headings (Serif), 'Inter' for body (Sans).
+    - Palette: Slate-900 (Text), Slate-50 (Background), Blue-700 (Accents), Amber-600 (Highlights).
+    - Components:
+      - **Hero Section**: Date and heavy typography.
+      - **Bento Grid**: For top news stories.
+      - **Analysis Cards**: With "Read Time" tags and author attribution.
+      - **Details/Summary**: For collapsible deep dives.
     """,
     llm=deepseek_llm,
     verbose=True
@@ -192,120 +163,83 @@ editor = Agent(
 
 # 4. 定义任务 (Tasks)
 
-# 优化搜索词，强制英文
 task_global = Task(
     description="""
-    1. Search for 'Top global news today', 'Breaking news Reuters', 'Tech news Bloomberg'.
-    2. Search for 'Trending on X today world news'.
-    3. Select 5 most important events. 
-    4. OUTPUT MUST BE IN ENGLISH for the titles, followed by a Chinese summary.
+    1. Search 'Breaking news Reuters', 'Tech analysis Stratechery', 'Geopolitics Foreign Affairs'.
+    2. Select 5 events with global structural impact.
+    3. RETURN FORMAT: English Headline + Chinese Contextual Summary.
     """,
-    expected_output="A list of 5 global news items with English Titles and Origin URLs.",
+    expected_output="5 Global news items (English Titles).",
     agent=global_scout
 )
 
 task_china = Task(
     description="""
-    1. 搜索"今日中国社会热点"、"知乎热榜 社会议题"、"财新网 热门"。
-    2. 严格过滤：剔除所有娱乐明星八卦、无实质内容的会议通稿。
-    3. 挑选5个具有讨论价值的真问题（如：就业、新规、争议性判决）。
+    1. 挖掘今日中国社会最具"张力"的5个议题（政策vs民意、科技vs伦理）。
+    2. 必须引用多方观点（官方叙事 vs 民间讨论）。
     """,
-    expected_output="5个经过筛选的高质量中国新闻，包含来源链接。",
+    expected_output="5个深度中国社会议题。",
     agent=china_scout
 )
 
 task_legal = Task(
     description="""
-    1. Search for 'Supreme Court opinions today', 'EU AI Act latest', 'Major corporate lawsuit 2026'.
-    2. Find 5 key legal updates.
+    Search for today's most significant court rulings or legislative drafts (US/EU/CN).
+    Focus on IP, Antitrust, AI Regulation, and Constitutional rights.
     """,
-    expected_output="5 legal news items with case names and legal implications.",
+    expected_output="5 Key Legal Updates.",
     agent=legal_scout
 )
 
 task_health_sports = Task(
     description="""
-    1. Search for health and sports news from scientific sources:
-       - 'Scientific American health news'
-       - 'Nature medicine latest research'
-       - 'Science magazine sports physiology'
-       - 'Latest medical research JAMA Lancet'
-    2. Focus on peer-reviewed research and scientific findings
-    3. Select 5 most significant health/sports science news items
-    4. Include source links and research citations
+    Search reputable scientific sources (Nature, Cell, ACSM).
+    Find 5 studies released in the last week regarding:
+    - Longevity/Aging
+    - Hypertrophy/Strength Training
+    - Cognitive Health
     """,
-    expected_output="5 health and sports science news items with scientific sources and links.",
+    expected_output="5 Scientific Health/Sports Updates.",
     agent=health_sports_scout
 )
 
 task_health_analysis = Task(
     description="""
-    From the health/sports news collected, select the TOP 3 most impactful stories.
-    For each of these 3 stories, write a detailed analysis report that includes:
-    1. Background: What is the scientific context?
-    2. Methods: How was the research conducted (if applicable)?
-    3. Findings: What are the key discoveries or developments?
-    4. Implications: What does this mean for public health, sports, or fitness?
-    5. Practical Applications: How can people use this information?
-    6. Limitations: What are the caveats or areas for further research?
-    
-    Write in clear, accessible language suitable for educated general readers.
-    Each analysis should be 300-500 words.
+    Select the Top 2 most practical/impactful studies from the list.
+    Write a 'Deep Dive' for each (500 words each).
+    Structure:
+    - **Hypothesis**: What did they test?
+    - **Methodology Check**: (e.g., "Double-blind RCT with n=500")
+    - **Results**: Specific data points (e.g., "15% increase in VO2Max").
+    - **Takeaway**: Actionable advice.
     """,
-    expected_output="3 in-depth analysis reports on the top health/sports news, each 300-500 words.",
+    expected_output="2 Scientific Deep Dives.",
     agent=health_analyst,
     context=[task_health_sports]
 )
 
 task_legal_analysis = Task(
     description="""
-    Phase 1: Identify Key Legal Issues
-    - Analyze the current US and China hot topics from the news
-    - Identify 3-5 key legal issues or questions raised by these topics
-    
-    Phase 2: Search Law Review Articles
-    - Search for recent law review articles from top 10 US law schools addressing these issues:
-      * Use search terms like: "[legal issue] site:law.yale.edu/ylj"
-      * Search: Harvard Law Review, Stanford Law Review, Columbia Law Review, etc.
-    
-    Phase 3: Select Top 3 Articles
-    - Choose the 3 most relevant and recent articles
-    - For each article provide:
-      * Full citation (title, author, journal, year)
-      * Link to the article
-      * Brief summary of the main argument
-      
-    Phase 4: Deep Analysis
-    For each of the 3 selected articles, write a comprehensive report:
-    1. Article Overview: Summarize the article's thesis and main points (200 words)
-    2. Legal Framework: Explain the legal doctrines and precedents discussed (150 words)
-    3. Key Arguments: Break down the author's main arguments in simple terms (200 words)
-    4. Connection to Hot Topics: How does this article relate to current US-China issues? (150 words)
-    5. Practical Implications: What are the real-world legal implications? (100 words)
-    
-    Each article analysis should be 800-1000 words total.
-    Write in clear language that makes complex legal concepts accessible.
+    Select 1 major legal controversy (US or China).
+    Find 2-3 academic or high-level professional commentaries (SSRN, Law Review Blogs).
+    Write a 'Jurisprudential Analysis' (800 words):
+    1. **Legal Question**: The core conflict.
+    2. **Theoretical Framework**: How implies strict scrutiny vs rational basis? (or equivalent concepts).
+    3. **Comparative Perspective**: How would this be handled in the other jurisdiction (CN vs US)?
+    4. **Future Implication**: Prediction of legal trends.
     """,
-    expected_output="3 comprehensive law review article analyses, each 800-1000 words, with full citations and connections to current US-China topics.",
+    expected_output="1 Comprehensive Legal Theory Analysis.",
     agent=legal_scholar,
     context=[task_china, task_global, task_legal]
 )
 
-# 关键：强制要求包含所有部分
 task_research = Task(
     description="""
-    Aggregate the outputs from all scouts and analysts:
-    1. China Scout
-    2. Global Scout  
-    3. Legal Scout
-    4. Health & Sports Scout (with deep analysis)
-    5. Legal Scholar (with law review analysis)
-    
-    Verify that ALL FIVE SECTIONS exist.
-    For Global News, ensure the original English title is preserved.
-    Format the output as a structured Markdown report with clear section headers.
+    Compile ALL inputs.
+    Ensure strict separation of "News Briefs" and "Deep Analysis".
+    Add a "Key Takeaway" one-liner for every long section.
     """,
-    expected_output="A complete Markdown report containing exactly 5 sections: China, Global, Legal, Health & Sports (with deep analysis), and Legal Analysis & Law Review Articles.",
+    expected_output="Master Report Markdown.",
     agent=researcher,
     context=[task_china, task_global, task_legal, task_health_sports, task_health_analysis, task_legal_analysis]
 )
@@ -314,39 +248,38 @@ current_date = datetime.now().strftime("%Y-%m-%d")
 
 task_publish = Task(
     description=f"""
-    Convert the provided research report into a full `index.html` file.
+    Generate the `index.html`.
     
-    Design Requirements:
-    - Use a clean, newspaper-style layout (like New York Times or Bloomberg).
-    - Title: "Daily Briefing {current_date}"
-    - Create a responsive layout with 5 main sections:
-      1. China News
-      2. Global News  
-      3. Legal News
-      4. Health & Sports News (with in-depth analysis reports)
-      5. Legal Analysis & Law Review Articles
-    - On desktop: Use CSS Grid with 2 columns for China/Global, then full-width sections for others
-    - On tablet/mobile: Stack all sections vertically
-    - Use clear typography (Serif for headings, Sans-serif for body).
-    - For the Health & Sports section, clearly distinguish the news items from the deep analysis reports
-    - For the Legal Analysis section, format each law review article analysis as a distinct card or article
-    - Add collapsible sections for long analysis content to improve readability
-    - **CRITICAL**: You MUST include the content from ALL 5 sections provided in the context. Do not summarize them away.
-    - Output ONLY the raw HTML code, starting with <!DOCTYPE html>.
+    **Technical Constraints**:
+    1. Include `<script src="https://cdn.tailwindcss.com"></script>` in `<head>`.
+    2. Import fonts: `<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Merriweather:wght@300;700&display=swap" rel="stylesheet">`.
+    3. Use `font-serif` for titles, `font-sans` for body.
+    
+    **Layout Structure**:
+    - **Header**: "Daily Insight Briefing" | {current_date} | Minimalist White on Dark Blue.
+    - **Grid Area A (News Ticker)**: 3-column grid for China/Global/Legal Briefs. Small cards.
+    - **Grid Area B (Deep Dives)**: Full width sections.
+      - *Legal Analysis*: Styled like a Law Journal (Cream background, serif text).
+      - *Health Science*: Styled like a Medical Paper (Clean white, blue accents, data points highlighted).
+    - **Footer**: Copyright & Disclaimer.
+    
+    **Content**:
+    - MUST include ALL content from the Context.
+    - Use `<details class="cursor-pointer ...">` for expanding long texts on mobile.
     """,
-    expected_output="A complete index.html file string with all 5 sections properly formatted.",
+    expected_output="Final HTML String.",
     agent=editor,
     context=[task_research]
 )
 
 # 5. 执行流程
 def run():
-    print("🚀 Starting Daily News Agent...")
+    print("🚀 Starting Daily News Agent (Deep Analysis Edition)...")
     
-    # 检查 API Key
     if not os.environ.get("DEEPSEEK_API_KEY"):
         raise ValueError("❌ DEEPSEEK_API_KEY is missing!")
     
+    # 按照逻辑顺序执行
     news_crew = Crew(
         agents=[china_scout, global_scout, legal_scout, health_sports_scout, health_analyst, legal_scholar, researcher, editor],
         tasks=[task_china, task_global, task_legal, task_health_sports, task_health_analysis, task_legal_analysis, task_research, task_publish],
@@ -357,7 +290,7 @@ def run():
     result = news_crew.kickoff()
     final_html = str(result)
     
-    # 清洗 Markdown 代码块标记（如果 LLM 为了格式好看加了 ```html ... ```）
+    # 增强的清洗逻辑
     if "```html" in final_html:
         final_html = final_html.split("```html")[1].split("```")[0]
     elif "```" in final_html:
