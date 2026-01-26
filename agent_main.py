@@ -8,7 +8,6 @@ from crewai_tools import ScrapeWebsiteTool, SerperDevTool
 CURRENT_DATE = datetime.now().strftime("%Y-%m-%d")
 CURRENT_YEAR = datetime.now().strftime("%Y")
 CURRENT_YEAR_MONTH = datetime.now().strftime("%Y年%m月")
-CURRENT_MONTH = datetime.now().strftime("%Y年%m")
 NEWS_ITEMS_PER_SECTION = 5
 LEGAL_ANALYSIS_ITEMS = 3
 DEEP_ANALYSIS_ITEMS = 3
