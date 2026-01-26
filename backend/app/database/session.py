@@ -2,11 +2,14 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from app.core.config import settings
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./homenews.db"
-
+# Use database URL from settings instead of hardcoding
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+    settings.DATABASE_URL,
+    # Note: check_same_thread=False is required for SQLite with FastAPI
+    # This allows SQLite to be accessed from multiple threads
+    connect_args={"check_same_thread": False} if settings.DATABASE_URL.startswith("sqlite") else {}
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

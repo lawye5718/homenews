@@ -3,15 +3,23 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
-from app.database.session import engine
+from app.database.session import engine, Base
 from app.api.v1 import router as api_v1_router
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup
+    """
+    Application lifespan manager.
+    Handles startup and shutdown events.
+    """
+    # Startup: Create database tables
+    Base.metadata.create_all(bind=engine)
+    print("✅ Database tables created")
     yield
-    # Shutdown
+    # Shutdown: Cleanup database connections
+    engine.dispose()
+    print("✅ Database connections disposed")
 
 
 app = FastAPI(
@@ -36,11 +44,14 @@ app.include_router(api_v1_router, prefix=settings.API_V1_STR)
 
 
 @app.get("/")
-def read_root():
+def read_root() -> dict:
+    """Root endpoint returning basic project information."""
     return {"Hello": "World", "Project": "HomeNews"}
 
 
 @app.get("/health")
-def health_check():
+def health_check() -> dict:
+    """Health check endpoint for monitoring."""
     return {"status": "healthy", "service": "HomeNews API"}
+
 
