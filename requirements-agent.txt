@@ -1,12 +1,9 @@
+# Minimal dependencies for the Daily News Agent workflow
+# This file contains only the dependencies needed to run agent_main.py
+
 crewai[tools]>=0.28.0
 python-dotenv>=1.0.0
-litellm>=1.35.0
-fastapi>=0.104.0
-uvicorn>=0.24.0
-sqlalchemy>=2.0.23
-pydantic>=2.5.0
-# apscheduler is required to suppress litellm import warnings (litellm[proxy] dependency)
-apscheduler>=3.10.0
+litellm>=1.61.15
 # email-validator is required for litellm error logging (pydantic EmailStr validation)
 email-validator>=2.0.0
 # fastapi-sso is required for litellm proxy logging (prevents ModuleNotFoundError during error handling)

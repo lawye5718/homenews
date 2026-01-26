@@ -1,3 +1,4 @@
+"""News-related Pydantic schemas for request/response validation."""
 from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional

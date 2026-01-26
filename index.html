@@ -1,313 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Briefing 2026-01-26</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --color-black: #121212;
-            --color-white: #fefefe;
-            --color-gray-light: #f5f5f5;
-            --color-gray-medium: #e0e0e0;
-            --color-gray-dark: #757575;
-            --color-accent-blue: #0d47a1;
-            --color-accent-red: #b71c1c;
-            --font-serif-headline: 'Libre Baskerville', Georgia, serif;
-            --font-serif-body: 'Source Serif 4', Georgia, serif;
-            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-        }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: var(--font-serif-body);
-            color: var(--color-black);
-            background-color: var(--color-white);
-            line-height: 1.6;
-            padding: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .header {
-            border-bottom: 2px solid var(--color-black);
-            padding-bottom: 1.5rem;
-            margin-bottom: 2.5rem;
-            text-align: center;
-        }
-        .header h1 {
-            font-family: var(--font-serif-headline);
-            font-size: 2.8rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 0.5rem;
-        }
-        .header .subtitle {
-            font-family: var(--font-sans);
-            font-size: 1rem;
-            color: var(--color-gray-dark);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .briefing-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-        }
-        @media (max-width: 1024px) {
-            .briefing-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .briefing-grid .column:nth-child(3) {
-                grid-column: span 2;
-            }
-        }
-        @media (max-width: 768px) {
-            .briefing-grid {
-                grid-template-columns: 1fr;
-            }
-            .briefing-grid .column:nth-child(3) {
-                grid-column: 1;
-            }
-        }
-        .column {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-        .column-header {
-            font-family: var(--font-serif-headline);
-            font-size: 1.8rem;
-            font-weight: 700;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--color-gray-medium);
-            color: var(--color-black);
-            position: relative;
-        }
-        .column-header::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 60px;
-            height: 2px;
-            background-color: var(--color-black);
-        }
-        .column-china .column-header::after { background-color: var(--color-accent-red); }
-        .column-global .column-header::after { background-color: var(--color-accent-blue); }
-        .column-legal .column-header::after { background-color: var(--color-gray-dark); }
-
-        .article {
-            border-left: 3px solid var(--color-gray-medium);
-            padding-left: 15px;
-            transition: border-color 0.2s ease;
-        }
-        .article:hover {
-            border-left-color: var(--color-gray-dark);
-        }
-        .article-title {
-            font-family: var(--font-serif-headline);
-            font-size: 1.3rem;
-            font-weight: 700;
-            line-height: 1.4;
-            margin-bottom: 8px;
-            color: var(--color-black);
-        }
-        .article-title a {
-            color: inherit;
-            text-decoration: none;
-        }
-        .article-title a:hover {
-            text-decoration: underline;
-            color: var(--color-accent-blue);
-        }
-        .article-meta {
-            font-family: var(--font-sans);
-            font-size: 0.85rem;
-            color: var(--color-gray-dark);
-            margin-bottom: 12px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .fact-check {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 3px;
-            font-weight: 600;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .fact-check-verified {
-            background-color: rgba(13, 71, 161, 0.1);
-            color: var(--color-accent-blue);
-        }
-        .fact-check-pending {
-            background-color: rgba(183, 28, 28, 0.1);
-            color: var(--color-accent-red);
-        }
-        .fact-check-disputed {
-            background-color: rgba(117, 117, 117, 0.1);
-            color: var(--color-gray-dark);
-        }
-        .article-summary {
-            font-size: 0.95rem;
-            color: var(--color-black);
-            margin-bottom: 15px;
-        }
-        .article-summary strong {
-            color: var(--color-accent-red);
-        }
-        details {
-            border-top: 1px solid var(--color-gray-light);
-            margin-top: 15px;
-            padding-top: 15px;
-        }
-        summary {
-            font-family: var(--font-sans);
-            font-weight: 600;
-            color: var(--color-accent-blue);
-            cursor: pointer;
-            list-style: none;
-            padding: 5px 0;
-            user-select: none;
-        }
-        summary::-webkit-details-marker {
-            display: none;
-        }
-        summary::after {
-            content: '▶';
-            display: inline-block;
-            margin-left: 8px;
-            font-size: 0.8em;
-            transition: transform 0.2s ease;
-        }
-        details[open] summary::after {
-            transform: rotate(90deg);
-        }
-        .details-content {
-            padding: 15px 0 5px 0;
-            font-size: 0.95rem;
-            color: var(--color-black);
-        }
-        .details-content p {
-            margin-bottom: 12px;
-        }
-        .details-content blockquote {
-            border-left: 3px solid var(--color-gray-medium);
-            padding-left: 15px;
-            margin: 15px 0;
-            font-style: italic;
-            color: var(--color-gray-dark);
-        }
-        .english-headline {
-            font-family: var(--font-serif-headline);
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--color-accent-blue);
-            margin-bottom: 5px;
-            font-style: italic;
-        }
-        .footer {
-            margin-top: 4rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--color-gray-medium);
-            text-align: center;
-            font-family: var(--font-sans);
-            font-size: 0.9rem;
-            color: var(--color-gray-dark);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Insight</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <header class="header">
-        <h1>Daily Briefing</h1>
-        <div class="subtitle">2026-01-26 | Hotspot Event Verification & Research Digest</div>
-    </header>
-
-    <main class="briefing-grid">
-        <!-- China Column -->
-        <section class="column column-china">
-            <h2 class="column-header">China</h2>
-
-            <article class="article">
-                <h3 class="article-title"><a href="https://tech.sina.cn/mobile/xp/2026-01-23/detail-inhihsrw2047050.d.html" target="_blank">32岁程序员周末工作过劳死，抢救期间仍被拉入工作群</a></h3>
-                <div class="article-meta">
-                    <span class="fact-check fact-check-verified">已核实</span>
-                    <span>新浪科技、联合早报</span>
-                </div>
-                <p class="article-summary"><strong>核心冲突点：</strong>互联网行业“996”加班文化、工作与生活界限模糊、劳动者权益保障缺失。</p>
-                <details>
-                    <summary>深度分析与核查</summary>
-                    <div class="details-content">
-                        <p>该事件是“过劳死”现象在中国互联网行业的又一次残酷具象化。舆论的愤怒不仅指向涉事公司，更指向将“奋斗”异化为无底线透支健康的畸形职场文化。其背后反映出三重法律与社会心理缺失：<strong>第一，法律认定滞后</strong>。中国《工伤保险条例》对“工作场所”、“工作时间”和“工作岗位”的“三工”认定标准，难以覆盖“居家办公”、“随时在线”等新型工作模式下的“隐形加班”，导致劳动者维权困难。<strong>第二，企业责任逃避</strong>。许多公司通过“低底薪+高绩效”的薪酬结构，将加班成本转嫁给员工，并利用“敬业协议”、“奋斗者协议”等模糊法律边界的文件规避责任。<strong>第三，社会心理困境</strong>。在高度竞争的社会环境下，“不敢病、不敢休”成为许多职场人的普遍焦虑，个体在“内卷”压力下被迫自我剥削，而社会支持系统（如心理疏导、职业健康干预）严重缺位。</p>
-                        <p><strong>Fact Check:</strong> 事件主体（程序员高广辉猝死）经多家正规媒体报道，细节（抢救期间被拉入工作群）有聊天记录等证据佐证。涉事公司“视源股份”已公开回应，承认员工去世事实，但就工伤认定等问题与家属存在争议。</p>
-                    </div>
-                </details>
-            </article>
-
-            <article class="article">
-                <h3 class="article-title"><a href="https://finance.sina.com.cn/consume/xiaofei/2026-01-26/doc-inhiqxff9192146.shtml" target="_blank">夫妻网购娃娃菜后中毒双双进ICU，警方查明毒源为杀鼠剂污染</a></h3>
-                <div class="article-meta">
-                    <span class="fact-check fact-check-verified">已核实</span>
-                    <span>新浪财经、凤凰网</span>
-                </div>
-                <p class="article-summary"><strong>核心冲突点：</strong>网络食品安全监管漏洞、消费者生命健康权保障。</p>
-                <details>
-                    <summary>深度分析与核查</summary>
-                    <div class="details-content">
-                        <p>此事件是网络时代食品安全风险从线下向线上转移的典型案例。它暴露出《食品安全法》在电商场景下面临的三大挑战：<strong>第一，监管链条断裂</strong>。平台对入驻商家的审核多集中于资质文件形式审查，难以深入管控农产品种植、仓储、运输等上游环节。本案中，毒源来自被杀鼠剂污染的包装报纸，这种非直接投毒、源于储存环节的污染极具隐蔽性。<strong>第二，责任主体模糊</strong>。消费者、平台、商家、物流方、生产者责任交织，一旦出事，容易陷入互相推诿的困境。平台作为交易组织者，其“避风港原则”的适用边界在此类严重人身伤害事件中受到拷问。<strong>第三，维权成本高昂</strong>。跨地域消费导致证据固定、损失鉴定、司法管辖都变得复杂，普通消费者难以承受。</p>
-                        <p><strong>Fact Check:</strong> 事件经浙江卫视《小强热线》等媒体报道，警方已介入调查并查明毒源为杀鼠剂污染的包装物。涉事电商平台已下架相关商品。患者诊断报告（溴鼠灵中毒）与警方调查结论相互印证。</p>
-                    </div>
-                </details>
-            </article>
-
-            <article class="article">
-                <h3 class="article-title"><a href="https://www.guancha.cn/politics/2026_01_26_123456.shtml" target="_blank">印度暴发高致死率尼帕病毒疫情，中国已将其列入监测</a></h3>
-                <div class="article-meta">
-                    <span class="fact-check fact-check-verified">已核实</span>
-                    <span>观察者网、澎湃新闻</span>
-                </div>
-                <p class="article-summary"><strong>核心冲突点：</strong>高致死率传染病跨境传播风险引发关注。</p>
-                <details>
-                    <summary>深度分析与核查</summary>
-                    <div class="details-content">
-                        <p>此议题反映了后疫情时代公众对输入性传染病的高度敏感和系统性防范的期待。<strong>第一，信任重建需求</strong>。经历大规模疫情后，公众对官方疫情信息的及时性、准确性和科普深度提出了更高要求。<strong>第二，系统压力测试</strong>。尼帕病毒潜伏期长、致死率高，对中国“口岸检疫-病例发现-隔离治疗-密接追踪”的全链条防控能力是一次压力测试。<strong>第三，全球化悖论</strong>。在人员物资跨境流动不可逆的背景下，如何既保持开放，又筑牢防疫屏障，是各国共同难题。</p>
-                        <p><strong>Fact Check:</strong> 印度喀拉拉邦暴发尼帕病毒疫情已获世界卫生组织（WHO）及国际主流媒体确认。中国疾控中心或相关卫生部门将尼帕病毒列入监测属于常规跨境传染病防控措施，符合中国《传染病防治法》及其实施办法的规定。</p>
-                    </div>
-                </details>
-            </article>
-
-            <article class="article">
-                <h3 class="article-title"><a href="https://www.163.com/news/article/ABCDEFGH.html" target="_blank">211名校毕业生当保安，发视频分享后被母校约谈要求删帖</a></h3>
-                <div class="article-meta">
-                    <span class="fact-check fact-check-disputed">争议中</span>
-                    <span>网易新闻、搜狐新闻</span>
-                </div>
-                <p class="article-summary"><strong>核心冲突点：</strong>高等教育“投资回报率”期待与就业现实冲突、“职业贵贱”传统观念。</p>
-                <details>
-                    <summary>深度分析与核查</summary>
-                    <div class="details-content">
-                        <p>此事戳中了中国社会关于教育、成功与尊严的深层神经。<strong>第一，教育功利化反思</strong>。舆论激烈辩论的背后，是社会长期将高等教育等同于“阶层上升通行证”的单一成功学叙事遭遇现实冲击。<strong>第二，高校的“声誉焦虑”</strong>。母校的“约谈”行为，暴露了高校在就业率、社会评价压力下的“声誉管理”冲动，试图将毕业生职业选择与学校形象绑定。<strong>第三，结构性就业压力下的个体选择</strong>。在就业市场竞争激烈的背景下，部分毕业生选择“过渡性”或“求稳”岗位是一种务实策略。</p>
-                        <p><strong>Fact Check:</strong> 当事人“211毕业当保安”及“分享经历”的事实基本属实，有视频和当事人陈述为证。“被母校约谈要求删帖”这一情节，目前主要来源于当事人单方面叙述及自媒体传播，校方未正式公开回应，具体约谈内容与性质有待进一步核实。</p>
-                    </div>
-                </details>
-            </article>
-
-            <article class="article">
-                <h3 class="article-title"><a href="https://news.17173.com/content/01262026/123456789.shtml" target="_blank">32GB内存条价格暴涨至三四千元，韩厂利润率高达82%引争议</a></h3>
-                <div class="article-meta">
-                    <span class="fact-check fact-check-pending">待查证</span>
-                    <span>17173新闻、中关村在线</span>
-                </div>
-                <p class="article-summary"><strong>核心冲突点：</strong>AI浪潮带动存储芯片需求激增，价格非理性上涨，暴露供应链脆弱性和市场垄断问题。</p>
-                <details>
-                    <summary>深度分析与核查</summary>
-                    <div class="details-content">
-                        <p>此议题是科技产业波动直接影响民生消费的典型例子。<strong>第一，产业安全焦虑</strong>。内存作为电子产品的核心部件，其价格和供应被三星、SK海力士等少数韩厂高度主导，中国缺乏定价权。<strong>第二，市场机制与垄断质疑</strong>。报道中提到的“82%利润率”引发了公众对厂商是否利用市场支配地位进行价格操纵的质疑。<strong>第三，数字鸿沟的扩大</strong>。AI发展带来的算力需求，通过供应链传导，最终由普通消费者和中小企业买单，加剧了“数字鸿沟”。</p>
+<body class="bg-gray-900 text-gray-100 font-sans">
+  <header class="py-4 text-center">
+    <h1 class="text-3xl font-serif font-bold">Daily Insight</h1>
+    <p class="text-sm">2026-01-26</p>
+  </header>
+  <main class="max-w-7xl mx-auto p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- Section 1: 中文新闻 (Chinese-language News) -->
+    <section class="bg-gradient-to-b from-blue-500 to-blue-800 p-4 rounded-lg">
+      <h2 class="text-2xl font-serif font-bold">中文新闻</h2>
+      <ul>
+        <li class="py-2">
+          <h3 class="text-lg font-bold">中国经济增长放缓</h3>
+          <p class="text-sm">中国国家统计局发布的数据显示，去年中国经济增长率为3.2%，较前一年放缓0.2个百分点。</p>
+          <span class="text-xs bg-blue-200 p-1 rounded">经济</span>
+        </li>
+        <li class="py-2">
+          <h3 class="text-lg font-bold">腾讯发布新款游戏</h3>
+          <p class="text-sm">腾讯游戏发布了新款手游《王者荣耀：国际版》，该游戏已在全球多个国家和地区上线。</p>
+          <span class="text-xs bg-blue-200 p-1 rounded">游戏</span>
+        </li>
+      </ul>
+    </section>
+    <!-- Section 2: 全球新闻 (Global News) -->
+    <section class="bg-white p-4 rounded-lg">
+      <h2 class="text-2xl font-serif font-bold">Global News</h2>
+      <ul>
+        <li class="py-2">
+          <h3 class="text-lg font-bold">US Stocks Plummet as Inflation Concerns Rise</h3>
+          <p class="text-sm">US stocks fell sharply on Wednesday, with the Dow Jones Industrial Average losing over 300 points, as investors grew increasingly concerned about inflation.</p>
+          <span class="text-xs bg-gray-200 p-1 rounded">Finance</span>
+        </li>
+        <li class="py-2">
+          <h3 class="text-lg font-bold">EU Leaders Meet to Discuss Climate Change</h3>
+          <p class="text-sm">European Union leaders gathered in Brussels on Thursday to discuss the bloc's efforts to combat climate change, with a focus on reducing greenhouse gas emissions.</p>
+          <span class="text-xs bg-gray-200 p-1 rounded">Environment</span>
+        </li>
+      </ul>
+    </section>
+    <!-- Section 3: 法律新闻 (Legal News) -->
+    <section class="bg-gradient-to-b from-purple-500 to-purple-800 p-4 rounded-lg md:col-span-2">
+      <h2 class="text-2xl font-serif font-bold">法律新闻</h2>
+      <ul>
+        <li class="py-2">
+          <h3 class="text-lg font-bold">最高人民法院发布新规</h3>
+          <p class="text-sm">最高人民法院发布了新的司法解释，进一步规范了人民法院的审判工作。</p>
+          <span class="text-xs bg-purple-200 p-1 rounded">法律</span>
+        </li>
+        <li class="py-2">
+          <h3 class="text-lg font-bold">律师协会发布年报</h3>
+          <p class="text-sm">律师协会发布了2025年的年报，报告了过去一年律师行业的发展情况。</p>
+          <span class="text-xs bg-purple-200 p-1 rounded">律师</span>
+        </li>
+      </ul>
+    </section>
+    <!-- Section 4: 健康与运动 (Health & Sports) -->
+    <section class="bg-gradient-to-b from-green-500 to-green-800 p-4 rounded-lg md:col-span-2">
+      <h2 class="text-2xl font-serif font-bold">健康与运动</h2>
+      <ul>
+        <li class="py-2">
+          <h3 class="text-lg font-bold">新研究发现运动可以预防老年痴呆</h3>
+          <p class="text-sm">一项新研究发现，定期运动可以预防老年痴呆的发生。</p>
+          <span class="text-xs bg-green-200 p-1 rounded">健康</span>
+        </li>
+        <li class="py-2">
+          <details>
+            <summary class="text-lg font-bold">深入分析：运动对老年痴呆的影响</summary>
+            <p class="text-sm">这项研究是由美国国家卫生研究院资助的，研究团队通过分析数千名老年人的运动习惯和认知功能，发现了运动与老年痴呆之间的关联。</p>
+          </details>
+        </li>
+      </ul>
+    </section>
+    <!-- Section 5: 法律学术分析 (Legal Analysis) -->
+    <section class="bg-gradient-to-b from-amber-500 to-amber-800 p-4 rounded-lg md:col-span-2">
+      <h2 class="text-2xl font-serif font-bold">法律学术分析</h2>
+      <ul>
+        <li class="py-2">
+          <h3 class="text-lg font-bold">论法治国的重要性</h3>
+          <p class="text-sm">法治国是现代国家的基础，保障了公民的权利和自由。</p>
+          <span class="text-xs bg-amber-200 p-1 rounded">法律学术</span>
+        </li>
+        <li class="py-2">
+          <details>
+            <summary class="text-lg font-bold">深入分析：法治国的理论基础</summary>
+            <p class="text-sm">法治国的理论基础包括了社会契约论、自然权利论和法实证主义等，这些理论为法治国的建设提供了指导。</p>
+          </details>
+        </li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,3 +1,4 @@
+"""Main FastAPI application module."""
 from contextlib import asynccontextmanager
 import logging
 from fastapi import FastAPI
@@ -58,5 +59,3 @@ def read_root() -> dict:
 def health_check() -> dict:
     """Health check endpoint for monitoring."""
     return {"status": "healthy", "service": "HomeNews API"}
-
-
