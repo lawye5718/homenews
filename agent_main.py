@@ -449,8 +449,24 @@ task_research = Task(
     Ensure English headlines are preserved for Global news.
     **CRITICAL**: Preserve ALL original source URLs from all sections - news articles, research papers, court documents, law review articles, etc.
     Format source URLs clearly so they can be displayed as clickable links in the final HTML.
+    
+    **Output Format Requirements**:
+    Structure the output in clear markdown with:
+    - Clear section headers (# Section Name)
+    - Each news item with:
+      * ## News Headline
+      * Category tag
+      * Full summary text
+      * Sources: [URL1], [URL2], [URL3]
+    - Each analysis with:
+      * ## Analysis Title
+      * Complete 5000+ word content with all subsections
+      * All source citations with URLs
+    
+    Make it easy for the next agent to parse and convert to HTML.
+    Include ALL content - do not truncate or summarize.
     """,
-    expected_output="Master Report Markdown with all 5 sections, complete analyses, and all source URLs preserved.",
+    expected_output="Master Report Markdown with all 5 sections, complete analyses, all source URLs preserved, and clear structure for HTML conversion.",
     agent=researcher,
     context=[task_china, task_global, task_legal, task_health_sports, task_health_analysis, task_legal_analysis]
 )
@@ -531,9 +547,54 @@ task_publish = Task(
     }}
     ```
     
+    **CRITICAL - Content Population Requirements**:
+    YOU MUST populate ALL sections with the ACTUAL CONTENT from the research report.
+    DO NOT create empty framework/skeleton HTML.
+    
+    For each news item, you MUST include:
+    - The actual headline/title from the research report
+    - The full summary text (1000+ words)
+    - All source URLs as clickable links
+    - Relevant category tags
+    
+    For each analysis report, you MUST include:
+    - The complete 5000+ word analysis text
+    - All section headings and content
+    - All source citations and links
+    - Collapsible structure with "Read More" functionality
+    
+    **Example Structure for a News Card**:
+    ```html
+    <div class="card bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+      <span class="inline-block px-3 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full mb-3">Tech</span>
+      <h3 class="font-serif text-2xl font-bold mb-3">[ACTUAL NEWS HEADLINE HERE]</h3>
+      <div class="prose prose-lg">
+        [ACTUAL FULL NEWS SUMMARY TEXT HERE - 1000+ words from research report]
+      </div>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <a href="[ACTUAL SOURCE URL]" class="text-xs px-2 py-1 bg-gray-100 rounded-full hover:bg-gray-200">Source 1</a>
+        <a href="[ACTUAL SOURCE URL]" class="text-xs px-2 py-1 bg-gray-100 rounded-full hover:bg-gray-200">Source 2</a>
+      </div>
+    </div>
+    ```
+    
+    **Example Structure for Collapsible Analysis**:
+    ```html
+    <details class="card bg-white rounded-xl shadow-lg p-6">
+      <summary class="cursor-pointer font-serif text-2xl font-bold hover:text-blue-600">
+        [ACTUAL ANALYSIS TITLE HERE] ▼
+      </summary>
+      <div class="mt-4 prose prose-lg max-w-none">
+        [ACTUAL COMPLETE 5000+ WORD ANALYSIS CONTENT HERE]
+      </div>
+    </details>
+    ```
+    
     **Output**: 
     - ONLY the raw HTML code, starting with `<!DOCTYPE html>`.
-    - Complete, production-ready HTML with all animations and card-based styling.
+    - Complete, production-ready HTML with ALL ACTUAL CONTENT from the research report.
+    - NO placeholder text, NO empty sections, NO skeleton frameworks.
+    - Every section must have real news items and analyses from the research report.
     """,
     expected_output="Final HTML String with 5 sections, card-based responsive layout, collapsible groups, and smooth animations.",
     agent=editor,
@@ -541,6 +602,57 @@ task_publish = Task(
 )
 
 # --- 5. 执行流程 ---
+def validate_html_content(html_content):
+    """Validate that the HTML contains actual content, not just framework"""
+    required_sections = [
+        "中文新闻",  # Chinese News
+        "全球新闻",  # Global News  
+        "法律新闻",  # Legal News
+        "健康与运动", # Health & Sports
+        "法律学术"   # Legal Analysis
+    ]
+    
+    validation_passed = True
+    issues = []
+    
+    # Check for DOCTYPE
+    if not html_content.strip().startswith("<!DOCTYPE html>") and not html_content.strip().startswith("<html"):
+        issues.append("Missing DOCTYPE or html tag")
+        validation_passed = False
+    
+    # Check for each required section
+    for section in required_sections:
+        if section not in html_content:
+            issues.append(f"Missing section: {section}")
+            validation_passed = False
+    
+    # Check for content indicators (should have multiple paragraphs, not just headers)
+    if html_content.count("<p>") < 10:
+        issues.append(f"Suspiciously low paragraph count: {html_content.count('<p>')} (expected 10+)")
+        validation_passed = False
+    
+    # Check for links
+    if html_content.count("<a ") < 5:
+        issues.append(f"Suspiciously low link count: {html_content.count('<a ')} (expected source links)")
+        validation_passed = False
+    
+    # Check minimum length (should be substantial)
+    if len(html_content) < 50000:  # Should be much larger with all content
+        issues.append(f"HTML too short: {len(html_content)} bytes (expected 50000+)")
+        validation_passed = False
+    
+    if not validation_passed:
+        print("⚠️ HTML Validation Issues Found:")
+        for issue in issues:
+            print(f"  - {issue}")
+    else:
+        print("✅ HTML validation passed")
+        print(f"  - HTML length: {len(html_content)} bytes")
+        print(f"  - Paragraph count: {html_content.count('<p>')}")
+        print(f"  - Link count: {html_content.count('<a ')}")
+    
+    return validation_passed, issues
+
 def run():
     print("🚀 Starting Daily News Agent (5-Section Edition)...")
     
@@ -579,17 +691,28 @@ def run():
         result = news_crew.kickoff()
         final_html = str(result)
         
+        # Log result for debugging
+        print(f"\n📝 Raw result length: {len(final_html)} characters")
+        print(f"📝 First 500 chars of result:\n{final_html[:500]}")
+        
         # 清洗 Markdown 标记
         if "```html" in final_html:
             final_html = final_html.split("```html")[1].split("```")[0]
         elif "```" in final_html:
             final_html = final_html.split("```")[1].split("```")[0]
+        
+        # Validate HTML content
+        print("\n🔍 Validating HTML content...")
+        validation_passed, issues = validate_html_content(final_html)
+        
+        if not validation_passed:
+            print("⚠️ HTML validation failed, but saving anyway for review")
             
         output_path = "index.html"
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(final_html.strip())
         
-        print(f"✅ Report generated successfully: {output_path}")
+        print(f"\n✅ Report generated successfully: {output_path}")
         print("📊 Report includes 5 sections:")
         print("   1. 中文新闻 (Chinese-language News)")
         print("   2. 全球新闻 (Global News)")
@@ -777,17 +900,27 @@ def run():
             result = news_crew_deepseek.kickoff()
             final_html = str(result)
             
+            # Log result for debugging
+            print(f"\n📝 Raw result length: {len(final_html)} characters")
+            
             # 清洗 Markdown 标记
             if "```html" in final_html:
                 final_html = final_html.split("```html")[1].split("```")[0]
             elif "```" in final_html:
                 final_html = final_html.split("```")[1].split("```")[0]
+            
+            # Validate HTML content
+            print("\n🔍 Validating HTML content...")
+            validation_passed, issues = validate_html_content(final_html)
+            
+            if not validation_passed:
+                print("⚠️ HTML validation failed, but saving anyway for review")
                 
             output_path = "index.html"
             with open(output_path, "w", encoding="utf-8") as f:
                 f.write(final_html.strip())
             
-            print(f"✅ Report generated successfully with second backup model (DeepSeek Official API): {output_path}")
+            print(f"\n✅ Report generated successfully with second backup model (DeepSeek Official API): {output_path}")
             print("📊 Report includes 4 sections (Chinese news skipped to avoid content policy issues):")
             print("   1. 全球新闻 (Global News)")
             print("   2. 法律新闻 (Legal News)")
@@ -801,66 +934,75 @@ def run():
             # 使用第三备用模型重试 (nvidia/llama-3.3-nemotron-super-49b-v1.5)
             try:
                 
-                # 重新创建 agents（跳过 china_scout），使用第三备用 LLM
-                global_scout_deepseek = Agent(
+                # 重新创建 agents，使用第三备用 LLM (包含所有5个板块)
+                china_scout_backup = Agent(
+                    role=china_scout.role,
+                    goal=china_scout.goal,
+                    backstory=china_scout.backstory,
+                    tools=china_scout.tools,
+                    llm=backup_llm,
+                    verbose=True
+                )
+                
+                global_scout_backup = Agent(
                     role=global_scout.role,
                     goal=global_scout.goal,
                     backstory=global_scout.backstory,
                     tools=global_scout.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                legal_scout_deepseek = Agent(
+                legal_scout_backup = Agent(
                     role=legal_scout.role,
                     goal=legal_scout.goal,
                     backstory=legal_scout.backstory,
                     tools=legal_scout.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                health_sports_scout_deepseek = Agent(
+                health_sports_scout_backup = Agent(
                     role=health_sports_scout.role,
                     goal=health_sports_scout.goal,
                     backstory=health_sports_scout.backstory,
                     tools=health_sports_scout.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                health_analyst_deepseek = Agent(
+                health_analyst_backup = Agent(
                     role=health_analyst.role,
                     goal=health_analyst.goal,
                     backstory=health_analyst.backstory,
                     tools=health_analyst.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                legal_scholar_deepseek = Agent(
+                legal_scholar_backup = Agent(
                     role=legal_scholar.role,
                     goal=legal_scholar.goal,
                     backstory=legal_scholar.backstory,
                     tools=legal_scholar.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                researcher_deepseek = Agent(
+                researcher_backup = Agent(
                     role=researcher.role,
                     goal=researcher.goal,
                     backstory=researcher.backstory,
                     tools=researcher.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                editor_deepseek = Agent(
+                editor_backup = Agent(
                     role=editor.role,
                     goal=editor.goal,
                     backstory=editor.backstory,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
@@ -947,11 +1089,21 @@ def run():
                 result = news_crew_backup.kickoff()
                 final_html = str(result)
                 
+                # Log result for debugging
+                print(f"\n📝 Raw result length: {len(final_html)} characters")
+                
                 # 清洗 Markdown 标记
                 if "```html" in final_html:
                     final_html = final_html.split("```html")[1].split("```")[0]
                 elif "```" in final_html:
                     final_html = final_html.split("```")[1].split("```")[0]
+                
+                # Validate HTML content
+                print("\n🔍 Validating HTML content...")
+                validation_passed, issues = validate_html_content(final_html)
+                
+                if not validation_passed:
+                    print("⚠️ HTML validation failed, but saving anyway for review")
                     
                 output_path = "index.html"
                 with open(output_path, "w", encoding="utf-8") as f:
