@@ -4,3 +4,5 @@
 crewai[tools]>=0.28.0
 python-dotenv>=1.0.0
 litellm>=1.61.15
+# email-validator is required for litellm error logging (pydantic EmailStr validation)
+email-validator>=2.0.0
