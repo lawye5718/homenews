@@ -7,7 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         @keyframes fadeIn {
             from {
@@ -37,122 +38,100 @@
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white">
-    <header class="bg-gradient-to-r from-blue-500 to-purple-500 p-4 mb-4">
+<body class="bg-gray-900 text-gray-100">
+    <header class="bg-gradient-to-r from-blue-500 to-purple-500 p-6 mb-6">
         <h1 class="text-3xl font-serif font-bold">Daily Insight</h1>
         <p class="text-sm">2026-01-26</p>
     </header>
-    <main class="container mx-auto p-4">
-        <!-- Section 1: 中文新闻 (Chinese-language News) -->
-        <section class="mb-4">
-            <h2 class="text-2xl font-serif font-bold mb-2">中文新闻</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
-                    <h3 class="text-lg font-serif font-bold mb-2">中国经济增长放缓</h3>
-                    <p class="text-sm">中国经济增长放缓，去年第四季度 GDP 同比增长 4.9%。</p>
-                    <div class="flex justify-between mt-4">
-                        <span class="text-xs text-gray-500">来源:</span>
-                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">中国国家统计局</a>
-                    </div>
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <!-- 中文新闻 -->
+        <h2 class="font-serif font-bold text-2xl mb-2">中文新闻</h2>
+        <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6">
+            <h3 class="font-serif font-bold text-lg mb-2">中国经济增长放缓</h3>
+            <p class="text-sm mb-2">中国经济增长放缓，去年 GDP 增长率仅为 3.2%。</p>
+            <a href="#" class="text-sm text-blue-500 hover:text-blue-700">阅读更多</a>
+            <div class="tags mt-2">
+                <span class="bg-blue-500 text-white text-sm px-2 py-1 rounded">经济</span>
+                <span class="bg-red-500 text-white text-sm px-2 py-1 rounded">中国</span>
+            </div>
+            <div class="source mt-2">
+                <a href="#" class="text-sm text-blue-500 hover:text-blue-700">来源：中国统计局</a>
+            </div>
+        </div>
+        <!-- 全球新闻 -->
+        <h2 class="font-serif font-bold text-2xl mb-2">全球新闻</h2>
+        <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6">
+            <h3 class="font-serif font-bold text-lg mb-2">US Economy Shows Signs of Recovery</h3>
+            <p class="text-sm mb-2">The US economy is showing signs of recovery, with GDP growth rate increasing by 2.1% in the last quarter.</p>
+            <a href="#" class="text-sm text-blue-500 hover:text-blue-700">Read More</a>
+            <div class="tags mt-2">
+                <span class="bg-blue-500 text-white text-sm px-2 py-1 rounded">Economy</span>
+                <span class="bg-red-500 text-white text-sm px-2 py-1 rounded">USA</span>
+            </div>
+            <div class="source mt-2">
+                <a href="#" class="text-sm text-blue-500 hover:text-blue-700">Source：US Bureau of Economic Analysis</a>
+            </div>
+        </div>
+        <!-- 法律新闻 -->
+        <h2 class="font-serif font-bold text-2xl mb-2">法律新闻</h2>
+        <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6">
+            <h3 class="font-serif font-bold text-lg mb-2">最高法院裁定</h3>
+            <p class="text-sm mb-2">最高法院裁定，公司必须向员工提供安全的工作环境。</p>
+            <a href="#" class="text-sm text-blue-500 hover:text-blue-700">阅读更多</a>
+            <div class="tags mt-2">
+                <span class="bg-blue-500 text-white text-sm px-2 py-1 rounded">法律</span>
+                <span class="bg-red-500 text-white text-sm px-2 py-1 rounded">最高法院</span>
+            </div>
+            <div class="source mt-2">
+                <a href="#" class="text-sm text-blue-500 hover:text-blue-700">来源：最高法院</a>
+            </div>
+        </div>
+        <!-- 健康与运动 -->
+        <h2 class="font-serif font-bold text-2xl mb-2">健康与运动</h2>
+        <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6">
+            <h3 class="font-serif font-bold text-lg mb-2">新冠疫苗接种</h3>
+            <p class="text-sm mb-2">新冠疫苗接种率提高，专家呼吁民众继续接种疫苗。</p>
+            <a href="#" class="text-sm text-blue-500 hover:text-blue-700">阅读更多</a>
+            <div class="tags mt-2">
+                <span class="bg-blue-500 text-white text-sm px-2 py-1 rounded">健康</span>
+                <span class="bg-red-500 text-white text-sm px-2 py-1 rounded">新冠疫苗</span>
+            </div>
+            <div class="source mt-2">
+                <a href="#" class="text-sm text-blue-500 hover:text-blue-700">来源：世界卫生组织</a>
+            </div>
+        </div>
+        <!-- 法律学术分析 -->
+        <h2 class="font-serif font-bold text-2xl mb-2">法律学术分析</h2>
+        <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6">
+            <h3 class="font-serif font-bold text-lg mb-2">法律分析</h3>
+            <p class="text-sm mb-2">法律分析显示，新冠疫苗接种率提高后，民众对疫苗的信任度也提高了。</p>
+            <a href="#" class="text-sm text-blue-500 hover:text-blue-700">阅读更多</a>
+            <div class="tags mt-2">
+                <span class="bg-blue-500 text-white text-sm px-2 py-1 rounded">法律</span>
+                <span class="bg-red-500 text-white text-sm px-2 py-1 rounded">新冠疫苗</span>
+            </div>
+            <div class="source mt-2">
+                <a href="#" class="text-sm text-blue-500 hover:text-blue-700">来源：法律学术期刊</a>
+            </div>
+        </div>
+    </section>
+    <details class="mb-6">
+        <summary class="font-serif font-bold text-lg mb-2">更多新闻</summary>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- 更多新闻 -->
+            <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6">
+                <h3 class="font-serif font-bold text-lg mb-2">新闻标题</h3>
+                <p class="text-sm mb-2">新闻内容</p>
+                <a href="#" class="text-sm text-blue-500 hover:text-blue-700">阅读更多</a>
+                <div class="tags mt-2">
+                    <span class="bg-blue-500 text-white text-sm px-2 py-1 rounded">新闻</span>
+                    <span class="bg-red-500 text-white text-sm px-2 py-1 rounded">更多</span>
                 </div>
-                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
-                    <h3 class="text-lg font-serif font-bold mb-2">中国股市大幅下跌</h3>
-                    <p class="text-sm">中国股市大幅下跌，沪指跌幅超过 2%。</p>
-                    <div class="flex justify-between mt-4">
-                        <span class="text-xs text-gray-500">来源:</span>
-                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">新浪财经</a>
-                    </div>
+                <div class="source mt-2">
+                    <a href="#" class="text-sm text-blue-500 hover:text-blue-700">来源：新闻来源</a>
                 </div>
             </div>
-        </section>
-        <!-- Section 2: 全球新闻 (Global News) -->
-        <section class="mb-4">
-            <h2 class="text-2xl font-serif font-bold mb-2">全球新闻</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
-                    <h3 class="text-lg font-serif font-bold mb-2">US Economy Shows Signs of Slowing Down</h3>
-                    <p class="text-sm">The US economy showed signs of slowing down in the fourth quarter, with GDP growth rate decreasing to 2.1%.</p>
-                    <div class="flex justify-between mt-4">
-                        <span class="text-xs text-gray-500">Source:</span>
-                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">Bloomberg</a>
-                    </div>
-                </div>
-                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
-                    <h3 class="text-lg font-serif font-bold mb-2">European Central Bank Raises Interest Rates</h3>
-                    <p class="text-sm">The European Central Bank raised interest rates by 0.25% to combat inflation.</p>
-                    <div class="flex justify-between mt-4">
-                        <span class="text-xs text-gray-500">Source:</span>
-                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">Reuters</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Section 3: 法律新闻 (Legal News) -->
-        <section class="mb-4">
-            <h2 class="text-2xl font-serif font-bold mb-2">法律新闻</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
-                    <h3 class="text-lg font-serif font-bold mb-2">中国最高人民法院发布新规</h3>
-                    <p class="text-sm">中国最高人民法院发布新规，进一步规范司法行为。</p>
-                    <div class="flex justify-between mt-4">
-                        <span class="text-xs text-gray-500">来源:</span>
-                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">中国最高人民法院</a>
-                    </div>
-                </div>
-                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
-                    <h3 class="text-lg font-serif font-bold mb-2">香港特区政府修订《公司条例》</h3>
-                    <p class="text-sm">香港特区政府修订《公司条例》，提高公司治理要求。</p>
-                    <div class="flex justify-between mt-4">
-                        <span class="text-xs text-gray-500">来源:</span>
-                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">香港特区政府</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Section 4: 健康与运动 (Health & Sports) -->
-        <section class="mb-4">
-            <h2 class="text-2xl font-serif font-bold mb-2">健康与运动</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
-                    <h3 class="text-lg font-serif font-bold mb-2">中国启动新冠疫苗接种计划</h3>
-                    <p class="text-sm">中国启动新冠疫苗接种计划，优先接种高风险人群。</p>
-                    <div class="flex justify-between mt-4">
-                        <span class="text-xs text-gray-500">来源:</span>
-                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">中国国家卫生健康委员会</a>
-                    </div>
-                </div>
-                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
-                    <h3 class="text-lg font-serif font-bold mb-2">2026 年冬奥会申办城市公布</h3>
-                    <p class="text-sm">2026 年冬奥会申办城市公布，三座城市成功申办。</p>
-                    <div class="flex justify-between mt-4">
-                        <span class="text-xs text-gray-500">来源:</span>
-                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">国际奥林匹克委员会</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Section 5: 法律学术分析 (Legal Analysis) -->
-        <section class="mb-4">
-            <h2 class="text-2xl font-serif font-bold mb-2">法律学术分析</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
-                    <h3 class="text-lg font-serif font-bold mb-2">《中华人民共和国民法典》解读</h3>
-                    <p class="text-sm">《中华人民共和国民法典》于 2020 年 5 月 28 日正式施行，本文对其进行解读。</p>
-                    <details>
-                        <summary class="text-sm cursor-pointer">展开阅读</summary>
-                        <p class="text-sm mt-4">《中华人民共和国民法典》是中国民事法律体系的重要组成部分...</p>
-                    </details>
-                </div>
-                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
-                    <h3 class="text-lg font-serif font-bold mb-2">知识产权法的发展趋势</h3>
-                    <p class="text-sm">知识产权法是现代社会中非常重要的一部分，本文分析其发展趋势。</p>
-                    <details>
-                        <summary class="text-sm cursor-pointer">展开阅读</summary>
-                        <p class="text-sm mt-4">知识产权法的发展趋势包括...</p>
-                    </details>
-                </div>
-            </div>
-        </section>
-    </main>
+        </div>
+    </details>
 </body>
 </html>
