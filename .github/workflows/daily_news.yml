@@ -2,11 +2,9 @@ name: Daily News Agent
 
 on:
   schedule:
-    # 每天 UTC 19:00 = 北京时间次日 03:00
-    - cron: '0 19 * * *'
-  workflow_dispatch: # 允许手动按钮触发
+    - cron: '0 23 * * *' # 建议调整：UTC 23:00 是北京时间早上 7:00，适合发日报
+  workflow_dispatch:
 
-# 🔥 关键：赋予 GITHUB_TOKEN 写权限，否则无法推送到 gh-pages 分支
 permissions:
   contents: write
   pages: write
@@ -25,34 +23,31 @@ jobs:
         with:
           python-version: '3.11'
 
-      # 安装依赖
+      # ✅ 修复点：直接安装 requirements.txt，确保 fastapi 等依赖被包含
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install 'crewai[tools]' python-dotenv litellm
+          pip install -r requirements.txt
 
-      # 运行智能体脚本
       - name: Run CrewAI Agent
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
-          # 有些版本的 CrewAI/LangChain 可能会检查 OPENAI_API_KEY，即使我们用的是 DeepSeek
           OPENAI_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           OPENAI_API_BASE: "https://api.deepseek.com"
         run: python agent_main.py
 
-      # 检查 HTML 是否生成
       - name: Verify HTML generation
         run: |
           if [ -f "index.html" ]; then
             echo "✅ HTML generated successfully."
-            cat index.html | head -n 20 # 显示生成的HTML前20行
+            # 打印前50行以检查是否有 <!DOCTYPE html> 和头部信息
+            head -n 50 index.html 
           else
             echo "❌ HTML not found! Agent failed to produce output."
             exit 1
           fi
 
-      # 部署到 GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
