@@ -36,7 +36,7 @@ TBD
 
 ## 新增功能：AI自动化新闻简报系统
 
-本项目集成了一个使用NVIDIA DeepSeek-V3.2和CrewAI的自动化新闻简报系统。
+本项目集成了一个使用NVIDIA meta/llama-3.1-405b-instruct和CrewAI的自动化新闻简报系统。
 
 ### 功能特点
 
@@ -102,10 +102,10 @@ TBD
 
 **模型故障转移机制**：
 - 主模型: `meta/llama-3.1-405b-instruct` (NVIDIA API) - 高性能稳定模型，包含全部5个板块
-- 第二备用: `nvidia/llama-3.3-nemotron-super-49b-v1.5` (NVIDIA API) - 包含全部5个板块
-- 第三备用: `deepseek-chat` (DeepSeek 官方 API) - **仅包含4个板块（跳过中文新闻以避免内容审查问题）**
+- 第二备用: `deepseek-chat` (DeepSeek 官方 API) - **仅包含4个板块（跳过中文新闻以避免内容审查问题）**
+- 第三备用: `nvidia/llama-3.3-nemotron-super-49b-v1.5` (NVIDIA API) - 包含全部5个板块
 
-系统会在主模型失败时自动切换到备用模型，确保服务稳定性。使用第三备用模型时，会自动跳过可能触发内容审查的中文新闻板块。
+系统会在主模型失败时自动切换到备用模型，确保服务稳定性。使用第二备用模型（DeepSeek官方API）时，会自动跳过可能触发内容审查的中文新闻板块。
 
 ### 部署指南
 

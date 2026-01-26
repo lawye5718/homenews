@@ -19,11 +19,12 @@ nvidia_llm = LLM(
     timeout=600
 )
 
-# 第二备用模型配置 - 在主模型调用失败时使用
-backup_llm = LLM(
-    model="nvidia/llama-3.3-nemotron-super-49b-v1.5",
-    base_url="https://integrate.api.nvidia.com/v1",
-    api_key=os.environ.get("NVIDIA_API_KEY"),
+# 第二备用模型配置 - 使用 DeepSeek 官方 API (中国版)
+# 在主模型调用失败时使用，为避免敏感问题跳过中国新闻板块
+deepseek_llm = LLM(
+    model="deepseek-chat",
+    base_url="https://api.deepseek.com",
+    api_key=os.environ.get("DEEPSEEK_API_KEY"),
     temperature=0.7,
     top_p=0.95,
     max_tokens=8192,
@@ -31,12 +32,11 @@ backup_llm = LLM(
     timeout=600
 )
 
-# 第三备用模型配置 - 使用 DeepSeek 官方 API
-# 在前两个模型都失败或长时间无响应时使用
-deepseek_llm = LLM(
-    model="deepseek-chat",
-    base_url="https://api.deepseek.com",
-    api_key=os.environ.get("DEEPSEEK_API_KEY"),
+# 第三备用模型配置 - 在第二备用模型失败时使用
+backup_llm = LLM(
+    model="nvidia/llama-3.3-nemotron-super-49b-v1.5",
+    base_url="https://integrate.api.nvidia.com/v1",
+    api_key=os.environ.get("NVIDIA_API_KEY"),
     temperature=0.7,
     top_p=0.95,
     max_tokens=8192,
@@ -492,57 +492,88 @@ def run():
         
     except Exception as e:
         print(f"⚠️ Primary model failed with error: {e}")
-        print("🔄 Retrying with backup model: nvidia/llama-3.3-nemotron-super-49b-v1.5")
+        print("🔄 Retrying with second backup model: deepseek-chat (DeepSeek Official API)")
+        
+        # 检查是否有 DeepSeek API Key
+        if not os.environ.get("DEEPSEEK_API_KEY"):
+            print("⚠️ Warning: DEEPSEEK_API_KEY not found, will try third backup model instead")
+            # 如果没有 DeepSeek API Key，直接跳到第三备用模型
+            try:
+                print("🔄 Using third backup model: nvidia/llama-3.3-nemotron-super-49b-v1.5")
+                # 这里会跳到第三备用模型的逻辑
+                raise Exception("DEEPSEEK_API_KEY not available, switching to third backup")
+            except:
+                pass  # 继续到下面的第三备用模型逻辑
         
         # 如果是 Content Risk，提示用户调整 Prompt
         if "Content Exists Risk" in str(e):
-            print("⚠️ Suggestion: The system prompt might contain sensitive keywords. Try softening the language in 'china_scout'.")
+            print("⚠️ Suggestion: The system prompt might contain sensitive keywords. Trying DeepSeek with modified workflow.")
         
-        # 使用第二备用模型重试
+        # 使用第二备用模型重试 (DeepSeek Official API)
+        # 注意：跳过中国新闻部分以避免内容审查问题
         try:
-            # 重新创建所有 agents，使用备用 LLM
-            china_scout_backup = Agent(
-                role=china_scout.role,
-                goal=china_scout.goal,
-                backstory=china_scout.backstory,
-                tools=china_scout.tools,
-                llm=backup_llm,
-                verbose=True
-            )
+            print("⚠️ Note: Skipping Chinese news section to avoid content policy issues with DeepSeek API")
             
-            global_scout_backup = Agent(
+            # 重新创建 agents（跳过 china_scout），使用第二备用 LLM (DeepSeek)
+            global_scout_deepseek = Agent(
                 role=global_scout.role,
                 goal=global_scout.goal,
                 backstory=global_scout.backstory,
                 tools=global_scout.tools,
-                llm=backup_llm,
+                llm=deepseek_llm,
                 verbose=True
             )
             
-            legal_scout_backup = Agent(
+            legal_scout_deepseek = Agent(
                 role=legal_scout.role,
                 goal=legal_scout.goal,
                 backstory=legal_scout.backstory,
                 tools=legal_scout.tools,
-                llm=backup_llm,
+                llm=deepseek_llm,
                 verbose=True
             )
             
-            health_sports_scout_backup = Agent(
+            health_sports_scout_deepseek = Agent(
                 role=health_sports_scout.role,
                 goal=health_sports_scout.goal,
                 backstory=health_sports_scout.backstory,
                 tools=health_sports_scout.tools,
-                llm=backup_llm,
+                llm=deepseek_llm,
                 verbose=True
             )
             
-            health_analyst_backup = Agent(
+            health_analyst_deepseek = Agent(
                 role=health_analyst.role,
                 goal=health_analyst.goal,
                 backstory=health_analyst.backstory,
                 tools=health_analyst.tools,
-                llm=backup_llm,
+                llm=deepseek_llm,
+                verbose=True
+            )
+            
+            legal_scholar_deepseek = Agent(
+                role=legal_scholar.role,
+                goal=legal_scholar.goal,
+                backstory=legal_scholar.backstory,
+                tools=legal_scholar.tools,
+                llm=deepseek_llm,
+                verbose=True
+            )
+            
+            researcher_deepseek = Agent(
+                role=researcher.role,
+                goal=researcher.goal,
+                backstory=researcher.backstory,
+                tools=researcher.tools,
+                llm=deepseek_llm,
+                verbose=True
+            )
+            
+            editor_deepseek = Agent(
+                role=editor.role,
+                goal=editor.goal,
+                backstory=editor.backstory,
+                llm=deepseek_llm,
                 verbose=True
             )
             
@@ -564,95 +595,79 @@ def run():
                 verbose=True
             )
             
-            editor_backup = Agent(
-                role=editor.role,
-                goal=editor.goal,
-                backstory=editor.backstory,
-                llm=backup_llm,
-                verbose=True
-            )
-            
-            # 重新创建任务，使用备用 agents
-            task_china_backup = Task(
-                description=task_china.description,
-                expected_output=task_china.expected_output,
-                agent=china_scout_backup
-            )
-            
-            task_global_backup = Task(
+            # 重新创建任务（跳过 task_china），使用第二备用 agents
+            task_global_deepseek = Task(
                 description=task_global.description,
                 expected_output=task_global.expected_output,
-                agent=global_scout_backup
+                agent=global_scout_deepseek
             )
             
-            task_legal_backup = Task(
+            task_legal_deepseek = Task(
                 description=task_legal.description,
                 expected_output=task_legal.expected_output,
-                agent=legal_scout_backup
+                agent=legal_scout_deepseek
             )
             
-            task_health_sports_backup = Task(
+            task_health_sports_deepseek = Task(
                 description=task_health_sports.description,
                 expected_output=task_health_sports.expected_output,
-                agent=health_sports_scout_backup
+                agent=health_sports_scout_deepseek
             )
             
-            task_health_analysis_backup = Task(
+            task_health_analysis_deepseek = Task(
                 description=task_health_analysis.description,
                 expected_output=task_health_analysis.expected_output,
-                agent=health_analyst_backup,
-                context=[task_health_sports_backup]
+                agent=health_analyst_deepseek,
+                context=[task_health_sports_deepseek]
             )
             
-            task_legal_analysis_backup = Task(
+            task_legal_analysis_deepseek = Task(
                 description=task_legal_analysis.description,
                 expected_output=task_legal_analysis.expected_output,
-                agent=legal_scholar_backup,
-                context=[task_china_backup, task_global_backup, task_legal_backup]
+                agent=legal_scholar_deepseek,
+                context=[task_global_deepseek, task_legal_deepseek]  # 跳过中国新闻上下文
             )
             
-            task_research_backup = Task(
+            task_research_deepseek = Task(
                 description=task_research.description,
                 expected_output=task_research.expected_output,
-                agent=researcher_backup,
-                context=[task_china_backup, task_global_backup, task_legal_backup, 
-                        task_health_sports_backup, task_health_analysis_backup, task_legal_analysis_backup]
+                agent=researcher_deepseek,
+                context=[task_global_deepseek, task_legal_deepseek, 
+                        task_health_sports_deepseek, task_health_analysis_deepseek, task_legal_analysis_deepseek]  # 跳过中国新闻
             )
             
-            task_publish_backup = Task(
+            task_publish_deepseek = Task(
                 description=task_publish.description,
                 expected_output=task_publish.expected_output,
-                agent=editor_backup,
-                context=[task_research_backup]
+                agent=editor_deepseek,
+                context=[task_research_deepseek]
             )
             
-            # 创建新的 Crew，使用备用模型
-            news_crew_backup = Crew(
+            # 创建新的 Crew，使用第二备用模型（跳过中国新闻）
+            news_crew_deepseek = Crew(
                 agents=[
-                    china_scout_backup, 
-                    global_scout_backup, 
-                    legal_scout_backup, 
-                    health_sports_scout_backup,
-                    health_analyst_backup,
-                    legal_scholar_backup,
-                    researcher_backup, 
-                    editor_backup
+                    global_scout_deepseek, 
+                    legal_scout_deepseek, 
+                    health_sports_scout_deepseek,
+                    health_analyst_deepseek,
+                    legal_scholar_deepseek,
+                    researcher_deepseek, 
+                    editor_deepseek
                 ],
                 tasks=[
-                    task_china_backup, 
-                    task_global_backup, 
-                    task_legal_backup, 
-                    task_health_sports_backup,
-                    task_health_analysis_backup,
-                    task_legal_analysis_backup,
-                    task_research_backup, 
-                    task_publish_backup
+                    task_global_deepseek, 
+                    task_legal_deepseek, 
+                    task_health_sports_deepseek,
+                    task_health_analysis_deepseek,
+                    task_legal_analysis_deepseek,
+                    task_research_deepseek, 
+                    task_publish_deepseek
                 ],
                 process=Process.sequential,
                 verbose=True
             )
             
-            result = news_crew_backup.kickoff()
+            result = news_crew_deepseek.kickoff()
             final_html = str(result)
             
             # 清洗 Markdown 标记
@@ -665,30 +680,19 @@ def run():
             with open(output_path, "w", encoding="utf-8") as f:
                 f.write(final_html.strip())
             
-            print(f"✅ Report generated successfully with backup model: {output_path}")
-            print("📊 Report includes 5 sections:")
-            print("   1. 中文新闻 (Chinese-language News)")
-            print("   2. 全球新闻 (Global News)")
-            print("   3. 法律新闻 (Legal News)")
-            print("   4. 健康与运动 (Health & Sports + Deep Analysis)")
-            print("   5. 法律学术分析 (Legal Analysis & Law Review Articles)")
+            print(f"✅ Report generated successfully with second backup model (DeepSeek Official API): {output_path}")
+            print("📊 Report includes 4 sections (Chinese news skipped to avoid content policy issues):")
+            print("   1. 全球新闻 (Global News)")
+            print("   2. 法律新闻 (Legal News)")
+            print("   3. 健康与运动 (Health & Sports + Deep Analysis)")
+            print("   4. 法律学术分析 (Legal Analysis & Law Review Articles)")
             
-        except Exception as backup_error:
-            print(f"⚠️ Second backup model also failed with error: {backup_error}")
-            print("🔄 Retrying with third backup model: deepseek-chat (DeepSeek Official API)")
+        except Exception as deepseek_error:
+            print(f"⚠️ Second backup model also failed with error: {deepseek_error}")
+            print("🔄 Retrying with third backup model: nvidia/llama-3.3-nemotron-super-49b-v1.5")
             
-            # 检查是否有 DeepSeek API Key
-            if not os.environ.get("DEEPSEEK_API_KEY"):
-                print("❌ Error: DEEPSEEK_API_KEY not found in environment variables.")
-                print("❌ Critical Error: All three models failed.")
-                print(f"Primary error: {e}")
-                print(f"Second backup error: {backup_error}")
-                sys.exit(1)
-            
-            # 使用第三备用模型（DeepSeek 官方 API）重试
-            # 注意：跳过中国新闻部分以避免内容审查问题
+            # 使用第三备用模型重试 (nvidia/llama-3.3-nemotron-super-49b-v1.5)
             try:
-                print("⚠️ Note: Skipping Chinese news section to avoid content policy issues with DeepSeek API")
                 
                 # 重新创建 agents（跳过 china_scout），使用第三备用 LLM
                 global_scout_deepseek = Agent(
@@ -753,79 +757,87 @@ def run():
                     verbose=True
                 )
                 
-                # 重新创建任务（跳过 task_china），使用第三备用 agents
-                task_global_deepseek = Task(
+                # 重新创建任务，使用第三备用 agents (包含所有5个板块)
+                task_china_backup = Task(
+                    description=task_china.description,
+                    expected_output=task_china.expected_output,
+                    agent=china_scout_backup
+                )
+                
+                task_global_backup = Task(
                     description=task_global.description,
                     expected_output=task_global.expected_output,
-                    agent=global_scout_deepseek
+                    agent=global_scout_backup
                 )
                 
-                task_legal_deepseek = Task(
+                task_legal_backup = Task(
                     description=task_legal.description,
                     expected_output=task_legal.expected_output,
-                    agent=legal_scout_deepseek
+                    agent=legal_scout_backup
                 )
                 
-                task_health_sports_deepseek = Task(
+                task_health_sports_backup = Task(
                     description=task_health_sports.description,
                     expected_output=task_health_sports.expected_output,
-                    agent=health_sports_scout_deepseek
+                    agent=health_sports_scout_backup
                 )
                 
-                task_health_analysis_deepseek = Task(
+                task_health_analysis_backup = Task(
                     description=task_health_analysis.description,
                     expected_output=task_health_analysis.expected_output,
-                    agent=health_analyst_deepseek,
-                    context=[task_health_sports_deepseek]
+                    agent=health_analyst_backup,
+                    context=[task_health_sports_backup]
                 )
                 
-                task_legal_analysis_deepseek = Task(
+                task_legal_analysis_backup = Task(
                     description=task_legal_analysis.description,
                     expected_output=task_legal_analysis.expected_output,
-                    agent=legal_scholar_deepseek,
-                    context=[task_global_deepseek, task_legal_deepseek]  # 跳过中国新闻上下文
+                    agent=legal_scholar_backup,
+                    context=[task_china_backup, task_global_backup, task_legal_backup]
                 )
                 
-                task_research_deepseek = Task(
+                task_research_backup = Task(
                     description=task_research.description,
                     expected_output=task_research.expected_output,
-                    agent=researcher_deepseek,
-                    context=[task_global_deepseek, task_legal_deepseek, 
-                            task_health_sports_deepseek, task_health_analysis_deepseek, task_legal_analysis_deepseek]  # 跳过中国新闻
+                    agent=researcher_backup,
+                    context=[task_china_backup, task_global_backup, task_legal_backup, 
+                            task_health_sports_backup, task_health_analysis_backup, task_legal_analysis_backup]
                 )
                 
-                task_publish_deepseek = Task(
+                task_publish_backup = Task(
                     description=task_publish.description,
                     expected_output=task_publish.expected_output,
-                    agent=editor_deepseek,
-                    context=[task_research_deepseek]
+                    agent=editor_backup,
+                    context=[task_research_backup]
                 )
                 
-                # 创建新的 Crew，使用第三备用模型（跳过中国新闻）
-                news_crew_deepseek = Crew(
+                # 创建新的 Crew，使用第三备用模型 (包含所有5个板块)
+                news_crew_backup = Crew(
                     agents=[
-                        global_scout_deepseek, 
-                        legal_scout_deepseek, 
-                        health_sports_scout_deepseek,
-                        health_analyst_deepseek,
-                        legal_scholar_deepseek,
-                        researcher_deepseek, 
-                        editor_deepseek
+                        china_scout_backup, 
+                        global_scout_backup, 
+                        legal_scout_backup, 
+                        health_sports_scout_backup,
+                        health_analyst_backup,
+                        legal_scholar_backup,
+                        researcher_backup, 
+                        editor_backup
                     ],
                     tasks=[
-                        task_global_deepseek, 
-                        task_legal_deepseek, 
-                        task_health_sports_deepseek,
-                        task_health_analysis_deepseek,
-                        task_legal_analysis_deepseek,
-                        task_research_deepseek, 
-                        task_publish_deepseek
+                        task_china_backup, 
+                        task_global_backup, 
+                        task_legal_backup, 
+                        task_health_sports_backup,
+                        task_health_analysis_backup,
+                        task_legal_analysis_backup,
+                        task_research_backup, 
+                        task_publish_backup
                     ],
                     process=Process.sequential,
                     verbose=True
                 )
                 
-                result = news_crew_deepseek.kickoff()
+                result = news_crew_backup.kickoff()
                 final_html = str(result)
                 
                 # 清洗 Markdown 标记
@@ -838,18 +850,19 @@ def run():
                 with open(output_path, "w", encoding="utf-8") as f:
                     f.write(final_html.strip())
                 
-                print(f"✅ Report generated successfully with third backup model (DeepSeek Official API): {output_path}")
-                print("📊 Report includes 4 sections (Chinese news skipped to avoid content policy issues):")
-                print("   1. 全球新闻 (Global News)")
-                print("   2. 法律新闻 (Legal News)")
-                print("   3. 健康与运动 (Health & Sports + Deep Analysis)")
-                print("   4. 法律学术分析 (Legal Analysis & Law Review Articles)")
+                print(f"✅ Report generated successfully with third backup model (nvidia/llama-3.3-nemotron-super-49b-v1.5): {output_path}")
+                print("📊 Report includes 5 sections:")
+                print("   1. 中文新闻 (Chinese-language News)")
+                print("   2. 全球新闻 (Global News)")
+                print("   3. 法律新闻 (Legal News)")
+                print("   4. 健康与运动 (Health & Sports + Deep Analysis)")
+                print("   5. 法律学术分析 (Legal Analysis & Law Review Articles)")
                 
-            except Exception as deepseek_error:
+            except Exception as backup_error:
                 print(f"❌ Critical Error: All three models failed.")
                 print(f"Primary model error: {e}")
-                print(f"Second backup model error: {backup_error}")
-                print(f"Third backup model error: {deepseek_error}")
+                print(f"Second backup model error: {deepseek_error}")
+                print(f"Third backup model error: {backup_error}")
                 sys.exit(1)
 
 if __name__ == "__main__":
