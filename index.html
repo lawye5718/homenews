@@ -1,102 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Insight</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Insight</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .card {
+            animation: fadeIn 0.5s ease-out;
+        }
+        details[open] summary ~ * {
+            animation: slideDown 0.3s ease;
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 5000px;
+            }
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans">
-  <header class="py-4 text-center">
-    <h1 class="text-3xl font-serif font-bold">Daily Insight</h1>
-    <p class="text-sm">2026-01-26</p>
-  </header>
-  <main class="max-w-7xl mx-auto p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-    <!-- Section 1: 中文新闻 (Chinese-language News) -->
-    <section class="bg-gradient-to-b from-blue-500 to-blue-800 p-4 rounded-lg">
-      <h2 class="text-2xl font-serif font-bold">中文新闻</h2>
-      <ul>
-        <li class="py-2">
-          <h3 class="text-lg font-bold">中国经济增长放缓</h3>
-          <p class="text-sm">中国国家统计局发布的数据显示，去年中国经济增长率为3.2%，较前一年放缓0.2个百分点。</p>
-          <span class="text-xs bg-blue-200 p-1 rounded">经济</span>
-        </li>
-        <li class="py-2">
-          <h3 class="text-lg font-bold">腾讯发布新款游戏</h3>
-          <p class="text-sm">腾讯游戏发布了新款手游《王者荣耀：国际版》，该游戏已在全球多个国家和地区上线。</p>
-          <span class="text-xs bg-blue-200 p-1 rounded">游戏</span>
-        </li>
-      </ul>
-    </section>
-    <!-- Section 2: 全球新闻 (Global News) -->
-    <section class="bg-white p-4 rounded-lg">
-      <h2 class="text-2xl font-serif font-bold">Global News</h2>
-      <ul>
-        <li class="py-2">
-          <h3 class="text-lg font-bold">US Stocks Plummet as Inflation Concerns Rise</h3>
-          <p class="text-sm">US stocks fell sharply on Wednesday, with the Dow Jones Industrial Average losing over 300 points, as investors grew increasingly concerned about inflation.</p>
-          <span class="text-xs bg-gray-200 p-1 rounded">Finance</span>
-        </li>
-        <li class="py-2">
-          <h3 class="text-lg font-bold">EU Leaders Meet to Discuss Climate Change</h3>
-          <p class="text-sm">European Union leaders gathered in Brussels on Thursday to discuss the bloc's efforts to combat climate change, with a focus on reducing greenhouse gas emissions.</p>
-          <span class="text-xs bg-gray-200 p-1 rounded">Environment</span>
-        </li>
-      </ul>
-    </section>
-    <!-- Section 3: 法律新闻 (Legal News) -->
-    <section class="bg-gradient-to-b from-purple-500 to-purple-800 p-4 rounded-lg md:col-span-2">
-      <h2 class="text-2xl font-serif font-bold">法律新闻</h2>
-      <ul>
-        <li class="py-2">
-          <h3 class="text-lg font-bold">最高人民法院发布新规</h3>
-          <p class="text-sm">最高人民法院发布了新的司法解释，进一步规范了人民法院的审判工作。</p>
-          <span class="text-xs bg-purple-200 p-1 rounded">法律</span>
-        </li>
-        <li class="py-2">
-          <h3 class="text-lg font-bold">律师协会发布年报</h3>
-          <p class="text-sm">律师协会发布了2025年的年报，报告了过去一年律师行业的发展情况。</p>
-          <span class="text-xs bg-purple-200 p-1 rounded">律师</span>
-        </li>
-      </ul>
-    </section>
-    <!-- Section 4: 健康与运动 (Health & Sports) -->
-    <section class="bg-gradient-to-b from-green-500 to-green-800 p-4 rounded-lg md:col-span-2">
-      <h2 class="text-2xl font-serif font-bold">健康与运动</h2>
-      <ul>
-        <li class="py-2">
-          <h3 class="text-lg font-bold">新研究发现运动可以预防老年痴呆</h3>
-          <p class="text-sm">一项新研究发现，定期运动可以预防老年痴呆的发生。</p>
-          <span class="text-xs bg-green-200 p-1 rounded">健康</span>
-        </li>
-        <li class="py-2">
-          <details>
-            <summary class="text-lg font-bold">深入分析：运动对老年痴呆的影响</summary>
-            <p class="text-sm">这项研究是由美国国家卫生研究院资助的，研究团队通过分析数千名老年人的运动习惯和认知功能，发现了运动与老年痴呆之间的关联。</p>
-          </details>
-        </li>
-      </ul>
-    </section>
-    <!-- Section 5: 法律学术分析 (Legal Analysis) -->
-    <section class="bg-gradient-to-b from-amber-500 to-amber-800 p-4 rounded-lg md:col-span-2">
-      <h2 class="text-2xl font-serif font-bold">法律学术分析</h2>
-      <ul>
-        <li class="py-2">
-          <h3 class="text-lg font-bold">论法治国的重要性</h3>
-          <p class="text-sm">法治国是现代国家的基础，保障了公民的权利和自由。</p>
-          <span class="text-xs bg-amber-200 p-1 rounded">法律学术</span>
-        </li>
-        <li class="py-2">
-          <details>
-            <summary class="text-lg font-bold">深入分析：法治国的理论基础</summary>
-            <p class="text-sm">法治国的理论基础包括了社会契约论、自然权利论和法实证主义等，这些理论为法治国的建设提供了指导。</p>
-          </details>
-        </li>
-      </ul>
-    </section>
-  </main>
+<body class="bg-gray-900 text-white">
+    <header class="bg-gradient-to-r from-blue-500 to-purple-500 p-4 mb-4">
+        <h1 class="text-3xl font-serif font-bold">Daily Insight</h1>
+        <p class="text-sm">2026-01-26</p>
+    </header>
+    <main class="container mx-auto p-4">
+        <!-- Section 1: 中文新闻 (Chinese-language News) -->
+        <section class="mb-4">
+            <h2 class="text-2xl font-serif font-bold mb-2">中文新闻</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
+                    <h3 class="text-lg font-serif font-bold mb-2">中国经济增长放缓</h3>
+                    <p class="text-sm">中国经济增长放缓，去年第四季度 GDP 同比增长 4.9%。</p>
+                    <div class="flex justify-between mt-4">
+                        <span class="text-xs text-gray-500">来源:</span>
+                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">中国国家统计局</a>
+                    </div>
+                </div>
+                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
+                    <h3 class="text-lg font-serif font-bold mb-2">中国股市大幅下跌</h3>
+                    <p class="text-sm">中国股市大幅下跌，沪指跌幅超过 2%。</p>
+                    <div class="flex justify-between mt-4">
+                        <span class="text-xs text-gray-500">来源:</span>
+                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">新浪财经</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Section 2: 全球新闻 (Global News) -->
+        <section class="mb-4">
+            <h2 class="text-2xl font-serif font-bold mb-2">全球新闻</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
+                    <h3 class="text-lg font-serif font-bold mb-2">US Economy Shows Signs of Slowing Down</h3>
+                    <p class="text-sm">The US economy showed signs of slowing down in the fourth quarter, with GDP growth rate decreasing to 2.1%.</p>
+                    <div class="flex justify-between mt-4">
+                        <span class="text-xs text-gray-500">Source:</span>
+                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">Bloomberg</a>
+                    </div>
+                </div>
+                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
+                    <h3 class="text-lg font-serif font-bold mb-2">European Central Bank Raises Interest Rates</h3>
+                    <p class="text-sm">The European Central Bank raised interest rates by 0.25% to combat inflation.</p>
+                    <div class="flex justify-between mt-4">
+                        <span class="text-xs text-gray-500">Source:</span>
+                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">Reuters</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Section 3: 法律新闻 (Legal News) -->
+        <section class="mb-4">
+            <h2 class="text-2xl font-serif font-bold mb-2">法律新闻</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
+                    <h3 class="text-lg font-serif font-bold mb-2">中国最高人民法院发布新规</h3>
+                    <p class="text-sm">中国最高人民法院发布新规，进一步规范司法行为。</p>
+                    <div class="flex justify-between mt-4">
+                        <span class="text-xs text-gray-500">来源:</span>
+                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">中国最高人民法院</a>
+                    </div>
+                </div>
+                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
+                    <h3 class="text-lg font-serif font-bold mb-2">香港特区政府修订《公司条例》</h3>
+                    <p class="text-sm">香港特区政府修订《公司条例》，提高公司治理要求。</p>
+                    <div class="flex justify-between mt-4">
+                        <span class="text-xs text-gray-500">来源:</span>
+                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">香港特区政府</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Section 4: 健康与运动 (Health & Sports) -->
+        <section class="mb-4">
+            <h2 class="text-2xl font-serif font-bold mb-2">健康与运动</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
+                    <h3 class="text-lg font-serif font-bold mb-2">中国启动新冠疫苗接种计划</h3>
+                    <p class="text-sm">中国启动新冠疫苗接种计划，优先接种高风险人群。</p>
+                    <div class="flex justify-between mt-4">
+                        <span class="text-xs text-gray-500">来源:</span>
+                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">中国国家卫生健康委员会</a>
+                    </div>
+                </div>
+                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
+                    <h3 class="text-lg font-serif font-bold mb-2">2026 年冬奥会申办城市公布</h3>
+                    <p class="text-sm">2026 年冬奥会申办城市公布，三座城市成功申办。</p>
+                    <div class="flex justify-between mt-4">
+                        <span class="text-xs text-gray-500">来源:</span>
+                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">国际奥林匹克委员会</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Section 5: 法律学术分析 (Legal Analysis) -->
+        <section class="mb-4">
+            <h2 class="text-2xl font-serif font-bold mb-2">法律学术分析</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
+                    <h3 class="text-lg font-serif font-bold mb-2">《中华人民共和国民法典》解读</h3>
+                    <p class="text-sm">《中华人民共和国民法典》于 2020 年 5 月 28 日正式施行，本文对其进行解读。</p>
+                    <details>
+                        <summary class="text-sm cursor-pointer">展开阅读</summary>
+                        <p class="text-sm mt-4">《中华人民共和国民法典》是中国民事法律体系的重要组成部分...</p>
+                    </details>
+                </div>
+                <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-4">
+                    <h3 class="text-lg font-serif font-bold mb-2">知识产权法的发展趋势</h3>
+                    <p class="text-sm">知识产权法是现代社会中非常重要的一部分，本文分析其发展趋势。</p>
+                    <details>
+                        <summary class="text-sm cursor-pointer">展开阅读</summary>
+                        <p class="text-sm mt-4">知识产权法的发展趋势包括...</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
