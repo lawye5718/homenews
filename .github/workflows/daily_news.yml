@@ -29,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install 'crewai[tools]' langchain-openai python-dotenv litellm
+          pip install 'crewai[tools]' python-dotenv litellm
 
       # 运行智能体脚本
       - name: Run CrewAI Agent
