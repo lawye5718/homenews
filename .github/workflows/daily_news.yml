@@ -2,8 +2,8 @@ name: Daily News Agent
 
 on:
   schedule:
-    # 每天北京时间 04:00 (UTC 20:00)
-    - cron: '0 20 * * *'
+    # 每天 UTC 19:00 = 北京时间次日 03:00
+    - cron: '0 19 * * *'
   workflow_dispatch: # 允许手动按钮触发
 
 # 🔥 关键：赋予 GITHUB_TOKEN 写权限，否则无法推送到 gh-pages 分支

@@ -1,9 +1,8 @@
 # agent_main.py
 import os
 from datetime import datetime
-from crewai import Agent, Task, Crew, Process
+from crewai import Agent, Task, Crew, Process, LLM
 from crewai_tools import ScrapeWebsiteTool
-from langchain_openai import ChatOpenAI
 
 # 尝试多种导入方式来解决SerperDevTool导入错误
 try:
@@ -23,12 +22,11 @@ except ImportError:
                 print(f"Mock SerperDevTool: Would search for '{query}'")
                 return f"Mock result for: {query}"
 
-# 1. 配置 LLM (DeepSeek)
-deepseek_llm = ChatOpenAI(
-    model="deepseek-chat", 
-    openai_api_key=os.environ.get("DEEPSEEK_API_KEY"),
-    openai_api_base="https://api.deepseek.com",
-    temperature=0.7
+# 1. 配置 LLM (DeepSeek) - 使用新的LLM类并指定base_url
+deepseek_llm = LLM(
+    model="deepseek/deepseek-chat",  # 使用DeepSeek模型名称
+    base_url="https://api.deepseek.com",  # 指定DeepSeek API地址
+    api_key=os.environ.get("DEEPSEEK_API_KEY")  # 使用DeepSeek API密钥
 )
 
 # 2. 初始化工具
@@ -47,7 +45,7 @@ china_scout = Agent(
     goal='捕捉中国互联网Top 5热点新闻',
     backstory="你专注于微博、知乎、百度的社会热点，寻找最具争议和讨论价值的话题。",
     tools=[tool for tool in [search_tool, scrape_tool] if tool is not None],
-    llm=deepseek_llm,
+    llm=deepseek_llm,  # 使用配置好的LLM
     verbose=True
 )
 
@@ -57,7 +55,7 @@ global_scout = Agent(
     goal='捕捉X(Twitter)和Google Trends的Top 5国际热点',
     backstory="你专注于英语舆论场，寻找具有跨国影响力的科技、政治或社会话题。",
     tools=[tool for tool in [search_tool, scrape_tool] if tool is not None],
-    llm=deepseek_llm,
+    llm=deepseek_llm,  # 使用配置好的LLM
     verbose=True
 )
 
@@ -67,7 +65,7 @@ researcher = Agent(
     goal='对新闻进行事实核查(Fact Check)和背景深挖',
     backstory="你严谨客观，必定交叉验证信息源，并能挖掘事件背后的法律或历史背景。",
     tools=[tool for tool in [search_tool, scrape_tool] if tool is not None],
-    llm=deepseek_llm,
+    llm=deepseek_llm,  # 使用配置好的LLM
     verbose=True
 )
 
@@ -76,7 +74,7 @@ editor = Agent(
     role='数字新闻主编',
     goal='生成 HTML 单页报告',
     backstory="你擅长HTML/CSS，能生成适配移动端的双栏布局新闻网页。",
-    llm=deepseek_llm,
+    llm=deepseek_llm,  # 使用配置好的LLM
     verbose=True
 )
 
