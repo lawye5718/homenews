@@ -6,3 +6,5 @@ python-dotenv>=1.0.0
 litellm>=1.61.15
 # email-validator is required for litellm error logging (pydantic EmailStr validation)
 email-validator>=2.0.0
+# fastapi-sso is required for litellm proxy logging (prevents ModuleNotFoundError during error handling)
+fastapi-sso>=0.10.0

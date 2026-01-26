@@ -6,19 +6,17 @@ from crewai_tools import ScrapeWebsiteTool, SerperDevTool
 
 # --- 1. 配置 LLM (NVIDIA NIM) ---
 # 替换为 NVIDIA API 配置
-# 使用 NVIDIA DeepSeek-V3.2 模型
+# 使用 NVIDIA meta/llama-3.1-405b-instruct 模型 (高性能稳定)
 # 参考 NVIDIA 官方示范代码配置
 nvidia_llm = LLM(
-    model="deepseek-ai/deepseek-v3.2",
+    model="meta/llama-3.1-405b-instruct",
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=os.environ.get("NVIDIA_API_KEY"),
-    temperature=1,
+    temperature=0.7,
     top_p=0.95,
     max_tokens=8192,
     stream=True,
-    timeout=600,
-    # DeepSeek-V3.2 的思维模式配置 (通过 extra_body 传递)
-    extra_body={"chat_template_kwargs": {"thinking": True}}
+    timeout=600
 )
 
 # 第二备用模型配置 - 在主模型调用失败时使用
@@ -26,7 +24,7 @@ backup_llm = LLM(
     model="nvidia/llama-3.3-nemotron-super-49b-v1.5",
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=os.environ.get("NVIDIA_API_KEY"),
-    temperature=1,
+    temperature=0.7,
     top_p=0.95,
     max_tokens=8192,
     stream=True,
@@ -39,7 +37,7 @@ deepseek_llm = LLM(
     model="deepseek-chat",
     base_url="https://api.deepseek.com",
     api_key=os.environ.get("DEEPSEEK_API_KEY"),
-    temperature=1,
+    temperature=0.7,
     top_p=0.95,
     max_tokens=8192,
     stream=True,

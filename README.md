@@ -88,7 +88,7 @@ TBD
 ### 技术栈
 
 - **AI框架**: CrewAI
-- **语言模型**: NVIDIA DeepSeek-V3.2
+- **语言模型**: NVIDIA meta/llama-3.1-405b-instruct (主模型), nvidia/llama-3.3-nemotron-super-49b-v1.5 (备用)
 - **搜索工具**: SerperDevTool
 - **部署**: GitHub Actions + GitHub Pages
 
@@ -101,7 +101,7 @@ TBD
 3. **DEEPSEEK_API_KEY**: DeepSeek API密钥 (可选，用于第三备用模型)
 
 **模型故障转移机制**：
-- 主模型: `deepseek-ai/deepseek-v3.2` (NVIDIA API) - 包含全部5个板块
+- 主模型: `meta/llama-3.1-405b-instruct` (NVIDIA API) - 高性能稳定模型，包含全部5个板块
 - 第二备用: `nvidia/llama-3.3-nemotron-super-49b-v1.5` (NVIDIA API) - 包含全部5个板块
 - 第三备用: `deepseek-chat` (DeepSeek 官方 API) - **仅包含4个板块（跳过中文新闻以避免内容审查问题）**
 
