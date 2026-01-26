@@ -191,7 +191,7 @@ researcher = Agent(
     backstory=f"""
     You are responsible for the structural integrity of the report.
     You ensure:
-    1. All FIVE sections are present: China, Global, Legal, Health/Sports, Legal Analysis
+    1. All FIVE sections are present: China, Global, Legal News, Health/Sports, Legal Scholarship (Law Review Articles)
     2. Data is accurate and sources are cited
     3. English headlines are preserved for Global news
     4. Deep analysis reports are properly integrated
