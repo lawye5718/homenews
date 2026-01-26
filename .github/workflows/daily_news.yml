@@ -32,11 +32,12 @@ jobs:
 
       - name: Run CrewAI Agent
         env:
-          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          # 修改：使用 NVIDIA API Key
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
           SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
-          # 兼容性设置：某些组件可能检查 OPENAI_API_KEY
-          OPENAI_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          OPENAI_API_BASE: "https://api.deepseek.com"
+          # LiteLLM 有时会回退查找 OPENAI_API_KEY，为了保险可以指向同一个
+          OPENAI_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          OPENAI_API_BASE: "https://integrate.api.nvidia.com/v1"
         run: python agent_main.py
 
       - name: Verify HTML generation
