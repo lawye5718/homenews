@@ -207,15 +207,18 @@ task_publish = Task(
 )
 
 # 5. 执行
-def clean_html_from_markdown(text: str) -> str:
+def extract_html_from_markdown(text: str) -> str:
     """
-    Extract HTML content from markdown code blocks.
+    Extract content from markdown code blocks.
+    
+    Attempts to extract HTML content from markdown code blocks (```html or ```).
+    If no code blocks are found, returns the text as-is.
     
     Args:
-        text: Raw text that may contain HTML in markdown code blocks
+        text: Raw text that may contain content in markdown code blocks
         
     Returns:
-        Cleaned HTML string
+        Extracted content string
     """
     if not text:
         return ""
@@ -241,13 +244,10 @@ def run() -> None:
     Main execution function for the daily news agent.
     
     Raises:
-        ValueError: If required API keys are missing
+        ValueError: If required API keys are missing or crew execution fails
         IOError: If unable to write output file
     """
     print("🚀 Starting Daily News Agent (Optimized for Quality Sources)...")
-    
-    if not DEEPSEEK_API_KEY:
-        raise ValueError("❌ DEEPSEEK_API_KEY is missing!")
     
     news_crew = Crew(
         agents=[china_scout, global_scout, legal_scout, researcher, editor],
@@ -262,7 +262,7 @@ def run() -> None:
         if not result:
             raise ValueError("❌ Crew execution returned empty result")
         
-        final_html = clean_html_from_markdown(str(result))
+        final_html = extract_html_from_markdown(str(result))
         
         if not final_html:
             raise ValueError("❌ Failed to extract HTML content from result")
