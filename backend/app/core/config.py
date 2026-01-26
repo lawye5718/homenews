@@ -1,6 +1,7 @@
 from pydantic_settings import BaseSettings
-from typing import List, Union
+from typing import List
 import os
+import secrets
 
 
 class Settings(BaseSettings):
@@ -11,8 +12,8 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./homenews.db")
 
-    # Secrets
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "dev-secret-key-change-in-production")
+    # Secrets - Generate secure random key if not set
+    SECRET_KEY: str = os.getenv("SECRET_KEY") or secrets.token_urlsafe(32)
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 

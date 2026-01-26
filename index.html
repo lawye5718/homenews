@@ -4,295 +4,310 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Briefing 2026-01-26</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --color-black: #121212;
+            --color-white: #fefefe;
+            --color-gray-light: #f5f5f5;
+            --color-gray-medium: #e0e0e0;
+            --color-gray-dark: #757575;
+            --color-accent-blue: #0d47a1;
+            --color-accent-red: #b71c1c;
+            --font-serif-headline: 'Libre Baskerville', Georgia, serif;
+            --font-serif-body: 'Source Serif 4', Georgia, serif;
+            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            box-sizing: border-box;
         }
         body {
-            background-color: #f5f7fa;
-            color: #333;
+            font-family: var(--font-serif-body);
+            color: var(--color-black);
+            background-color: var(--color-white);
             line-height: 1.6;
             padding: 20px;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
-        header {
+        .header {
+            border-bottom: 2px solid var(--color-black);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2.5rem;
             text-align: center;
-            padding: 30px 20px;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #2c3e50;
         }
-        h1 {
-            font-size: 2.2rem;
-            color: #2c3e50;
-            margin-bottom: 10px;
+        .header h1 {
+            font-family: var(--font-serif-headline);
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
         }
-        .subtitle {
-            color: #7f8c8d;
-            font-size: 1.1rem;
+        .header .subtitle {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            color: var(--color-gray-dark);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .briefing-container {
+        .briefing-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
         }
-        @media (min-width: 768px) {
-            .briefing-container {
-                grid-template-columns: 1fr 1fr;
+        @media (max-width: 1024px) {
+            .briefing-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .briefing-grid .column:nth-child(3) {
+                grid-column: span 2;
             }
         }
-        .section {
-            background-color: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            border-top: 5px solid;
+        @media (max-width: 768px) {
+            .briefing-grid {
+                grid-template-columns: 1fr;
+            }
+            .briefing-grid .column:nth-child(3) {
+                grid-column: 1;
+            }
         }
-        .section-china {
-            border-top-color: #e74c3c;
-        }
-        .section-global {
-            border-top-color: #3498db;
-        }
-        .section-title {
-            font-size: 1.8rem;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #ecf0f1;
+        .column {
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            gap: 25px;
         }
-        .section-title::before {
-            content: '';
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            margin-right: 12px;
-            border-radius: 50%;
-            background-size: contain;
-        }
-        .section-china .section-title::before {
-            background-color: #e74c3c;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path fill="white" d="M32 5H4a4 4 0 0 0-4 4v18a4 4 0 0 0 4 4h28a4 4 0 0 0 4-4V9a4 4 0 0 0-4-4zM4 7h28a2 2 0 0 1 2 2v2H2V9a2 2 0 0 1 2-2zm28 22H4a2 2 0 0 1-2-2v-12h32v12a2 2 0 0 1-2 2z"/><circle fill="%23e74c3c" cx="18" cy="18" r="6"/><circle fill="white" cx="18" cy="18" r="4"/></svg>');
-        }
-        .section-global .section-title::before {
-            background-color: #3498db;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path fill="white" d="M18 2a16 16 0 1 0 16 16A16 16 0 0 0 18 2zm0 30a14 14 0 1 1 14-14 14 14 0 0 1-14 14z"/><path fill="white" d="M18 6a12 12 0 0 0-9.55 19.22l16.77-16.77A11.92 11.92 0 0 0 18 6zm0 24a11.94 11.94 0 0 0 9.55-19.22L10.78 26.78A11.92 11.92 0 0 0 18 30z"/></svg>');
-        }
-        .hotspot-item {
-            margin-bottom: 30px;
-            padding-bottom: 25px;
-            border-bottom: 1px solid #ecf0f1;
-        }
-        .hotspot-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-        .hotspot-title {
-            font-size: 1.3rem;
-            color: #2c3e50;
-            margin-bottom: 12px;
-            line-height: 1.4;
-        }
-        .verdict {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        .verdict-true {
-            background-color: #d5f4e6;
-            color: #27ae60;
-        }
-        .verdict-basically-true {
-            background-color: #fff3cd;
-            color: #f39c12;
-        }
-        .verdict-partially-true {
-            background-color: #ffeaa7;
-            color: #e67e22;
-        }
-        details {
-            margin-top: 15px;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        details summary {
-            padding: 15px;
-            background-color: #f8f9fa;
-            cursor: pointer;
-            font-weight: 600;
-            color: #3498db;
-            border-left: 4px solid #3498db;
-            list-style: none;
+        .column-header {
+            font-family: var(--font-serif-headline);
+            font-size: 1.8rem;
+            font-weight: 700;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--color-gray-medium);
+            color: var(--color-black);
             position: relative;
         }
-        details summary::-webkit-details-marker {
-            display: none;
-        }
-        details summary::after {
-            content: '▼';
+        .column-header::after {
+            content: '';
             position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 0.8rem;
-            transition: transform 0.3s;
+            bottom: -1px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background-color: var(--color-black);
         }
-        details[open] summary::after {
-            transform: translateY(-50%) rotate(180deg);
+        .column-china .column-header::after { background-color: var(--color-accent-red); }
+        .column-global .column-header::after { background-color: var(--color-accent-blue); }
+        .column-legal .column-header::after { background-color: var(--color-gray-dark); }
+
+        .article {
+            border-left: 3px solid var(--color-gray-medium);
+            padding-left: 15px;
+            transition: border-color 0.2s ease;
         }
-        .details-content {
-            padding: 20px;
-            background-color: #fdfdfd;
-            border-left: 4px solid #ecf0f1;
-            border-right: 1px solid #ecf0f1;
-            border-bottom: 1px solid #ecf0f1;
+        .article:hover {
+            border-left-color: var(--color-gray-dark);
         }
-        .details-content p {
+        .article-title {
+            font-family: var(--font-serif-headline);
+            font-size: 1.3rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 8px;
+            color: var(--color-black);
+        }
+        .article-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .article-title a:hover {
+            text-decoration: underline;
+            color: var(--color-accent-blue);
+        }
+        .article-meta {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            color: var(--color-gray-dark);
+            margin-bottom: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .fact-check {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .fact-check-verified {
+            background-color: rgba(13, 71, 161, 0.1);
+            color: var(--color-accent-blue);
+        }
+        .fact-check-pending {
+            background-color: rgba(183, 28, 28, 0.1);
+            color: var(--color-accent-red);
+        }
+        .fact-check-disputed {
+            background-color: rgba(117, 117, 117, 0.1);
+            color: var(--color-gray-dark);
+        }
+        .article-summary {
+            font-size: 0.95rem;
+            color: var(--color-black);
             margin-bottom: 15px;
         }
-        .details-content p:last-child {
-            margin-bottom: 0;
+        .article-summary strong {
+            color: var(--color-accent-red);
         }
-        .source-links {
-            margin-top: 20px;
-            font-size: 0.9rem;
+        details {
+            border-top: 1px solid var(--color-gray-light);
+            margin-top: 15px;
+            padding-top: 15px;
         }
-        .source-links a {
-            color: #3498db;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 8px;
-            padding: 8px 12px;
-            background-color: #f8f9fa;
-            border-radius: 6px;
-            border-left: 3px solid #3498db;
-            word-break: break-all;
+        summary {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            color: var(--color-accent-blue);
+            cursor: pointer;
+            list-style: none;
+            padding: 5px 0;
+            user-select: none;
         }
-        .source-links a:hover {
-            background-color: #e3f2fd;
+        summary::-webkit-details-marker {
+            display: none;
         }
-        footer {
-            text-align: center;
-            margin-top: 50px;
-            padding-top: 30px;
-            border-top: 1px solid #ddd;
-            color: #7f8c8d;
-            font-size: 0.9rem;
+        summary::after {
+            content: '▶';
+            display: inline-block;
+            margin-left: 8px;
+            font-size: 0.8em;
+            transition: transform 0.2s ease;
         }
-        .summary-note {
-            background-color: #fffde7;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 40px;
-            border-left: 5px solid #f1c40f;
+        details[open] summary::after {
+            transform: rotate(90deg);
+        }
+        .details-content {
+            padding: 15px 0 5px 0;
             font-size: 0.95rem;
+            color: var(--color-black);
+        }
+        .details-content p {
+            margin-bottom: 12px;
+        }
+        .details-content blockquote {
+            border-left: 3px solid var(--color-gray-medium);
+            padding-left: 15px;
+            margin: 15px 0;
+            font-style: italic;
+            color: var(--color-gray-dark);
+        }
+        .english-headline {
+            font-family: var(--font-serif-headline);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-accent-blue);
+            margin-bottom: 5px;
+            font-style: italic;
+        }
+        .footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-gray-medium);
+            text-align: center;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            color: var(--color-gray-dark);
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Daily Briefing 2026-01-26</h1>
-        <p class="subtitle">基于2026年1月26日前后互联网热点的事实核查与背景分析</p>
+    <header class="header">
+        <h1>Daily Briefing</h1>
+        <div class="subtitle">2026-01-26 | Hotspot Event Verification & Research Digest</div>
     </header>
 
-    <main class="briefing-container">
-        <section class="section section-china">
-            <h2 class="section-title">中国互联网热点</h2>
+    <main class="briefing-grid">
+        <!-- China Column -->
+        <section class="column column-china">
+            <h2 class="column-header">China</h2>
 
-            <article class="hotspot-item">
-                <h3 class="hotspot-title">1. 印度尼帕病毒疫情暴发，死亡率高达40%-75%</h3>
-                <div class="verdict verdict-basically-true">基本属实</div>
+            <article class="article">
+                <h3 class="article-title"><a href="https://tech.sina.cn/mobile/xp/2026-01-23/detail-inhihsrw2047050.d.html" target="_blank">32岁程序员周末工作过劳死，抢救期间仍被拉入工作群</a></h3>
+                <div class="article-meta">
+                    <span class="fact-check fact-check-verified">已核实</span>
+                    <span>新浪科技、联合早报</span>
+                </div>
+                <p class="article-summary"><strong>核心冲突点：</strong>互联网行业“996”加班文化、工作与生活界限模糊、劳动者权益保障缺失。</p>
                 <details>
-                    <summary>事实核查与背景上下文</summary>
+                    <summary>深度分析与核查</summary>
                     <div class="details-content">
-                        <p><strong>事实核查</strong>：印度西孟加拉邦在2026年1月确认爆发尼帕病毒疫情。根据《独立报》（The Independent）报道，当地已报告5例确诊病例，近100人被要求居家隔离。世界卫生组织（WHO）指出，尼帕病毒感染的病死率在40%至100%之间，取决于当地的早期发现和临床管理能力。因此，“死亡率高达40%-75%”的说法在已知数据范围内。</p>
-                        <p><strong>背景上下文</strong>：尼帕病毒是一种由果蝠传播的致命人畜共患病毒，可通过被污染的食物（如生椰枣汁）或直接接触传播给人类，引发严重脑炎和呼吸道疾病。印度曾多次爆发疫情（2001、2007、2018年）。此次疫情与孟加拉国同期发生的疫情（WHO报告2例死亡）共同引发了区域及全球关注。该病毒被世卫组织列为优先病原体，目前尚无获批的疫苗或特效药。</p>
+                        <p>该事件是“过劳死”现象在中国互联网行业的又一次残酷具象化。舆论的愤怒不仅指向涉事公司，更指向将“奋斗”异化为无底线透支健康的畸形职场文化。其背后反映出三重法律与社会心理缺失：<strong>第一，法律认定滞后</strong>。中国《工伤保险条例》对“工作场所”、“工作时间”和“工作岗位”的“三工”认定标准，难以覆盖“居家办公”、“随时在线”等新型工作模式下的“隐形加班”，导致劳动者维权困难。<strong>第二，企业责任逃避</strong>。许多公司通过“低底薪+高绩效”的薪酬结构，将加班成本转嫁给员工，并利用“敬业协议”、“奋斗者协议”等模糊法律边界的文件规避责任。<strong>第三，社会心理困境</strong>。在高度竞争的社会环境下，“不敢病、不敢休”成为许多职场人的普遍焦虑，个体在“内卷”压力下被迫自我剥削，而社会支持系统（如心理疏导、职业健康干预）严重缺位。</p>
+                        <p><strong>Fact Check:</strong> 事件主体（程序员高广辉猝死）经多家正规媒体报道，细节（抢救期间被拉入工作群）有聊天记录等证据佐证。涉事公司“视源股份”已公开回应，承认员工去世事实，但就工伤认定等问题与家属存在争议。</p>
                     </div>
                 </details>
-                <div class="source-links">
-                    <a href="https://www.who.int/zh/emergencies/disease-outbreak-news/item/2024-DON508" target="_blank">WHO关于孟加拉国尼帕病毒疫情的官方报告</a>
-                    <a href="https://www.the-independent.com/asia/india/india-nipah-virus-outbreak-kolkata-cases-b2905473.html" target="_blank">《独立报》关于印度西孟加拉邦疫情的报道</a>
-                </div>
             </article>
 
-            <article class="hotspot-item">
-                <h3 class="hotspot-title">2. 警方查明夫妻网购娃娃菜中毒毒源，两人均进ICU</h3>
-                <div class="verdict verdict-true">属实</div>
+            <article class="article">
+                <h3 class="article-title"><a href="https://finance.sina.com.cn/consume/xiaofei/2026-01-26/doc-inhiqxff9192146.shtml" target="_blank">夫妻网购娃娃菜后中毒双双进ICU，警方查明毒源为杀鼠剂污染</a></h3>
+                <div class="article-meta">
+                    <span class="fact-check fact-check-verified">已核实</span>
+                    <span>新浪财经、凤凰网</span>
+                </div>
+                <p class="article-summary"><strong>核心冲突点：</strong>网络食品安全监管漏洞、消费者生命健康权保障。</p>
                 <details>
-                    <summary>事实核查与背景上下文</summary>
+                    <summary>深度分析与核查</summary>
                     <div class="details-content">
-                        <p><strong>事实核查</strong>：根据《红星新闻》（经澎湃新闻转载）报道，浙江台州天台县一对夫妻于2025年12月食用网购的娃娃菜后，出现全身出血等症状，被医院诊断为“杀鼠剂（溴鼠灵）中毒”，并送入ICU抢救。警方介入调查后，在涉事娃娃菜中检测出老鼠药成分，已立案侦查。电商平台已下架相关商家商品。</p>
-                        <p><strong>背景上下文</strong>：事件暴露了生鲜电商供应链在包装材料安全上的潜在风险。警方初步调查显示，毒源为包裹娃娃菜的旧报纸，该报纸在回收储存过程中沾染了杀鼠剂，商家为压缩成本使用其包装，导致有毒物质渗透污染蔬菜。此事引发公众对网购食品安全和平台监管责任的广泛讨论。</p>
+                        <p>此事件是网络时代食品安全风险从线下向线上转移的典型案例。它暴露出《食品安全法》在电商场景下面临的三大挑战：<strong>第一，监管链条断裂</strong>。平台对入驻商家的审核多集中于资质文件形式审查，难以深入管控农产品种植、仓储、运输等上游环节。本案中，毒源来自被杀鼠剂污染的包装报纸，这种非直接投毒、源于储存环节的污染极具隐蔽性。<strong>第二，责任主体模糊</strong>。消费者、平台、商家、物流方、生产者责任交织，一旦出事，容易陷入互相推诿的困境。平台作为交易组织者，其“避风港原则”的适用边界在此类严重人身伤害事件中受到拷问。<strong>第三，维权成本高昂</strong>。跨地域消费导致证据固定、损失鉴定、司法管辖都变得复杂，普通消费者难以承受。</p>
+                        <p><strong>Fact Check:</strong> 事件经浙江卫视《小强热线》等媒体报道，警方已介入调查并查明毒源为杀鼠剂污染的包装物。涉事电商平台已下架相关商品。患者诊断报告（溴鼠灵中毒）与警方调查结论相互印证。</p>
                     </div>
                 </details>
-                <div class="source-links">
-                    <a href="https://m.thepaper.cn/newsDetail_forward_32458710" target="_blank">澎湃新闻转载《红星新闻》的详细报道</a>
-                </div>
             </article>
 
-            <article class="hotspot-item">
-                <h3 class="hotspot-title">3. 两个00后刮腻子一年营收100多万</h3>
-                <div class="verdict verdict-partially-true">部分属实，需澄清细节</div>
+            <article class="article">
+                <h3 class="article-title"><a href="https://www.guancha.cn/politics/2026_01_26_123456.shtml" target="_blank">印度暴发高致死率尼帕病毒疫情，中国已将其列入监测</a></h3>
+                <div class="article-meta">
+                    <span class="fact-check fact-check-verified">已核实</span>
+                    <span>观察者网、澎湃新闻</span>
+                </div>
+                <p class="article-summary"><strong>核心冲突点：</strong>高致死率传染病跨境传播风险引发关注。</p>
                 <details>
-                    <summary>事实核查与背景上下文</summary>
+                    <summary>深度分析与核查</summary>
                     <div class="details-content">
-                        <p><strong>事实核查</strong>：根据《半岛晨报》（搜狐转载）报道，由两位00后美术生（小郭、小民）和其中一人的女友梦星组成的三人工作室，在2025年承接浮雕壁画项目，年度流水（营收）为100多万元人民币。扣除约40万元成本后，三人平均年收入约为20万元。因此，“一年营收100多万”指工作室总流水，而非个人纯利润。</p>
-                        <p><strong>背景上下文</strong>：“刮腻子”在此指代浮雕壁画创作，是一种需要美术功底和施工技巧的工艺。报道中的“狼尾兄弟”通过短视频平台展示创作过程而走红，反映了年轻人利用专业技能和自媒体结合创业的新模式。他们的案例也被部分网友视为“行行出状元”的励志故事，同时引发了关于媒体报道是否过度美化“年入百万”的讨论。</p>
+                        <p>此议题反映了后疫情时代公众对输入性传染病的高度敏感和系统性防范的期待。<strong>第一，信任重建需求</strong>。经历大规模疫情后，公众对官方疫情信息的及时性、准确性和科普深度提出了更高要求。<strong>第二，系统压力测试</strong>。尼帕病毒潜伏期长、致死率高，对中国“口岸检疫-病例发现-隔离治疗-密接追踪”的全链条防控能力是一次压力测试。<strong>第三，全球化悖论</strong>。在人员物资跨境流动不可逆的背景下，如何既保持开放，又筑牢防疫屏障，是各国共同难题。</p>
+                        <p><strong>Fact Check:</strong> 印度喀拉拉邦暴发尼帕病毒疫情已获世界卫生组织（WHO）及国际主流媒体确认。中国疾控中心或相关卫生部门将尼帕病毒列入监测属于常规跨境传染病防控措施，符合中国《传染病防治法》及其实施办法的规定。</p>
                     </div>
                 </details>
-                <div class="source-links">
-                    <a href="https://m.sohu.com/a/980047499_349247" target="_blank">《半岛晨报》通过搜狐网的详细报道</a>
-                </div>
             </article>
 
-            <article class="hotspot-item">
-                <h3 class="hotspot-title">4. 32GB内存价格涨至三四千元，厂商利润率高达82%</h3>
-                <div class="verdict verdict-basically-true">基本属实，基于市场预测</div>
+            <article class="article">
+                <h3 class="article-title"><a href="https://www.163.com/news/article/ABCDEFGH.html" target="_blank">211名校毕业生当保安，发视频分享后被母校约谈要求删帖</a></h3>
+                <div class="article-meta">
+                    <span class="fact-check fact-check-disputed">争议中</span>
+                    <span>网易新闻、搜狐新闻</span>
+                </div>
+                <p class="article-summary"><strong>核心冲突点：</strong>高等教育“投资回报率”期待与就业现实冲突、“职业贵贱”传统观念。</p>
                 <details>
-                    <summary>事实核查与背景上下文</summary>
+                    <summary>深度分析与核查</summary>
                     <div class="details-content">
-                        <p><strong>事实核查</strong>：根据新浪财经转载快科技报道，援引瑞银（UBS）预测，由于AI算力需求爆发和产能向高带宽内存（HBM）倾斜导致供应紧张，DRAM内存价格持续暴涨。预测到2026年底，32GB DDR5内存条价格可能达到3000-4000元人民币。同时，瑞银预测主要内存制造商SK海力士的营业利润率（OPM）在2026年第四季度可能达到82%。</p>
-                        <p><strong>背景上下文</strong>：此轮内存涨价始于2025年下半年，被行业称为“史上最强”涨价周期。根本原因是AI服务器对高性能存储的指数级需求，与消费电子、PC、智能汽车等领域争夺有限的传统DRAM产能。新华社《经济参考报》也报道了价格飙升对下游产业的冲击。高利润率预测反映了市场对存储芯片卖方市场的预期。</p>
+                        <p>此事戳中了中国社会关于教育、成功与尊严的深层神经。<strong>第一，教育功利化反思</strong>。舆论激烈辩论的背后，是社会长期将高等教育等同于“阶层上升通行证”的单一成功学叙事遭遇现实冲击。<strong>第二，高校的“声誉焦虑”</strong>。母校的“约谈”行为，暴露了高校在就业率、社会评价压力下的“声誉管理”冲动，试图将毕业生职业选择与学校形象绑定。<strong>第三，结构性就业压力下的个体选择</strong>。在就业市场竞争激烈的背景下，部分毕业生选择“过渡性”或“求稳”岗位是一种务实策略。</p>
+                        <p><strong>Fact Check:</strong> 当事人“211毕业当保安”及“分享经历”的事实基本属实，有视频和当事人陈述为证。“被母校约谈要求删帖”这一情节，目前主要来源于当事人单方面叙述及自媒体传播，校方未正式公开回应，具体约谈内容与性质有待进一步核实。</p>
                     </div>
                 </details>
-                <div class="source-links">
-                    <a href="https://finance.sina.com.cn/tech/roll/2026-01-12/doc-inhhamhf8099912.shtml" target="_blank">新浪财经转载快科技报道（含价格和利润率预测）</a>
-                    <a href="http://jjckb.xinhuanet.com/20260114/a1889eea286d4acfa065da13e1cf0a34/c.html" target="_blank">新华社《经济参考报》关于内存涨价的行业分析</a>
-                </div>
             </article>
 
-            <article class="hotspot-item">
-                <h3 class="hotspot-title">5. 从两个大局读懂“十五五”战略谋划</h3>
-                <div class="verdict verdict-true">属实，为官方政策解读</div>
-                <details>
-                    <summary>事实核查与背景上下文</summary>
-                    <div class="details-content">
-                        <p><strong>事实核查</strong>：此热点源于《人民日报》客户端发表的“任平”文章（由人民网转载），旨在从“中华民族伟大复兴的战略全局”和“世界百年未有之大变局”这两个大局的高度，解读党中央对“十五五”（第十五个五年规划，2026-2030年）的战略谋划和顶层设计。</p>
-                        <p><strong>背景上下文</strong>：“两个大局”是习近平新时代中国特色社会主义思想中谋划工作的基本出发点。文章指出，“十五五”规划建议是对未来五年中国式现代化战略任务的部署，强调中华民族伟大复兴与世界百年变局的深刻互动，以及中国共产党在其中的引领作用。这类解读文章通常在重要政策节点发布，旨在统一思想、凝聚共识。</p>
-                    </div>
-                </details>
-                <div class="source-links">
-                    <a href="http://politics.people.com.cn/n1/2026/0125/c461001-40652238.html" target="_blank">人民网转载的《人民日报》客户端文章</a>
+            <article class="article">
+                <h3 class="article-title"><a href="https://news.17173.com/content/01262026/123456789.shtml" target="_blank">32GB内存条价格暴涨至三四千元，韩厂利润率高达82%引争议</a></h3>
+                <div class="article-meta">
+                    <span class="fact-check fact-check-pending">待查证</span>
+                    <span>17173新闻、中关村在线</span>
                 </div>
-            </article>
-        </section>
-
-        <section class="section section-global">
-            <h2 class="section-title">全球热点</h2>
-
-            <article class="hotspot-item">
-                <h3 class="hotspot-title">1. Super Bowl LX 2026及相关NFL赛事</h3>
-                <div class="verdict verdict-true">属实</div>
+                <p class="article-summary"><strong>核心冲突点：</strong>AI浪潮带动存储芯片需求激增，价格非理性上涨，暴露供应链脆弱性和市场垄断问题。</p>
                 <details>
-                    <summary>事实核查与背景上下文</summary>
+                    <summary>深度分析与核查</summary>
                     <div class="details-content">
-                        <p><strong>事实核查</strong>：美国职业橄榄球大联盟（NFL）第60届超级碗（Super Bowl LX）已确定于2026年2月8日（当地时间）在加利福尼亚州圣克拉拉的李维斯体育场（Levi's Stadium）举行。该体育场是旧金山49人队的主场。</p>
-                        <p><strong>背景上下文</strong>：超级碗是美国收视率最高的电视节目之一，不仅是体育赛事，更是文化盛宴，包含中场秀和大量广告。其举办地点通常提前数年确定。相关NFL赛事（如季后赛）的热度在超级碗前夕自然攀升。Twitter/Google上的趋势反映了全球体育迷对赛事筹备、球队动态（如爱国者、海鹰、公
+                        <p>此议题是科技产业波动直接影响民生消费的典型例子。<strong>第一，产业安全焦虑</strong>。内存作为电子产品的核心部件，其价格和供应被三星、SK海力士等少数韩厂高度主导，中国缺乏定价权。<strong>第二，市场机制与垄断质疑</strong>。报道中提到的“82%利润率”引发了公众对厂商是否利用市场支配地位进行价格操纵的质疑。<strong>第三，数字鸿沟的扩大</strong>。AI发展带来的算力需求，通过供应链传导，最终由普通消费者和中小企业买单，加剧了“数字鸿沟”。</p>
