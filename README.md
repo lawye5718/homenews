@@ -18,9 +18,18 @@ HomeNews is a system designed to aggregate news feeds and integrate with home au
 - Deployment: Docker
 
 ## Setup
-1. Install dependencies: `pip install -r requirements.txt`
+
+### For the AI News Agent (快速安装)
+1. Install minimal dependencies: `pip install -r requirements-agent.txt`
+2. Configure environment variables (DEEPSEEK_API_KEY, SERPER_API_KEY)
+3. Run the news agent: `python agent_main.py`
+
+### For the Full Backend API
+1. Install all dependencies: `pip install -r requirements.txt`
 2. Configure environment variables
 3. Run the application
+
+**注意**: 如果只想运行AI新闻简报功能，使用 `requirements-agent.txt` 可以大幅减少安装时间（从几分钟减少到约1分钟）并避免依赖冲突。
 
 ## License
 TBD
