@@ -6,8 +6,11 @@ on:
     - cron: '0 20 * * *'
   workflow_dispatch: # 允许手动按钮触发
 
+# 🔥 关键：赋予 GITHUB_TOKEN 写权限，否则无法推送到 gh-pages 分支
 permissions:
-  contents: write # 必须有写权限才能发布 Pages
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   run-agent-and-deploy:
@@ -25,6 +28,7 @@ jobs:
       # 安装依赖
       - name: Install dependencies
         run: |
+          pip install --upgrade pip
           pip install -r requirements.txt
 
       # 运行智能体脚本
@@ -32,24 +36,26 @@ jobs:
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
-          OPENAI_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }} # CrewAI 有时会检查这个变量，填一样的即可
+          # 有些版本的 CrewAI/LangChain 可能会检查 OPENAI_API_KEY，即使我们用的是 DeepSeek
+          OPENAI_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          OPENAI_API_BASE: "https://api.deepseek.com"
         run: python agent_main.py
 
-      # 检查是否生成了 HTML
+      # 检查 HTML 是否生成
       - name: Verify HTML generation
         run: |
           if [ -f "index.html" ]; then
             echo "✅ HTML generated successfully."
           else
-            echo "❌ HTML not found!"
+            echo "❌ HTML not found! Agent failed to produce output."
             exit 1
           fi
 
-      # 部署到 GitHub Pages (这个步骤会自动创建 gh-pages 分支)
+      # 部署到 GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
           publish_branch: gh-pages
-          keep_files: true # 保留其他文件，或者设为 false 只发布 html
+          keep_files: true

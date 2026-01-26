@@ -100,6 +100,12 @@ task_publish = Task(
 
 # 5. 执行
 def run():
+    print("🚀 Starting Daily News Agent...")
+    
+    # 检查 API Key 是否存在，避免空跑报错
+    if not os.environ.get("DEEPSEEK_API_KEY"):
+        raise ValueError("❌ DEEPSEEK_API_KEY is missing!")
+    
     news_crew = Crew(
         agents=[china_scout, global_scout, researcher, editor],
         tasks=[task_china, task_global, task_research, task_publish],
@@ -108,14 +114,27 @@ def run():
     )
     result = news_crew.kickoff()
     
-    # 清洗并保存
+    # --- 优化后的 HTML 清洗逻辑 ---
     final_html = str(result)
-    if "```html" in final_html:
-        final_html = final_html.replace("```html", "").replace("```", "")
     
+    # 如果包含 markdown 代码块标记，尝试提取中间的内容
+    if "```html" in final_html:
+        parts = final_html.split("```html")
+        if len(parts) > 1:
+            # 取代码块中间的部分，并去掉结尾的 ```
+            final_html = parts[1].split("```")[0].strip()
+    elif "```" in final_html:
+        # 有时候 AI 不写 html 语言标记，只写 ```
+        parts = final_html.split("```")
+        if len(parts) > 1:
+            final_html = parts[1].strip()
+            
     # 写入根目录
-    with open("index.html", "w", encoding="utf-8") as f:
+    output_path = "index.html"
+    with open(output_path, "w", encoding="utf-8") as f:
         f.write(final_html)
+    
+    print(f"✅ Report generated successfully: {output_path}")
 
 if __name__ == "__main__":
     run()
