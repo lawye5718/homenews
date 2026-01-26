@@ -1,3 +1,9 @@
+"""
+Daily News Agent using CrewAI and DeepSeek LLM.
+
+This module creates an automated news briefing system that aggregates news
+from multiple sources, performs deep analysis, and generates HTML reports.
+"""
 import os
 from datetime import datetime
 from crewai import Agent, Task, Crew, Process, LLM
@@ -6,15 +12,15 @@ from crewai_tools import ScrapeWebsiteTool, SerperDevTool
 # 1. 配置 LLM
 # 增加 timeout 到 600秒，因为深度分析和生成长HTML需要较长时间
 deepseek_llm = LLM(
-    model="deepseek/deepseek-chat", 
+    model="deepseek/deepseek-chat",
     base_url="https://api.deepseek.com",
     api_key=os.environ.get("DEEPSEEK_API_KEY"),
-    temperature=0.6, #稍微降低温度以提高学术严谨性
-    timeout=600 
+    temperature=0.6,  # 稍微降低温度以提高学术严谨性
+    timeout=600
 )
 
 # 2. 初始化工具
-search_tool = SerperDevTool(n_results=15) # 增加搜索广度
+search_tool = SerperDevTool(n_results=15)  # 增加搜索广度
 scrape_tool = ScrapeWebsiteTool()
 
 # 3. 定义智能体 (Agents)
@@ -71,7 +77,7 @@ health_sports_scout = Agent(
     role='Evidence-Based Health Researcher',
     goal='Find health/performance news backed by peer-reviewed studies',
     backstory="""
-    You are allergic to pseudoscience. 
+    You are allergic to pseudoscience.
     Sources MUST be: The Lancet, JAMA, NEJM, Cell, Nature, or authoritative sports science journals.
     Focus on:
     1. Meta-analyses and Systematic Reviews (highest evidence).
@@ -89,12 +95,12 @@ legal_scholar = Agent(
     goal='Conduct deep jurisprudential analysis on US-China legal frictions or trends',
     backstory="""
     You are a Professor of Comparative Law.
-    
+
     Since full law review PDFs are often paywalled, you utilize:
     1. SSRN (Social Science Research Network) abstracts and working papers.
     2. High-level legal analysis blogs (Lawfare, SCOTUSblog, Just Security, Volokh Conspiracy).
     3. Open-access Law Review repositories.
-    
+
     Methodology (IRAC):
     - Issue: What is the core legal conflict?
     - Rule: What statutes or precedents are involved?
@@ -147,7 +153,7 @@ editor = Agent(
     backstory="""
     You are an award-winning web designer.
     You DO NOT use basic HTML. You use **Tailwind CSS** via CDN.
-    
+
     Design Language: "Digital Economist" or "Modern Bloomberg".
     - Font: 'Merriweather' for headings (Serif), 'Inter' for body (Sans).
     - Palette: Slate-900 (Text), Slate-50 (Background), Blue-700 (Accents), Amber-600 (Highlights).
@@ -249,12 +255,12 @@ current_date = datetime.now().strftime("%Y-%m-%d")
 task_publish = Task(
     description=f"""
     Generate the `index.html`.
-    
+
     **Technical Constraints**:
     1. Include `<script src="https://cdn.tailwindcss.com"></script>` in `<head>`.
     2. Import fonts: `<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Merriweather:wght@300;700&display=swap" rel="stylesheet">`.
     3. Use `font-serif` for titles, `font-sans` for body.
-    
+
     **Layout Structure**:
     - **Header**: "Daily Insight Briefing" | {current_date} | Minimalist White on Dark Blue.
     - **Grid Area A (News Ticker)**: 3-column grid for China/Global/Legal Briefs. Small cards.
@@ -262,7 +268,7 @@ task_publish = Task(
       - *Legal Analysis*: Styled like a Law Journal (Cream background, serif text).
       - *Health Science*: Styled like a Medical Paper (Clean white, blue accents, data points highlighted).
     - **Footer**: Copyright & Disclaimer.
-    
+
     **Content**:
     - MUST include ALL content from the Context.
     - Use `<details class="cursor-pointer ...">` for expanding long texts on mobile.
@@ -272,35 +278,48 @@ task_publish = Task(
     context=[task_research]
 )
 
+
 # 5. 执行流程
 def run():
+    """
+    Execute the daily news agent workflow.
+
+    Runs the CrewAI workflow to gather news, perform analysis, and generate HTML.
+    Requires DEEPSEEK_API_KEY environment variable to be set.
+
+    Raises:
+        ValueError: If DEEPSEEK_API_KEY environment variable is not set.
+    """
     print("🚀 Starting Daily News Agent (Deep Analysis Edition)...")
-    
+
     if not os.environ.get("DEEPSEEK_API_KEY"):
         raise ValueError("❌ DEEPSEEK_API_KEY is missing!")
-    
+
     # 按照逻辑顺序执行
     news_crew = Crew(
-        agents=[china_scout, global_scout, legal_scout, health_sports_scout, health_analyst, legal_scholar, researcher, editor],
-        tasks=[task_china, task_global, task_legal, task_health_sports, task_health_analysis, task_legal_analysis, task_research, task_publish],
+        agents=[china_scout, global_scout, legal_scout, health_sports_scout,
+                health_analyst, legal_scholar, researcher, editor],
+        tasks=[task_china, task_global, task_legal, task_health_sports,
+               task_health_analysis, task_legal_analysis, task_research, task_publish],
         process=Process.sequential,
         verbose=True
     )
-    
+
     result = news_crew.kickoff()
     final_html = str(result)
-    
+
     # 增强的清洗逻辑
     if "```html" in final_html:
         final_html = final_html.split("```html")[1].split("```")[0]
     elif "```" in final_html:
         final_html = final_html.split("```")[1].split("```")[0]
-        
+
     output_path = "index.html"
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(final_html.strip())
-    
+
     print(f"✅ Report generated successfully: {output_path}")
+
 
 if __name__ == "__main__":
     run()

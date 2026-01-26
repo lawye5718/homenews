@@ -1,9 +1,8 @@
-from fastapi import APIRouter, Depends, Query
+"""News API endpoints."""
+from fastapi import APIRouter, Query
 from typing import List, Optional
-from datetime import datetime
 
 from app.schemas.news import NewsArticle, NewsSource
-from app.core.config import settings
 
 
 router = APIRouter()
@@ -13,7 +12,7 @@ router = APIRouter()
 def get_news_sources() -> List[NewsSource]:
     """
     Get available news sources.
-    
+
     Returns:
         List of news sources
     """
@@ -24,15 +23,16 @@ def get_news_sources() -> List[NewsSource]:
 @router.get("/articles", response_model=List[NewsArticle])
 def get_news_articles(
     source: Optional[str] = None,
-    limit: int = Query(default=20, ge=1, le=100, description="Maximum number of articles to return")
+    limit: int = Query(default=20, ge=1, le=100,
+                       description="Maximum number of articles to return")
 ) -> List[NewsArticle]:
     """
     Get news articles from specified source.
-    
+
     Args:
         source: Optional source filter
         limit: Maximum number of articles (1-100)
-        
+
     Returns:
         List of news articles
     """
@@ -42,14 +42,15 @@ def get_news_articles(
 
 @router.get("/articles/latest", response_model=List[NewsArticle])
 def get_latest_news_articles(
-    limit: int = Query(default=10, ge=1, le=100, description="Maximum number of articles to return")
+    limit: int = Query(default=10, ge=1, le=100,
+                       description="Maximum number of articles to return")
 ) -> List[NewsArticle]:
     """
     Get latest news articles from all sources.
-    
+
     Args:
         limit: Maximum number of articles (1-100)
-        
+
     Returns:
         List of latest news articles
     """
