@@ -1,3 +1,4 @@
+"""Configuration settings for the HomeNews application."""
 from pydantic_settings import BaseSettings
 from typing import List
 import os
@@ -5,6 +6,8 @@ import secrets
 
 
 class Settings(BaseSettings):
+    """Application settings and configuration."""
+
     PROJECT_NAME: str = "HomeNews API"
     API_V1_STR: str = "/api/v1"
     BACKEND_CORS_ORIGINS: List[str] = []
@@ -18,6 +21,8 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     class Config:
+        """Pydantic configuration."""
+
         case_sensitive = True
 
 

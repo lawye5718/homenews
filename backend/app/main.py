@@ -1,3 +1,4 @@
+"""Main FastAPI application module."""
 from contextlib import asynccontextmanager
 import logging
 from fastapi import FastAPI

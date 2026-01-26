@@ -1,3 +1,4 @@
+"""News API endpoints."""
 from fastapi import APIRouter, Query
 from typing import List, Optional
 
