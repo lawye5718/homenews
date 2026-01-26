@@ -1,8 +1,17 @@
 # agent_main.py
 import os
+import sys
+import logging
 from datetime import datetime
 from crewai import Agent, Task, Crew, Process, LLM
 from crewai_tools import ScrapeWebsiteTool
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 # 尝试多种导入方式来解决不同版本 CrewAI 的 SerperDevTool 兼容性问题
 try:
@@ -17,28 +26,37 @@ except ImportError:
                 self.api_key = api_key
                 self.n_results = n_results
                 self.country = country
-                print("⚠️ SerperDevTool not available. Using mock class.")
+                logger.warning("SerperDevTool not available. Using mock class.")
             
             def run(self, query):
                 return f"Mock result for: {query}"
 
 # 1. 配置 LLM (DeepSeek)
 # 确保 DEEPSEEK_API_KEY 已在环境变量中设置
+DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "").strip()
+if not DEEPSEEK_API_KEY:
+    raise ValueError("❌ DEEPSEEK_API_KEY environment variable is required!")
+
 deepseek_llm = LLM(
     model="deepseek/deepseek-chat", 
     base_url="https://api.deepseek.com",
-    api_key=os.environ.get("DEEPSEEK_API_KEY"),
+    api_key=DEEPSEEK_API_KEY,
     temperature=0.7 
 )
 
 # 2. 初始化工具
 # 针对全球新闻，我们希望搜索结果偏向国际/美国（serper 支持 gl 参数，但在 wrapper 中通常自动处理或需在 query 中指定）
-try:
-    # 默认搜索工具
-    search_tool = SerperDevTool(api_key=os.environ.get("SERPER_API_KEY"))
-except Exception as e:
-    print(f"⚠️ Error initializing SerperDevTool: {e}")
+SERPER_API_KEY = os.environ.get("SERPER_API_KEY")
+if not SERPER_API_KEY:
+    logger.warning("SERPER_API_KEY not set. Search functionality will be limited.")
     search_tool = None
+else:
+    try:
+        # 默认搜索工具
+        search_tool = SerperDevTool(api_key=SERPER_API_KEY)
+    except Exception as e:
+        logger.error(f"Error initializing SerperDevTool: {e}")
+        search_tool = None
 
 scrape_tool = ScrapeWebsiteTool()
 
@@ -197,11 +215,51 @@ task_publish = Task(
 )
 
 # 5. 执行
-def run():
-    print("🚀 Starting Daily News Agent (Optimized for Quality Sources)...")
+def extract_html_from_markdown(text: str) -> str:
+    """
+    Extract content from markdown code blocks.
     
-    if not os.environ.get("DEEPSEEK_API_KEY"):
-        raise ValueError("❌ DEEPSEEK_API_KEY is missing!")
+    Attempts to extract HTML content from markdown code blocks (```html or ```).
+    If no code blocks are found, returns the text as-is.
+    
+    Args:
+        text: Raw text that may contain content in markdown code blocks
+        
+    Returns:
+        Extracted content string
+    """
+    if not text:
+        return ""
+    
+    # Try to extract from ```html block first
+    if "```html" in text:
+        parts = text.split("```html")
+        if len(parts) > 1:
+            return parts[1].split("```")[0].strip()
+    
+    # Try generic ``` block
+    if "```" in text:
+        parts = text.split("```")
+        if len(parts) > 1:
+            return parts[1].strip()
+    
+    # Return as-is if no markdown blocks found
+    return text.strip()
+
+
+def run(exit_on_error: bool = True) -> None:
+    """
+    Main execution function for the daily news agent.
+    
+    Args:
+        exit_on_error: Whether to call sys.exit() on error (default: True).
+                      Set to False when importing this module to handle errors differently.
+    
+    Raises:
+        ValueError: If required API keys are missing or crew execution fails
+        IOError: If unable to write output file
+    """
+    logger.info("Starting Daily News Agent (Optimized for Quality Sources)")
     
     news_crew = Crew(
         agents=[china_scout, global_scout, legal_scout, researcher, editor],
@@ -209,25 +267,33 @@ def run():
         process=Process.sequential,
         verbose=True
     )
-    result = news_crew.kickoff()
     
-    final_html = str(result)
-    
-    # 清洗 Markdown 标记
-    if "```html" in final_html:
-        parts = final_html.split("```html")
-        if len(parts) > 1:
-            final_html = parts[1].split("```")[0].strip()
-    elif "```" in final_html:
-        parts = final_html.split("```")
-        if len(parts) > 1:
-            final_html = parts[1].strip()
-            
-    output_path = "index.html"
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(final_html)
-    
-    print(f"✅ Report generated successfully: {output_path}")
+    try:
+        result = news_crew.kickoff()
+        
+        if not result:
+            raise ValueError("Crew execution returned empty result")
+        
+        final_html = extract_html_from_markdown(str(result))
+        
+        if not final_html:
+            raise ValueError("Failed to extract HTML content from result")
+        
+        output_path = "index.html"
+        try:
+            with open(output_path, "w", encoding="utf-8") as f:
+                f.write(final_html)
+        except IOError as e:
+            raise IOError(f"Failed to write output file: {e}") from e
+        
+        logger.info(f"Report generated successfully: {output_path}")
+        
+    except Exception as e:
+        logger.error(f"Error during execution: {e}")
+        if exit_on_error:
+            sys.exit(1)
+        else:
+            raise
 
 if __name__ == "__main__":
     run()
