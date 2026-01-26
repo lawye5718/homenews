@@ -249,17 +249,19 @@ legal_scholar = Agent(
 # 【深度研究员】 - 架构师（更新：整合5个板块）
 researcher = Agent(
     role='Chief Researcher & Architect',
-    goal='Synthesize all inputs into a cohesive, structured report with 5 sections, preserving all source URLs',
+    goal='Synthesize all inputs into a structured report, VERIFYING ALL URLs ARE PRESENT',
     backstory=f"""
-    You are responsible for the structural integrity of the report.
+    You are responsible for data integrity and structural integrity of the report.
+    You must ensure that every single news item passed to the Editor has a VALID, CLICKABLE URL.
+    Do not summarize away the links. The Editor needs them for the HTML.
+    
     You ensure:
     1. All FIVE sections are present: China, Global, Legal News, Health/Sports, Legal Scholarship (Law Review Articles)
-    2. Data is accurate and sources are cited with original URLs preserved
+    2. **CRITICAL**: Every news story must have its Source URL clearly listed
     3. English headlines are preserved for Global news
-    4. Deep analysis reports (5000+ words each) are properly integrated
-    5. Multi-source information is clearly presented with all source links
-    6. **Source URLs**: Preserve ALL original document URLs from all scouts and analysts
-    7. **Comprehensive content**: Ensure all 1000+ word summaries and 5000+ word analyses are complete
+    4. Deep analysis reports (5000+ words each) are properly integrated with all citations
+    5. **VERIFICATION STEP**: Check that every single news item and analysis has its corresponding Source URL attached. If a URL is missing in the input, flag it clearly.
+    6. Organize the content strictly into the 5 sections
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -268,49 +270,27 @@ researcher = Agent(
     verbose=True
 )
 
-# 【主编】 - Humanizer (去 AI 味 & UI 设计) - 更新：五栏布局
+# 【主编】 - 专注于 NYT 风格和数据真实性
 editor = Agent(
-    role='Lead Editor & Humanizer (Anti-AI Style)',
-    goal='Generate a Daily Briefing with 5 sections that sounds 100% Human with beautiful card-based UI and smooth animations',
+    role='Lead Editor (NYT Style & Frontend Dev)',
+    goal='Generate a "New York Times" style HTML report. ENSURE ALL LINKS WORK.',
     backstory=f"""
-    You are a veteran editor who hates "AI-sounding" text and loves beautiful, user-friendly design.
-    You adhere to the **Deep Humanizer Protocol**:
+    You are a meticulous frontend developer and editor inspired by The New York Times.
     
-    1. **Kill the "AI Voice"**: 
-       - NEVER use: "In conclusion", "delve", "landscape", "tapestry", "underscores", "complex interplay".
-       - 严禁使用："总而言之"、"值得注意的是"、"这是一把双刃剑"。
-    
-    2. **High Burstiness (爆发度)**: 
-       - Mix very short, punchy sentences with long, rhythmic ones. 
-       - Example: "The market crashed. Traders panicked, screaming into their phones as red lines plummeted across screens."
-    
-    3. **Show, Don't Tell**: 
-       - Instead of "The situation is tense", say "Diplomats slammed doors and refused to shake hands."
-    
-    4. **UI/UX Design (Tailwind CSS + Custom CSS)**:
-       - You act as a Frontend Engineer specializing in beautiful, modern web design.
-       - Use Tailwind CSS via CDN for rapid styling.
-       - Font: 'Merriweather' (Serif) for headlines, 'Inter' (Sans) for body.
-       - **Card-Based Layout**: Every news item and analysis in its own card with:
-         * Subtle shadows and elegant hover effects (shadow-lg hover:shadow-xl)
-         * Smooth transitions and animations
-         * Rounded corners and clean spacing
-         * White/light cards on dark gradient backgrounds
-       - **Collapsible Groups**: Group related news with smooth expand/collapse animations
-       - **Responsive Design**: Perfect on desktop, tablet, and mobile
-       - Include custom CSS for smooth animations (fadeIn, slideDown, hover effects)
-    
-    5. **Five Section Layout with Cards**:
-       - Section 1: Chinese-language News (中文新闻) - Blue gradient with white cards
-       - Section 2: Global News (全球新闻) - Purple gradient with white cards, **English Headlines** prominent
-       - Section 3: Legal News (法律新闻) - Indigo gradient with white cards
-       - Section 4: Health & Sports News + Deep Analysis (健康与运动) - Green gradient with expandable cards
-       - Section 5: Legal Analysis & Law Review Articles (法律学术分析) - Amber gradient with expandable cards
-    
-    6. **Source Links Display**:
-       - Display all source URLs as clickable badges/chips
-       - Use different colors for different source types (official, news, academic)
-       - Make links prominent and easy to click
+    **Core Philosophy**:
+    1. **Data Integrity**: You NEVER create fake links (href="#"). You ONLY use the URLs provided by the researchers. If a URL is missing, you do not display a link button.
+    2. **Design Aesthetic (NYT Style)**:
+       - **White Background**: Clean, stark, professional (bg-white / bg-stone-50).
+       - **Serif Headings**: Black, bold, serif fonts (Merriweather/Georgia) for authority.
+       - **Sans Body**: Clean sans-serif (Inter/Helvetica) for readability.
+       - **No Gradients**: Avoid cheap-looking gradients. Use solid colors and subtle borders.
+       - **High Contrast**: Dark gray text on white/off-white background.
+    3. **Five Section Layout**:
+       - Section 1: Chinese-language News (中文新闻)
+       - Section 2: Global News (全球新闻) - **English Headlines** prominent
+       - Section 3: Legal News (法律新闻)
+       - Section 4: Health & Sports News + Deep Analysis (健康与运动)
+       - Section 5: Legal Analysis & Law Review Articles (法律学术分析)
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -457,92 +437,53 @@ task_research = Task(
 
 current_date = datetime.now().strftime("%Y-%m-%d")
 
-# 【更新】发布任务：五栏响应式布局
+# 【重构】发布任务 - NYT 风格 + 链接修复
 task_publish = Task(
     description=f"""
-    Generate the final `index.html` file based on the Research Report with FIVE SECTIONS.
+    Generate the final `index.html` file based on the Research Report.
     
-    **Technical Requirements**:
-    1. Include `<script src="https://cdn.tailwindcss.com"></script>` in `<head>`.
-    2. Import fonts: Google Fonts (Inter, Merriweather).
-    3. Use `font-serif` for titles, `font-sans` for body.
-    4. Add smooth CSS transitions and animations for all interactive elements.
+    **CRITICAL DATA RULES**:
+    1. **NO FAKE LINKS**: You are STRICTLY FORBIDDEN from using `href="#"`. 
+    2. **USE REAL URLS**: You must extract the URL provided in the context for each story and put it in the `href` attribute.
+    3. **Fail-Safe**: If no URL is found in the context for a specific story, do NOT create a "Read More" button.
     
-    **Design Language - Card-Based Layout**:
-    - **Header**: "Daily Insight" | {current_date} | Minimalist with gradient background.
-    - **Layout Style**: 
-      - **Card-Based Design**: Each news item and analysis should be in its own distinct card with:
-        - Subtle shadow and hover effects (shadow-lg hover:shadow-xl transition-shadow)
-        - Rounded corners (rounded-xl)
-        - Clean padding and spacing
-        - White/light background on dark page for contrast
-      - **Responsive Grid Layout**:
-        - Desktop: Multi-column grid (2-3 columns) for news cards
-        - Tablet: 2-column grid
-        - Mobile: Single column stacked layout
-      - **Five Section Layout**:
-        1. 中文新闻 (Chinese-language News) - Gradient blue theme with card layout
-        2. 全球新闻 (Global News) - Must display **English Headline** prominently in cards
-        3. 法律新闻 (Legal News) - Gradient purple theme with card layout
-        4. 健康与运动 (Health & Sports) - Gradient green theme with card layout
-        5. 法律学术分析 (Legal Analysis) - Gradient amber theme with card layout
-      
-    **Collapsible & Animation Features**:
-      - **Collapsible News Groups**: Group related news stories together with collapsible sections
-        - Use `<details>` and `<summary>` elements for native collapsible behavior
-        - Add CSS transitions for smooth expand/collapse animations
-        - Style summary with hover effects and indicator icons (▶/▼)
-      - **Expandable Analysis Cards**: Deep analysis content (5000+ words) should be collapsible
-        - Initially show only title and first 200 words
-        - "Read More" button to expand full content with smooth slide-down animation
-        - Add CSS for max-height transitions and opacity fading
-      - **Animation Effects**:
-        - Fade-in animation for cards on page load (use @keyframes fadeIn)
-        - Smooth height transitions for collapsible sections (transition: max-height 0.3s ease)
-        - Hover animations for cards (transform: translateY(-4px))
-        - Rotation animation for expand/collapse icons (transition: transform 0.2s)
-      
-    **UI/UX Details**:
-      - **Tags**: Use small pill-shaped tags for categories (e.g., "Tech", "Law", "Society", "Health", "Academic").
-      - **Source Links**: Display source URLs as clickable badges/chips at the bottom of each card
-      - **Typography**: 
-        - Headlines: Merriweather (serif), bold, larger size
-        - Body: Inter (sans), comfortable line-height (1.6-1.8)
-        - Analysis sections: Clear hierarchy with h3, h4 headings
-      - **Color Scheme**: 
-        - Dark/Professional theme with gradient backgrounds
-        - Light cards on dark background for readability
-        - Distinct gradient colors for each section (blue, purple, green, amber, etc.)
-      - **Spacing**: Generous padding and margins for readability (p-6, gap-4, space-y-4)
-      - **Tone Check**: Ensure the summary text sounds human-written (punchy, avoiding AI clichés).
+    **DESIGN SYSTEM (New York Times Style)**:
+    1. **Library**: Use Tailwind CSS (`<script src="https://cdn.tailwindcss.com"></script>`).
+    2. **Fonts**: 
+       - Headlines: `font-family: 'Merriweather', serif;` (Import from Google Fonts)
+       - Body: `font-family: 'Inter', sans-serif;`
+    3. **Colors**:
+       - Background: `bg-stone-50` (warm off-white) or `bg-white`.
+       - Text: `text-stone-900` (almost black) for headings, `text-stone-700` for body.
+       - Accents: Minimal use of `border-stone-300` for dividers. No bright gradients.
+    4. **Layout**:
+       - **Header**: Simple, centered, serif headline "Daily Insight". Date below it in italic serif. Thin border-bottom.
+       - **Sections**: Clear section headers (e.g., "China News", "Global Briefing").
+       - **Cards**: Clean layout. White background `bg-white`. Thin border `border border-stone-200`. No heavy shadows (`shadow-sm` at most).
+       - **Typography**: High readability. Line height 1.6+.
+       - **Five Section Layout**:
+         1. 中文新闻 (Chinese-language News)
+         2. 全球新闻 (Global News) - Must display **English Headline** prominently
+         3. 法律新闻 (Legal News)
+         4. 健康与运动 (Health & Sports)
+         5. 法律学术分析 (Legal Analysis)
     
-    **Code Structure**:
-    Include these key CSS animations in a `<style>` tag:
-    ```css
-    @keyframes fadeIn {{
-      from {{ opacity: 0; transform: translateY(20px); }}
-      to {{ opacity: 1; transform: translateY(0); }}
-    }}
-    .card {{ animation: fadeIn 0.5s ease-out; }}
-    details[open] summary ~ * {{ animation: slideDown 0.3s ease; }}
-    @keyframes slideDown {{
-      from {{ opacity: 0; max-height: 0; }}
-      to {{ opacity: 1; max-height: 5000px; }}
-    }}
-    ```
+    **INTERACTIVITY**:
+    - **Collapsible**: Use `<details>` for the "Deep Analysis" (5000 words) sections to keep the page clean. 
+    - The summary (1000 words) should be visible by default or easily toggleable.
+    - **Hover**: Subtle hover effects (e.g., title turns dark red/blue on hover).
     
     **Output**: 
-    - ONLY the raw HTML code, starting with `<!DOCTYPE html>`.
-    - Complete, production-ready HTML with all animations and card-based styling.
+    - ONLY the raw HTML code (starting with `<!DOCTYPE html>`).
     """,
-    expected_output="Final HTML String with 5 sections, card-based responsive layout, collapsible groups, and smooth animations.",
+    expected_output="Final production-ready HTML string with real links and NYT design.",
     agent=editor,
     context=[task_research]
 )
 
 # --- 5. 执行流程 ---
 def run():
-    print("🚀 Starting Daily News Agent (5-Section Edition)...")
+    print("🚀 Starting Daily News Agent (NYT Style Edition)...")
     
     if not os.environ.get("NVIDIA_API_KEY"):
         print("❌ Error: NVIDIA_API_KEY not found in environment variables.")
