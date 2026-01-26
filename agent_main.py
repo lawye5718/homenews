@@ -4,6 +4,14 @@ from datetime import datetime
 from crewai import Agent, Task, Crew, Process, LLM
 from crewai_tools import ScrapeWebsiteTool, SerperDevTool
 
+# --- Configuration Constants ---
+CURRENT_DATE = datetime.now().strftime("%Y-%m-%d")
+CURRENT_YEAR = datetime.now().strftime("%Y")
+CURRENT_YEAR_MONTH = datetime.now().strftime("%Y年%m月")
+NEWS_ITEMS_PER_SECTION = 5
+LEGAL_ANALYSIS_ITEMS = 3
+DEEP_ANALYSIS_ITEMS = 3
+
 # --- 1. 配置 LLM (NVIDIA NIM) ---
 # 替换为 NVIDIA API 配置
 # 使用 NVIDIA meta/llama-3.1-405b-instruct 模型 (高性能稳定)
@@ -87,16 +95,22 @@ HUMANIZER_PROTOCOL = """
 # 【Chinese Media Editor】 - Multi-source integration + Neutral objective tone
 china_scout = Agent(
     role='News Editor for Chinese Media',
-    goal='Select 5 newsworthy stories from Chinese-language sources with 3+ source verification and comprehensive 1000+ word summaries',
+    goal=f'Select EXACTLY {NEWS_ITEMS_PER_SECTION} newsworthy stories from TODAY published in Chinese-language sources with 3+ source verification and comprehensive 1000+ word summaries for EACH story',
     backstory=f"""
     You are an experienced news editor with 10 years of editorial experience.
     
+    **CRITICAL REQUIREMENTS**:
+    - You MUST return EXACTLY {NEWS_ITEMS_PER_SECTION} news stories, no more, no less
+    - Each story MUST be from TODAY or the last 24 hours
+    - Each story MUST have a minimum of 1000 words of detailed analysis
+    - Search for news using date-specific keywords: "今天", "最新", "{CURRENT_YEAR_MONTH}"
+    
     Your selection criteria:
     1. Filter out low-quality content: entertainment gossip and promotional press releases.
-    2. Focus on substantive topics: employment, education, technology, and public welfare.
-    3. Deep perspective: Look beyond trending topics to find meaningful stories.
+    2. Focus on substantive topics FROM TODAY: employment, education, technology, and public welfare.
+    3. Deep perspective: Look beyond trending topics to find meaningful stories happening NOW.
     4. Multi-source integration: Each story must integrate at least 3 different perspectives.
-    5. **Comprehensive reporting**: Each news summary must be at least 1000 words with detailed analysis.
+    5. **Comprehensive reporting**: Each news summary must be at least 1000 words with detailed analysis including background, context, multiple viewpoints, and implications.
     6. **Source documentation**: Include original URLs for every source cited (news articles, official documents, social media posts).
     
     Style Guidelines:
@@ -116,15 +130,22 @@ china_scout = Agent(
 # 【全球情报官】 - 强制英文源 + 多源整合
 global_scout = Agent(
     role='International News Analyst (English Sources)',
-    goal='Identify Top 5 Global events using ONLY English primary sources, with 3+ sources per story and comprehensive 1000+ word analysis',
+    goal=f'Identify EXACTLY {NEWS_ITEMS_PER_SECTION} Global events from TODAY using ONLY English primary sources, with 3+ sources per story and comprehensive 1000+ word analysis for EACH story',
     backstory=f"""
-    You strictly adhere to English-language primary sources.
+    You strictly adhere to English-language primary sources and TODAY's breaking news.
+    
+    **CRITICAL REQUIREMENTS**:
+    - You MUST return EXACTLY {NEWS_ITEMS_PER_SECTION} news stories, no more, no less
+    - Each story MUST be from TODAY or the last 24 hours
+    - Each story MUST have a minimum of 1000 words of detailed analysis
+    - Search for news using date-specific keywords: "today", "breaking", "latest {CURRENT_YEAR}"
+    
     Your Logic:
-    1. Tech: Focus on fundamental breakthroughs (AI, Space), not PR stunts.
-    2. Geopolitics: Focus on strategic implications and factual developments.
+    1. Tech: Focus on fundamental breakthroughs from TODAY (AI, Space), not PR stunts.
+    2. Geopolitics: Focus on strategic implications and factual developments happening NOW.
     3. CRITICAL: You MUST retain the original English Headlines to avoid translation loss.
     4. Multi-Source: Each story must synthesize 3+ reputable sources (Reuters, Bloomberg, NYT, Nature, Foreign Affairs, Stratechery).
-    5. **Comprehensive reporting**: Each news summary must be at least 1000 words with detailed analysis and context.
+    5. **Comprehensive reporting**: Each news summary must be at least 1000 words with detailed analysis including background, expert opinions, data, and global implications.
     6. **Source documentation**: Include original URLs for every source cited (news articles, research papers, analysis pieces).
     
     {HUMANIZER_PROTOCOL}
@@ -137,14 +158,20 @@ global_scout = Agent(
 # 【法律情报官】 - 多源整合
 legal_scout = Agent(
     role='Global Legal News Curator',
-    goal='Identify 5 landmark legal events (SCOTUS, EU CJEU, China SPC) with multi-source verification and comprehensive 1000+ word legal analysis',
+    goal=f'Identify EXACTLY {NEWS_ITEMS_PER_SECTION} landmark legal events from TODAY (SCOTUS, EU CJEU, China SPC) with multi-source verification and comprehensive 1000+ word legal analysis for EACH case',
     backstory=f"""
-    Focus on "Hard Law" developments:
+    **CRITICAL REQUIREMENTS**:
+    - You MUST return EXACTLY {NEWS_ITEMS_PER_SECTION} legal news stories, no more, no less
+    - Each story MUST be from TODAY or the last 24-48 hours
+    - Each story MUST have a minimum of 1000 words of detailed legal analysis
+    - Search for news using date-specific keywords: "today", "latest", "{CURRENT_YEAR}"
+    
+    Focus on "Hard Law" developments from TODAY:
     1. Landmark Rulings: Supreme Court decisions that change precedent.
     2. Major Legislation: EU AI Act, GDPR, Antitrust laws.
     3. Corporate Litigation: Significant Big Tech lawsuits.
     4. Multi-Source: Each legal development must include court documents, expert commentary, and news coverage.
-    5. **Comprehensive reporting**: Each legal news summary must be at least 1000 words with detailed legal analysis.
+    5. **Comprehensive reporting**: Each legal news summary must be at least 1000 words with detailed legal analysis including case background, legal reasoning, precedents, and implications.
     6. **Source documentation**: Include original URLs for court documents, legislation texts, expert analyses, and news articles.
     
     {HUMANIZER_PROTOCOL}
@@ -157,9 +184,16 @@ legal_scout = Agent(
 # 【健康与运动新闻情报官】 - 新增：科学期刊来源
 health_sports_scout = Agent(
     role='Health & Sports Science Reporter',
-    goal='Identify Top 5 health and sports science news from peer-reviewed sources with comprehensive 1000+ word scientific summaries',
+    goal=f'Identify EXACTLY {NEWS_ITEMS_PER_SECTION} health and sports science news from THIS WEEK from peer-reviewed sources with comprehensive 1000+ word scientific summaries for EACH story',
     backstory=f"""
     You are a science journalist specializing in health and sports research.
+    
+    **CRITICAL REQUIREMENTS**:
+    - You MUST return EXACTLY {NEWS_ITEMS_PER_SECTION} news stories, no more, no less
+    - Each story MUST be from THIS WEEK (last 7 days) with recent publication dates
+    - Each story MUST have a minimum of 1000 words of detailed scientific analysis
+    - Search for news using date-specific keywords: "{CURRENT_YEAR}", "latest", "new study", "recent research"
+    
     Your priority sources (in order):
     1. Scientific American (health, sports science, fitness)
     2. Nature (medical research, sports physiology)
@@ -168,11 +202,11 @@ health_sports_scout = Agent(
     5. Sports Medicine journals
     
     Selection Criteria:
-    - Focus on peer-reviewed research with practical implications
+    - Focus on peer-reviewed research published THIS WEEK with practical implications
     - Prioritize studies with large sample sizes and robust methodology
     - Include both breaking research and emerging trends
     - Avoid sensationalized health claims without scientific backing
-    - **Comprehensive reporting**: Each news summary must be at least 1000 words with detailed scientific background and analysis
+    - **Comprehensive reporting**: Each news summary must be at least 1000 words with detailed scientific background, methodology, results, analysis, and practical implications
     - **Source documentation**: Include original URLs for journal articles, research papers, and scientific publications
     
     {HUMANIZER_PROTOCOL}
@@ -249,19 +283,26 @@ legal_scholar = Agent(
 # 【深度研究员】 - 架构师（更新：整合5个板块）
 researcher = Agent(
     role='Chief Researcher & Architect',
-    goal='Synthesize all inputs into a structured report, VERIFYING ALL URLs ARE PRESENT',
+    goal=f'Synthesize all inputs into a structured report with ALL {NEWS_ITEMS_PER_SECTION} items per section, VERIFYING ALL URLs ARE PRESENT and ALL CONTENT is preserved in full',
     backstory=f"""
     You are responsible for data integrity and structural integrity of the report.
     You must ensure that every single news item passed to the Editor has a VALID, CLICKABLE URL.
-    Do not summarize away the links. The Editor needs them for the HTML.
+    Do not summarize away the links or the content. The Editor needs them for the HTML.
     
-    You ensure:
-    1. All FIVE sections are present: China, Global, Legal News, Health/Sports, Legal Scholarship (Law Review Articles)
-    2. **CRITICAL**: Every news story must have its Source URL clearly listed
-    3. English headlines are preserved for Global news
-    4. Deep analysis reports (5000+ words each) are properly integrated with all citations
-    5. **VERIFICATION STEP**: Check that every single news item and analysis has its corresponding Source URL attached. If a URL is missing in the input, flag it clearly.
-    6. Organize the content strictly into the 5 sections
+    **CRITICAL REQUIREMENTS**:
+    1. All FIVE sections must be present with complete data
+    2. **EACH SECTION MUST HAVE ALL {NEWS_ITEMS_PER_SECTION} NEWS ITEMS** (except Legal Scholarship which has {LEGAL_ANALYSIS_ITEMS})
+    3. **DO NOT TRUNCATE OR SUMMARIZE**: Pass through all 1000+ word summaries in full
+    4. **DO NOT TRUNCATE OR SUMMARIZE**: Pass through all 5000+ word analyses in full
+    5. Every news story must have its Source URLs clearly listed and separated
+    6. English headlines are preserved exactly as written for Global news
+    7. Deep analysis reports (5000+ words each) are properly integrated with all citations
+    8. **VERIFICATION STEP**: Check that every single news item has:
+       - Title
+       - Full 1000+ word summary (or 5000+ for deep analysis)
+       - At least one Source URL
+       If any of these are missing, flag it clearly to the user
+    9. Organize the content strictly into the 5 sections with clear boundaries
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -270,27 +311,30 @@ researcher = Agent(
     verbose=True
 )
 
-# 【主编】 - 专注于 NYT 风格和数据真实性
+# 【主编】 - 专注于 NYT 风格和数据真实性 + 5栏布局
 editor = Agent(
     role='Lead Editor (NYT Style & Frontend Dev)',
-    goal='Generate a "New York Times" style HTML report. ENSURE ALL LINKS WORK.',
+    goal=f'Generate a "New York Times" style HTML report with 5-column grid layout. ENSURE ALL {NEWS_ITEMS_PER_SECTION} NEWS ITEMS PER SECTION ARE DISPLAYED. ENSURE ALL LINKS WORK.',
     backstory=f"""
     You are a meticulous frontend developer and editor inspired by The New York Times.
     
     **Core Philosophy**:
     1. **Data Integrity**: You NEVER create fake links (href="#"). You ONLY use the URLs provided by the researchers. If a URL is missing, you do not display a link button.
-    2. **Design Aesthetic (NYT Style)**:
+    2. **Display ALL Items**: You MUST display ALL {NEWS_ITEMS_PER_SECTION} news items in each section ({LEGAL_ANALYSIS_ITEMS} for Legal Analysis), not just 1 or 2.
+    3. **Full Content**: You MUST preserve the full 1000+ word summaries and 5000+ word analyses, using collapsible sections to keep the page clean.
+    4. **Design Aesthetic (NYT Style with Modern Grid)**:
        - **White Background**: Clean, stark, professional (bg-white / bg-stone-50).
        - **Serif Headings**: Black, bold, serif fonts (Merriweather/Georgia) for authority.
        - **Sans Body**: Clean sans-serif (Inter/Helvetica) for readability.
        - **No Gradients**: Avoid cheap-looking gradients. Use solid colors and subtle borders.
        - **High Contrast**: Dark gray text on white/off-white background.
-    3. **Five Section Layout**:
-       - Section 1: Chinese-language News (中文新闻)
-       - Section 2: Global News (全球新闻) - **English Headlines** prominent
-       - Section 3: Legal News (法律新闻)
-       - Section 4: Health & Sports News + Deep Analysis (健康与运动)
-       - Section 5: Legal Analysis & Law Review Articles (法律学术分析)
+       - **5-Column Grid**: Use CSS Grid (grid-cols-5) for desktop, responsive for mobile/tablet
+    5. **Five Column Layout** (CRITICAL):
+       - Column 1: 中文新闻 (Chinese-language News) - Display ALL {NEWS_ITEMS_PER_SECTION} items
+       - Column 2: 全球新闻 (Global News) - Display ALL {NEWS_ITEMS_PER_SECTION} items with **English Headlines** prominent
+       - Column 3: 法律新闻 (Legal News) - Display ALL {NEWS_ITEMS_PER_SECTION} items
+       - Column 4: 健康与运动 (Health & Sports) - Display ALL {NEWS_ITEMS_PER_SECTION} items + {DEEP_ANALYSIS_ITEMS} deep analyses
+       - Column 5: 法律学术分析 (Legal Analysis) - Display {LEGAL_ANALYSIS_ITEMS} deep analyses
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -301,47 +345,89 @@ editor = Agent(
 # --- 4. 定义任务 (Tasks) ---
 
 task_china = Task(
-    description="""
-    1. Search for 5 newsworthy stories from Chinese-language media sources.
-    2. Sources: Major news outlets and reputable media platforms.
-    3. Requirements: Focus on factual reporting, emphasize technology and public welfare topics.
+    description=f"""
+    1. Search for TODAY's {NEWS_ITEMS_PER_SECTION} most newsworthy stories from Chinese-language media sources published in the last 24 hours.
+       Use search queries like: "China news today", "中国新闻 今天", "微博热搜 今日", "知乎热榜 最新"
+    2. Sources: Major news outlets and reputable media platforms (今日头条, 新浪新闻, 澎湃新闻, etc.).
+    3. Requirements: Focus on factual reporting, emphasize technology and public welfare topics FROM TODAY.
     4. Multi-source integration: Each story must integrate at least 3 different source perspectives.
-    5. **Word count requirement**: Each news summary must be at least 1000 words, providing comprehensive detail.
+    5. **CRITICAL - Word count requirement**: Each news summary MUST be at least 1000 words, providing comprehensive detail with context, background, analysis, and implications.
     6. **Source links required**: Include original document links (URLs) for each source cited.
+    7. **Output format**: Return exactly {NEWS_ITEMS_PER_SECTION} news items in this format:
+       
+       News Item 1:
+       Title: [Title in Chinese]
+       Summary: [1000+ word comprehensive summary]
+       Sources: [URL1], [URL2], [URL3]
+       
+       [Repeat for items 2-{NEWS_ITEMS_PER_SECTION}]
     """,
-    expected_output="5 curated news stories from Chinese media (1000+ words each), each with multi-source integration and source links.",
+    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} curated news stories from Chinese media published TODAY (1000+ words each), each with multi-source integration and source links.",
     agent=china_scout
 )
 
 task_global = Task(
-    description="""
-    1. Search 'Breaking news Reuters', 'Tech analysis Stratechery', 'Geopolitics Foreign Affairs'.
-    2. Select 5 events with global structural impact.
-    3. RETURN FORMAT: English Headline + Chinese Contextual Summary.
+    description=f"""
+    1. Search for TODAY's breaking news using these queries:
+       - "Breaking news today Reuters"
+       - "Tech news today {CURRENT_YEAR}"
+       - "Global news latest 24 hours"
+       - "Technology breakthrough today"
+       - "Geopolitics news today"
+    2. Select {NEWS_ITEMS_PER_SECTION} events with global structural impact published in the last 24 hours.
+    3. RETURN FORMAT: English Headline + Comprehensive Chinese Analysis (1000+ words).
     4. Multi-Source: Each story must synthesize 3+ sources (Reuters, Bloomberg, NYT, Nature, etc).
-    5. **Word count requirement**: Each news summary must be at least 1000 words, providing comprehensive analysis.
+    5. **CRITICAL - Word count requirement**: Each news summary MUST be at least 1000 words, providing comprehensive analysis with context, background, expert opinions, and implications.
     6. **Source links required**: Include original document links (URLs) for each source cited.
+    7. **Output format**: Return exactly {NEWS_ITEMS_PER_SECTION} news items in this format:
+       
+       News Item 1:
+       English Title: [Title in English]
+       Chinese Summary: [1000+ word comprehensive summary in Chinese]
+       Sources: [URL1], [URL2], [URL3]
+       
+       [Repeat for items 2-{NEWS_ITEMS_PER_SECTION}]
     """,
-    expected_output="5 Global news items (1000+ words each) with English Titles and multi-source verification, including source URLs.",
+    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} Global news items published TODAY (1000+ words each) with English Titles and multi-source verification, including source URLs.",
     agent=global_scout
 )
 
 task_legal = Task(
-    description="""
-    Search for today's most significant court rulings or legislative drafts (US/EU/CN).
-    Focus on IP, Antitrust, AI Regulation.
+    description=f"""
+    Search for TODAY's most significant court rulings or legislative drafts (US/EU/CN) from the last 24-48 hours.
+    Use search queries like:
+    - "Supreme Court ruling today {CURRENT_YEAR}"
+    - "Legal news today USA"
+    - "Court decision latest"
+    - "EU legislation today"
+    - "China legal news today"
+    
+    Focus on IP, Antitrust, AI Regulation, Privacy Law.
     Multi-Source: Each legal development must include court documents, expert commentary, and news coverage.
-    **Word count requirement**: Each legal news summary must be at least 1000 words, providing comprehensive legal analysis.
+    **CRITICAL - Word count requirement**: Each legal news summary MUST be at least 1000 words, providing comprehensive legal analysis with case background, legal reasoning, precedents, and implications.
     **Source links required**: Include original document links (URLs) - court documents, legislation, expert analysis, and news articles.
+    **Output format**: Return exactly {NEWS_ITEMS_PER_SECTION} news items in this format:
+    
+    Legal Update 1:
+    Title: [Case/Legislation Title]
+    Summary: [1000+ word comprehensive legal analysis]
+    Sources: [Court document URL], [Expert analysis URL], [News URL]
+    
+    [Repeat for items 2-{NEWS_ITEMS_PER_SECTION}]
     """,
-    expected_output="5 Key Legal Updates (1000+ words each) with multi-source citations and original document URLs.",
+    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} Key Legal Updates from TODAY (1000+ words each) with multi-source citations and original document URLs.",
     agent=legal_scout
 )
 
 # 【新增】健康与运动新闻任务
 task_health_sports = Task(
-    description="""
-    1. Search for the top 5 health and sports science news from peer-reviewed sources.
+    description=f"""
+    1. Search for the top {NEWS_ITEMS_PER_SECTION} RECENT health and sports science news published in the last week.
+       Use search queries like:
+       - "health research {CURRENT_YEAR} latest"
+       - "sports science breakthrough today"
+       - "medical study published this week"
+       - "fitness research new {CURRENT_YEAR}"
     2. Priority sources: Scientific American, Nature, Science Magazine, The Lancet, JAMA, NEJM, Sports Medicine journals.
     3. Focus on:
        - New research findings with practical health implications
@@ -349,18 +435,27 @@ task_health_sports = Task(
        - Exercise and fitness studies
        - Nutrition research
     4. Include the journal/source name, publication date, and key findings.
-    5. **Word count requirement**: Each news summary must be at least 1000 words, providing comprehensive scientific detail.
+    5. **CRITICAL - Word count requirement**: Each news summary MUST be at least 1000 words, providing comprehensive scientific detail including methodology, results, analysis, and practical implications.
     6. **Source links required**: Include original document links (URLs) - journal articles, research papers, and scientific publications.
+    7. **Output format**: Return exactly {NEWS_ITEMS_PER_SECTION} news items in this format:
+    
+    Health/Sports Item 1:
+    Title: [Research Title]
+    Journal/Source: [Journal Name] - [Publication Date]
+    Summary: [1000+ word comprehensive scientific summary]
+    Sources: [Journal URL], [Related Study URL], [News Coverage URL]
+    
+    [Repeat for items 2-{NEWS_ITEMS_PER_SECTION}]
     """,
-    expected_output="5 Health/Sports Science news items (1000+ words each) with source citations, key findings, and original document URLs.",
+    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} Health/Sports Science news items from THIS WEEK (1000+ words each) with source citations, key findings, and original document URLs.",
     agent=health_sports_scout
 )
 
 # 【新增】健康深度分析任务
 task_health_analysis = Task(
-    description="""
-    Select the TOP 3 most impactful health/sports stories from the collected news.
-    For each of the 3 stories, generate a comprehensive in-depth analysis report of at least 5000 words including:
+    description=f"""
+    Select the TOP {DEEP_ANALYSIS_ITEMS} most impactful health/sports stories from the collected news.
+    For each of the {DEEP_ANALYSIS_ITEMS} stories, generate a comprehensive in-depth analysis report of at least 5000 words including:
     
     1. **Executive Summary** (500-700 words): Overview of the research and its significance
     2. **Background & Context** (800-1000 words): Scientific context with concrete examples, historical perspective
@@ -376,14 +471,14 @@ task_health_analysis = Task(
     
     IMPORTANT: Follow the Deep Humanizer Protocol. No AI clichés. Use concrete examples and varied sentence structure.
     """,
-    expected_output="3 comprehensive in-depth analysis reports (5000+ words each) for top health/sports stories with all source URLs.",
+    expected_output=f"{DEEP_ANALYSIS_ITEMS} comprehensive in-depth analysis reports (5000+ words each) for top health/sports stories with all source URLs.",
     agent=health_analyst,
     context=[task_health_sports]
 )
 
 # 【新增】法律学术分析任务
 task_legal_analysis = Task(
-    description="""
+    description=f"""
     Phase 1: Identify 3-5 key legal issues from current US and China hot topics based on the news collected.
     
     Phase 2: Search for relevant law review articles from top 10 US law schools:
@@ -391,7 +486,7 @@ task_legal_analysis = Task(
     - Columbia Law Review, University of Chicago Law Review, NYU Law Review
     - Penn Law Review, Michigan Law Review, Virginia Law Review, Berkeley Law Review
     
-    Phase 3: Select the 3 most relevant and recent articles.
+    Phase 3: Select the {LEGAL_ANALYSIS_ITEMS} most relevant and recent articles.
     
     Phase 4: For each article, generate a comprehensive in-depth analysis of at least 5000 words:
     1. **Article Overview & Introduction** (700-900 words): Summarize thesis with engaging, concrete language and context
@@ -407,47 +502,59 @@ task_legal_analysis = Task(
     
     IMPORTANT: Follow the Deep Humanizer Protocol. Technical precision with readable prose. Avoid jargon overload.
     """,
-    expected_output="Analysis of 3 law review articles (5000+ words each) connected to current US-China topics with all source URLs.",
+    expected_output=f"Analysis of {LEGAL_ANALYSIS_ITEMS} law review articles (5000+ words each) connected to current US-China topics with all source URLs.",
     agent=legal_scholar,
     context=[task_china, task_global, task_legal]
 )
 
 # 【更新】研究任务：整合所有5个板块
 task_research = Task(
-    description="""
-    Compile ALL inputs from the 5 sections:
-    1. Chinese-language News (中文新闻) - with 1000+ word summaries
-    2. Global News (全球新闻) - with 1000+ word summaries
-    3. Legal News (法律新闻) - with 1000+ word summaries
-    4. Health & Sports News + Deep Analysis (健康与运动) - with 1000+ word summaries and 5000+ word analyses
-    5. Legal Analysis & Law Review Articles (法律学术分析) - with 5000+ word analyses
+    description=f"""
+    Compile ALL inputs from the 5 sections ensuring EVERY news item is preserved:
+    1. Chinese-language News (中文新闻) - ALL {NEWS_ITEMS_PER_SECTION} news items with 1000+ word summaries
+    2. Global News (全球新闻) - ALL {NEWS_ITEMS_PER_SECTION} news items with 1000+ word summaries  
+    3. Legal News (法律新闻) - ALL {NEWS_ITEMS_PER_SECTION} news items with 1000+ word summaries
+    4. Health & Sports News + Deep Analysis (健康与运动) - ALL {NEWS_ITEMS_PER_SECTION} news items with 1000+ word summaries PLUS {DEEP_ANALYSIS_ITEMS} deep analysis reports with 5000+ words each
+    5. Legal Analysis & Law Review Articles (法律学术分析) - {LEGAL_ANALYSIS_ITEMS} law review analyses with 5000+ words each
     
-    Verify that ALL FIVE SECTIONS exist with complete data.
-    Ensure strict separation of content between sections.
-    Add a "Key Takeaway" one-liner for every major news item.
-    Preserve all deep analysis reports in their entirety (5000+ words each).
-    Ensure English headlines are preserved for Global news.
-    **CRITICAL**: Preserve ALL original source URLs from all sections - news articles, research papers, court documents, law review articles, etc.
-    Format source URLs clearly so they can be displayed as clickable links in the final HTML.
+    **CRITICAL REQUIREMENTS**:
+    - Verify that ALL FIVE SECTIONS exist with complete data
+    - **EACH section must have ALL {NEWS_ITEMS_PER_SECTION} news items** (except Legal Analysis which has {LEGAL_ANALYSIS_ITEMS} items)
+    - Ensure strict separation of content between sections
+    - Add a "Key Takeaway" one-liner for every major news item
+    - Preserve all deep analysis reports in their entirety (5000+ words each)
+    - Ensure English headlines are preserved for Global news section
+    - **PRESERVE ALL original source URLs** from all sections - news articles, research papers, court documents, law review articles, etc.
+    - Format source URLs clearly and separately so they can be displayed as clickable links in the final HTML
+    - **DO NOT SUMMARIZE OR TRUNCATE**: Pass through all content in full length to the editor
+    
+    **Output Structure**:
+    For each section, organize as:
+    Section Name:
+      Item 1: Title, Full Summary (1000+ words), Source URLs
+      Item 2: Title, Full Summary (1000+ words), Source URLs
+      Item 3: Title, Full Summary (1000+ words), Source URLs
+      Item 4: Title, Full Summary (1000+ words), Source URLs
+      Item 5: Title, Full Summary (1000+ words), Source URLs
+      [Plus deep analysis if applicable]
     """,
-    expected_output="Master Report Markdown with all 5 sections, complete analyses, and all source URLs preserved.",
+    expected_output=f"Master Report with ALL 5 sections, each containing ALL news items ({NEWS_ITEMS_PER_SECTION} per section except Legal Analysis with {LEGAL_ANALYSIS_ITEMS}), complete 1000+ word summaries, 5000+ word analyses, and ALL source URLs preserved.",
     agent=researcher,
     context=[task_china, task_global, task_legal, task_health_sports, task_health_analysis, task_legal_analysis]
 )
 
-current_date = datetime.now().strftime("%Y-%m-%d")
-
-# 【重构】发布任务 - NYT 风格 + 链接修复
+# 【重构】发布任务 - NYT 风格 + 链接修复 + 5栏布局
 task_publish = Task(
     description=f"""
-    Generate the final `index.html` file based on the Research Report.
+    Generate the final `index.html` file based on the Research Report with TODAY's date: {CURRENT_DATE}.
     
     **CRITICAL DATA RULES**:
     1. **NO FAKE LINKS**: You are STRICTLY FORBIDDEN from using `href="#"`. 
     2. **USE REAL URLS**: You must extract the URL provided in the context for each story and put it in the `href` attribute.
     3. **Fail-Safe**: If no URL is found in the context for a specific story, do NOT create a "Read More" button.
+    4. **DISPLAY ALL {NEWS_ITEMS_PER_SECTION} NEWS ITEMS**: Each section MUST show ALL {NEWS_ITEMS_PER_SECTION} news items provided, not just 1.
     
-    **DESIGN SYSTEM (New York Times Style)**:
+    **DESIGN SYSTEM (New York Times Style with 5-Column Layout)**:
     1. **Library**: Use Tailwind CSS (`<script src="https://cdn.tailwindcss.com"></script>`).
     2. **Fonts**: 
        - Headlines: `font-family: 'Merriweather', serif;` (Import from Google Fonts)
@@ -456,27 +563,36 @@ task_publish = Task(
        - Background: `bg-stone-50` (warm off-white) or `bg-white`.
        - Text: `text-stone-900` (almost black) for headings, `text-stone-700` for body.
        - Accents: Minimal use of `border-stone-300` for dividers. No bright gradients.
-    4. **Layout**:
-       - **Header**: Simple, centered, serif headline "Daily Insight". Date below it in italic serif. Thin border-bottom.
-       - **Sections**: Clear section headers (e.g., "China News", "Global Briefing").
+    4. **Layout - FIVE COLUMN RESPONSIVE GRID**:
+       - **Header**: Simple, centered, serif headline "Daily Insight - {CURRENT_DATE}". Thin border-bottom.
+       - **Main Container**: Use CSS Grid with 5 columns on desktop (grid-cols-5), responsive on mobile/tablet
+       - **Each Column Represents One Section**:
+         1. Column 1: 中文新闻 (Chinese-language News) - Show ALL {NEWS_ITEMS_PER_SECTION} news items
+         2. Column 2: 全球新闻 (Global News) - Show ALL {NEWS_ITEMS_PER_SECTION} items with **English Headlines** prominent
+         3. Column 3: 法律新闻 (Legal News) - Show ALL {NEWS_ITEMS_PER_SECTION} items
+         4. Column 4: 健康与运动 (Health & Sports) - Show ALL {NEWS_ITEMS_PER_SECTION} items + {DEEP_ANALYSIS_ITEMS} deep analysis (collapsible)
+         5. Column 5: 法律学术分析 (Legal Analysis) - Show {LEGAL_ANALYSIS_ITEMS} deep analysis reports (collapsible)
+       - **Responsive**: Use `lg:grid-cols-5 md:grid-cols-2 grid-cols-1` for mobile/tablet adaptation
        - **Cards**: Clean layout. White background `bg-white`. Thin border `border border-stone-200`. No heavy shadows (`shadow-sm` at most).
-       - **Typography**: High readability. Line height 1.6+.
-       - **Five Section Layout**:
-         1. 中文新闻 (Chinese-language News)
-         2. 全球新闻 (Global News) - Must display **English Headline** prominently
-         3. 法律新闻 (Legal News)
-         4. 健康与运动 (Health & Sports)
-         5. 法律学术分析 (Legal Analysis)
+       - **Typography**: High readability. Line height 1.6+. Use `line-clamp-3` for previews.
     
-    **INTERACTIVITY**:
-    - **Collapsible**: Use `<details>` for the "Deep Analysis" (5000 words) sections to keep the page clean. 
-    - The summary (1000 words) should be visible by default or easily toggleable.
-    - **Hover**: Subtle hover effects (e.g., title turns dark red/blue on hover).
+    **CONTENT DISPLAY**:
+    - **News Items**: Show title and first 200-300 characters as preview, with "Read More" toggle to expand full 1000+ word summary
+    - **Deep Analysis**: Use `<details>` tag with engaging summary, full 5000+ word content hidden until expanded
+    - **Source Links**: Display as clickable badges/chips below each item
+    
+    **INTERACTIVITY & READABILITY**:
+    - **Collapsible**: Use `<details>` for long content (1000+ and 5000+ word sections) to keep page scannable
+    - **Preview Mode**: Show first 200-300 chars by default with "Read Full Article" button
+    - **Hover**: Subtle hover effects (e.g., title underline, card slight elevation)
+    - **Clear Hierarchy**: Section headers (text-2xl), item titles (text-xl), body (text-base)
     
     **Output**: 
     - ONLY the raw HTML code (starting with `<!DOCTYPE html>`).
+    - Ensure ALL {NEWS_ITEMS_PER_SECTION} items in each section are displayed.
+    - Include proper date: {CURRENT_DATE}
     """,
-    expected_output="Final production-ready HTML string with real links and NYT design.",
+    expected_output="Final production-ready HTML with 5-column grid layout, all news items displayed, real links, and excellent readability.",
     agent=editor,
     context=[task_research]
 )
@@ -625,24 +741,6 @@ def run():
                 verbose=True
             )
             
-            legal_scholar_backup = Agent(
-                role=legal_scholar.role,
-                goal=legal_scholar.goal,
-                backstory=legal_scholar.backstory,
-                tools=legal_scholar.tools,
-                llm=backup_llm,
-                verbose=True
-            )
-            
-            researcher_backup = Agent(
-                role=researcher.role,
-                goal=researcher.goal,
-                backstory=researcher.backstory,
-                tools=researcher.tools,
-                llm=backup_llm,
-                verbose=True
-            )
-            
             # 重新创建任务（跳过 task_china），使用第二备用 agents
             task_global_deepseek = Task(
                 description=task_global.description,
@@ -742,66 +840,75 @@ def run():
             # 使用第三备用模型重试 (nvidia/llama-3.3-nemotron-super-49b-v1.5)
             try:
                 
-                # 重新创建 agents（跳过 china_scout），使用第三备用 LLM
-                global_scout_deepseek = Agent(
+                # 重新创建 agents 使用第三备用 LLM (backup_llm)
+                china_scout_backup = Agent(
+                    role=china_scout.role,
+                    goal=china_scout.goal,
+                    backstory=china_scout.backstory,
+                    tools=china_scout.tools,
+                    llm=backup_llm,
+                    verbose=True
+                )
+                
+                global_scout_backup = Agent(
                     role=global_scout.role,
                     goal=global_scout.goal,
                     backstory=global_scout.backstory,
                     tools=global_scout.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                legal_scout_deepseek = Agent(
+                legal_scout_backup = Agent(
                     role=legal_scout.role,
                     goal=legal_scout.goal,
                     backstory=legal_scout.backstory,
                     tools=legal_scout.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                health_sports_scout_deepseek = Agent(
+                health_sports_scout_backup = Agent(
                     role=health_sports_scout.role,
                     goal=health_sports_scout.goal,
                     backstory=health_sports_scout.backstory,
                     tools=health_sports_scout.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                health_analyst_deepseek = Agent(
+                health_analyst_backup = Agent(
                     role=health_analyst.role,
                     goal=health_analyst.goal,
                     backstory=health_analyst.backstory,
                     tools=health_analyst.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                legal_scholar_deepseek = Agent(
+                legal_scholar_backup = Agent(
                     role=legal_scholar.role,
                     goal=legal_scholar.goal,
                     backstory=legal_scholar.backstory,
                     tools=legal_scholar.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                researcher_deepseek = Agent(
+                researcher_backup = Agent(
                     role=researcher.role,
                     goal=researcher.goal,
                     backstory=researcher.backstory,
                     tools=researcher.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                editor_deepseek = Agent(
+                editor_backup = Agent(
                     role=editor.role,
                     goal=editor.goal,
                     backstory=editor.backstory,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
