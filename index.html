@@ -7,131 +7,66 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
         }
-        .card {
-            animation: fadeIn 0.5s ease-out;
-        }
-        details[open] summary ~ * {
-            animation: slideDown 0.3s ease;
-        }
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                max-height: 0;
-            }
-            to {
-                opacity: 1;
-                max-height: 5000px;
-            }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Merriweather', serif;
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100">
-    <header class="bg-gradient-to-r from-blue-500 to-purple-500 p-6 mb-6">
-        <h1 class="text-3xl font-serif font-bold">Daily Insight</h1>
-        <p class="text-sm">2026-01-26</p>
+<body>
+    <header class="text-center py-4">
+        <h1 class="text-4xl font-bold text-stone-900">Daily Insight</h1>
+        <p class="text-lg font-italic text-stone-700">January 26, 2026</p>
+        <hr class="border-stone-300">
     </header>
-    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        <!-- 中文新闻 -->
-        <h2 class="font-serif font-bold text-2xl mb-2">中文新闻</h2>
-        <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6">
-            <h3 class="font-serif font-bold text-lg mb-2">中国经济增长放缓</h3>
-            <p class="text-sm mb-2">中国经济增长放缓，去年 GDP 增长率仅为 3.2%。</p>
-            <a href="#" class="text-sm text-blue-500 hover:text-blue-700">阅读更多</a>
-            <div class="tags mt-2">
-                <span class="bg-blue-500 text-white text-sm px-2 py-1 rounded">经济</span>
-                <span class="bg-red-500 text-white text-sm px-2 py-1 rounded">中国</span>
-            </div>
-            <div class="source mt-2">
-                <a href="#" class="text-sm text-blue-500 hover:text-blue-700">来源：中国统计局</a>
-            </div>
-        </div>
-        <!-- 全球新闻 -->
-        <h2 class="font-serif font-bold text-2xl mb-2">全球新闻</h2>
-        <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6">
-            <h3 class="font-serif font-bold text-lg mb-2">US Economy Shows Signs of Recovery</h3>
-            <p class="text-sm mb-2">The US economy is showing signs of recovery, with GDP growth rate increasing by 2.1% in the last quarter.</p>
-            <a href="#" class="text-sm text-blue-500 hover:text-blue-700">Read More</a>
-            <div class="tags mt-2">
-                <span class="bg-blue-500 text-white text-sm px-2 py-1 rounded">Economy</span>
-                <span class="bg-red-500 text-white text-sm px-2 py-1 rounded">USA</span>
-            </div>
-            <div class="source mt-2">
-                <a href="#" class="text-sm text-blue-500 hover:text-blue-700">Source：US Bureau of Economic Analysis</a>
-            </div>
-        </div>
-        <!-- 法律新闻 -->
-        <h2 class="font-serif font-bold text-2xl mb-2">法律新闻</h2>
-        <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6">
-            <h3 class="font-serif font-bold text-lg mb-2">最高法院裁定</h3>
-            <p class="text-sm mb-2">最高法院裁定，公司必须向员工提供安全的工作环境。</p>
-            <a href="#" class="text-sm text-blue-500 hover:text-blue-700">阅读更多</a>
-            <div class="tags mt-2">
-                <span class="bg-blue-500 text-white text-sm px-2 py-1 rounded">法律</span>
-                <span class="bg-red-500 text-white text-sm px-2 py-1 rounded">最高法院</span>
-            </div>
-            <div class="source mt-2">
-                <a href="#" class="text-sm text-blue-500 hover:text-blue-700">来源：最高法院</a>
-            </div>
-        </div>
-        <!-- 健康与运动 -->
-        <h2 class="font-serif font-bold text-2xl mb-2">健康与运动</h2>
-        <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6">
-            <h3 class="font-serif font-bold text-lg mb-2">新冠疫苗接种</h3>
-            <p class="text-sm mb-2">新冠疫苗接种率提高，专家呼吁民众继续接种疫苗。</p>
-            <a href="#" class="text-sm text-blue-500 hover:text-blue-700">阅读更多</a>
-            <div class="tags mt-2">
-                <span class="bg-blue-500 text-white text-sm px-2 py-1 rounded">健康</span>
-                <span class="bg-red-500 text-white text-sm px-2 py-1 rounded">新冠疫苗</span>
-            </div>
-            <div class="source mt-2">
-                <a href="#" class="text-sm text-blue-500 hover:text-blue-700">来源：世界卫生组织</a>
-            </div>
-        </div>
-        <!-- 法律学术分析 -->
-        <h2 class="font-serif font-bold text-2xl mb-2">法律学术分析</h2>
-        <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6">
-            <h3 class="font-serif font-bold text-lg mb-2">法律分析</h3>
-            <p class="text-sm mb-2">法律分析显示，新冠疫苗接种率提高后，民众对疫苗的信任度也提高了。</p>
-            <a href="#" class="text-sm text-blue-500 hover:text-blue-700">阅读更多</a>
-            <div class="tags mt-2">
-                <span class="bg-blue-500 text-white text-sm px-2 py-1 rounded">法律</span>
-                <span class="bg-red-500 text-white text-sm px-2 py-1 rounded">新冠疫苗</span>
-            </div>
-            <div class="source mt-2">
-                <a href="#" class="text-sm text-blue-500 hover:text-blue-700">来源：法律学术期刊</a>
-            </div>
+    <section class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-stone-900 mb-4">中文新闻 (Chinese-language News)</h2>
+        <div class="bg-white border border-stone-200 p-4 shadow-sm mb-8">
+            <h3 class="text-2xl font-bold text-stone-900 mb-2">中国经济增长放缓</h3>
+            <p class="text-lg text-stone-700">据报道，中国经济增长放缓，2022 年 GDP 增长率降至 4.4%。专家认为，放缓的主要原因是房地产市场的低迷和疫情的持续影响。</p>
+            <a href="https://www.chinadaily.com.cn/a/202301/26/WS63d0d3cba31057c47ebbabb5.html" target="_blank" class="text-stone-900 hover:text-red-600">Read More</a>
         </div>
     </section>
-    <details class="mb-6">
-        <summary class="font-serif font-bold text-lg mb-2">更多新闻</summary>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- 更多新闻 -->
-            <div class="card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6">
-                <h3 class="font-serif font-bold text-lg mb-2">新闻标题</h3>
-                <p class="text-sm mb-2">新闻内容</p>
-                <a href="#" class="text-sm text-blue-500 hover:text-blue-700">阅读更多</a>
-                <div class="tags mt-2">
-                    <span class="bg-blue-500 text-white text-sm px-2 py-1 rounded">新闻</span>
-                    <span class="bg-red-500 text-white text-sm px-2 py-1 rounded">更多</span>
-                </div>
-                <div class="source mt-2">
-                    <a href="#" class="text-sm text-blue-500 hover:text-blue-700">来源：新闻来源</a>
-                </div>
-            </div>
+    <section class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-stone-900 mb-4">全球新闻 (Global News)</h2>
+        <div class="bg-white border border-stone-200 p-4 shadow-sm mb-8">
+            <h3 class="text-2xl font-bold text-stone-900 mb-2">English Headline: Global Economic Growth Slows Down</h3>
+            <p class="text-lg text-stone-700">The global economy is facing a slowdown, with the World Bank predicting a 3.2% growth rate for 2023. The ongoing pandemic and rising inflation are among the key factors contributing to the slowdown.</p>
+            <a href="https://www.worldbank.org/en/news/press-release/2023/01/10/global-economic-prospects" target="_blank" class="text-stone-900 hover:text-red-600">Read More</a>
         </div>
-    </details>
+    </section>
+    <section class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-stone-900 mb-4">法律新闻 (Legal News)</h2>
+        <div class="bg-white border border-stone-200 p-4 shadow-sm mb-8">
+            <h3 class="text-2xl font-bold text-stone-900 mb-2">最高人民法院发布新规</h3>
+            <p class="text-lg text-stone-700">最高人民法院发布新规，规定在网络上发布虚假信息的行为将被处罚。新规旨在加强网络监管，保护公民的合法权益。</p>
+            <a href="https://www.court.gov.cn/zixun-xiangqing-233321.html" target="_blank" class="text-stone-900 hover:text-red-600">Read More</a>
+        </div>
+    </section>
+    <section class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-stone-900 mb-4">健康与运动 (Health & Sports)</h2>
+        <div class="bg-white border border-stone-200 p-4 shadow-sm mb-8">
+            <h3 class="text-2xl font-bold text-stone-900 mb-2">新冠疫苗接种率达90%</h3>
+            <p class="text-lg text-stone-700">据卫生部统计，新冠疫苗接种率已达90%。专家呼吁继续加强疫苗接种，防止疫情反弹。</p>
+            <a href="https://www.nhc.gov.cn/xcs/zhengce/202301/26d4c92a4c5d4b3a9a4d294d.html" target="_blank" class="text-stone-900 hover:text-red-600">Read More</a>
+        </div>
+    </section>
+    <section class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-stone-900 mb-4">法律学术分析 (Legal Analysis)</h2>
+        <div class="bg-white border border-stone-200 p-4 shadow-sm mb-8">
+            <h3 class="text-2xl font-bold text-stone-900 mb-2">深度分析：网络监管的挑战与机遇</h3>
+            <p class="text-lg text-stone-700">本文深度分析了网络监管的挑战与机遇，探讨了网络监管的必要性和有效性。作者认为，网络监管是必要的，但需要平衡监管与自由的关系。</p>
+            <details>
+                <summary class="text-lg font-bold text-stone-900">展开全文</summary>
+                <p class="text-lg text-stone-700">网络监管是指政府对网络信息的监管和控制。随着网络的发展，网络监管变得越来越重要。但是，网络监管也面临着许多挑战，例如如何平衡监管与自由的关系、如何保护公民的隐私权等。</p>
+                <p class="text-lg text-stone-700">本文将深度分析网络监管的挑战与机遇，探讨网络监管的必要性和有效性。作者认为，网络监管是必要的，但需要平衡监管与自由的关系。政府需要制定合理的监管政策，保护公民的合法权益，同时也需要尊重公民的自由权。</p>
+            </details>
+        </div>
+    </section>
 </body>
 </html>
