@@ -65,3 +65,7 @@ htmlcov/
 tmp/
 temp/
 *.tmp
+
+# Reports (markdown files generated during execution)
+reports/
+

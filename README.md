@@ -99,20 +99,41 @@ TBD
   - 内容采用人性化、吸引人的写作风格
   - 原文献链接显示为可点击徽章
 
+- **报告保存与邮件发送**（2026年1月新增）：
+  - 所有中间报告自动保存为Markdown格式
+  - 按日期组织的文件夹结构（`reports/YYYY-MM-DD/`）
+  - 每个智能体的输出单独保存，便于审查和调试
+  - 可配置邮件自动发送功能
+  - 所有报告作为附件发送到指定邮箱
+  - 详细配置指南见 [REPORTS_EMAIL_GUIDE.md](REPORTS_EMAIL_GUIDE.md)
+
 ### 技术栈
 
 - **AI框架**: CrewAI
 - **语言模型**: NVIDIA meta/llama-3.1-405b-instruct (主模型), nvidia/llama-3.3-nemotron-super-49b-v1.5 (备用)
 - **搜索工具**: SerperDevTool
 - **部署**: GitHub Actions + GitHub Pages
+- **邮件**: SMTP (支持Gmail, Outlook等)
 
 ### 配置要求
 
 要启用自动化新闻简报功能，需要配置以下环境变量：
 
+#### 必需配置
 1. **NVIDIA_API_KEY**: NVIDIA API密钥 (从 build.nvidia.com 获取)
 2. **SERPER_API_KEY**: Serper.dev API密钥
-3. **DEEPSEEK_API_KEY**: DeepSeek API密钥 (可选，用于第三备用模型)
+
+#### 可选配置
+3. **DEEPSEEK_API_KEY**: DeepSeek API密钥 (可选，用于第二备用模型)
+
+#### 邮件配置（可选，启用报告邮件发送）
+4. **mailadd**: 接收报告的邮箱地址
+5. **SMTP_USER**: SMTP用户名（通常是发件邮箱）
+6. **SMTP_PASSWORD**: SMTP密码（建议使用应用专用密码）
+7. **SMTP_SERVER**: SMTP服务器地址（默认：smtp.gmail.com）
+8. **SMTP_PORT**: SMTP端口（默认：587）
+
+详细的邮件配置说明请参考 [REPORTS_EMAIL_GUIDE.md](REPORTS_EMAIL_GUIDE.md)。
 
 **模型故障转移机制**：
 - 主模型: `meta/llama-3.1-405b-instruct` (NVIDIA API) - 高性能稳定模型，包含全部5个板块
