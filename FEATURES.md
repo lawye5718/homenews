@@ -12,6 +12,8 @@ All news items now require detailed, comprehensive summaries:
 - **Minimum 1000 words per news summary** across all sections (China, Global, Legal, Health/Sports)
 - In-depth analysis with historical context, multiple perspectives, and detailed explanations
 - Rich detail rather than brief summaries
+- Word count is measured by actual content words (excluding markdown formatting, source links, and HTML tags)
+- Quality over quantity: Content should be substantive and informative, not artificially padded
 
 #### Deep Analysis Reports
 Analysis reports now provide extensive, scholarly-level depth:
@@ -22,6 +24,9 @@ Analysis reports now provide extensive, scholarly-level depth:
   - Extensive findings and implications
   - Critical assessments and comparative perspectives
   - Practical applications and policy recommendations
+- Word count is measured by actual content words (excluding markdown formatting, source links, and HTML tags)
+- Focus on substantive analysis with concrete examples, data, and real-world applications
+- Quality matters: Content should be thorough and insightful, not artificially lengthened
 
 #### Enhanced Model Configuration
 - **Increased max_tokens from 8192 to 32000** for all LLM configurations

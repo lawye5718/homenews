@@ -8,6 +8,11 @@ from crewai_tools import ScrapeWebsiteTool, SerperDevTool
 # 替换为 NVIDIA API 配置
 # 使用 NVIDIA meta/llama-3.1-405b-instruct 模型 (高性能稳定)
 # 参考 NVIDIA 官方示范代码配置
+# max_tokens 设置为 32000（从 8192 增加）以支持：
+# 1. 1000+ 字的详细新闻摘要（每个板块 5 条新闻 = 5000+ 字）
+# 2. 5000+ 字的深度分析报告（健康分析 3 篇 + 法律分析 3 篇 = 30000+ 字）
+# 3. 综合研究报告和最终 HTML 生成
+# 注意：此限制基于内容需求，同时在大多数 LLM 的上下文窗口范围内
 nvidia_llm = LLM(
     model="meta/llama-3.1-405b-instruct",
     base_url="https://integrate.api.nvidia.com/v1",
