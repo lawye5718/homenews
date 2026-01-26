@@ -1,0 +1,55 @@
+name: Daily News Agent
+
+on:
+  schedule:
+    # 每天北京时间 04:00 (UTC 20:00)
+    - cron: '0 20 * * *'
+  workflow_dispatch: # 允许手动按钮触发
+
+permissions:
+  contents: write # 必须有写权限才能发布 Pages
+
+jobs:
+  run-agent-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      # 安装依赖
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      # 运行智能体脚本
+      - name: Run CrewAI Agent
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }} # CrewAI 有时会检查这个变量，填一样的即可
+        run: python agent_main.py
+
+      # 检查是否生成了 HTML
+      - name: Verify HTML generation
+        run: |
+          if [ -f "index.html" ]; then
+            echo "✅ HTML generated successfully."
+          else
+            echo "❌ HTML not found!"
+            exit 1
+          fi
+
+      # 部署到 GitHub Pages (这个步骤会自动创建 gh-pages 分支)
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          publish_branch: gh-pages
+          keep_files: true # 保留其他文件，或者设为 false 只发布 html

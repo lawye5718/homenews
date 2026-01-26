@@ -17,3 +17,9 @@ httpx==0.25.1
 beautifulsoup4==4.12.2
 feedparser==6.0.10
 lxml==4.9.3
+
+# AI Agent dependencies
+crewai
+crewai-tools
+langchain_openai
+python-dotenv
