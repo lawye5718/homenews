@@ -5,3 +5,5 @@ fastapi>=0.104.0
 uvicorn>=0.24.0
 sqlalchemy>=2.0.23
 pydantic>=2.5.0
+# apscheduler is required to suppress litellm import warnings (litellm[proxy] dependency)
+apscheduler>=3.10.0
