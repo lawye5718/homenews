@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Briefing 2026-01-26</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #2c3e50;
+        }
+        h1 {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        .briefing-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        @media (min-width: 768px) {
+            .briefing-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-top: 5px solid;
+        }
+        .section-china {
+            border-top-color: #e74c3c;
+        }
+        .section-global {
+            border-top-color: #3498db;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+        }
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            border-radius: 50%;
+            background-size: contain;
+        }
+        .section-china .section-title::before {
+            background-color: #e74c3c;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path fill="white" d="M32 5H4a4 4 0 0 0-4 4v18a4 4 0 0 0 4 4h28a4 4 0 0 0 4-4V9a4 4 0 0 0-4-4zM4 7h28a2 2 0 0 1 2 2v2H2V9a2 2 0 0 1 2-2zm28 22H4a2 2 0 0 1-2-2v-12h32v12a2 2 0 0 1-2 2z"/><circle fill="%23e74c3c" cx="18" cy="18" r="6"/><circle fill="white" cx="18" cy="18" r="4"/></svg>');
+        }
+        .section-global .section-title::before {
+            background-color: #3498db;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path fill="white" d="M18 2a16 16 0 1 0 16 16A16 16 0 0 0 18 2zm0 30a14 14 0 1 1 14-14 14 14 0 0 1-14 14z"/><path fill="white" d="M18 6a12 12 0 0 0-9.55 19.22l16.77-16.77A11.92 11.92 0 0 0 18 6zm0 24a11.94 11.94 0 0 0 9.55-19.22L10.78 26.78A11.92 11.92 0 0 0 18 30z"/></svg>');
+        }
+        .hotspot-item {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        .hotspot-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .hotspot-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .verdict {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .verdict-true {
+            background-color: #d5f4e6;
+            color: #27ae60;
+        }
+        .verdict-basically-true {
+            background-color: #fff3cd;
+            color: #f39c12;
+        }
+        .verdict-partially-true {
+            background-color: #ffeaa7;
+            color: #e67e22;
+        }
+        details {
+            margin-top: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        details summary {
+            padding: 15px;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            font-weight: 600;
+            color: #3498db;
+            border-left: 4px solid #3498db;
+            list-style: none;
+            position: relative;
+        }
+        details summary::-webkit-details-marker {
+            display: none;
+        }
+        details summary::after {
+            content: '▼';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+            transition: transform 0.3s;
+        }
+        details[open] summary::after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+        .details-content {
+            padding: 20px;
+            background-color: #fdfdfd;
+            border-left: 4px solid #ecf0f1;
+            border-right: 1px solid #ecf0f1;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        .details-content p {
+            margin-bottom: 15px;
+        }
+        .details-content p:last-child {
+            margin-bottom: 0;
+        }
+        .source-links {
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+        .source-links a {
+            color: #3498db;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border-left: 3px solid #3498db;
+            word-break: break-all;
+        }
+        .source-links a:hover {
+            background-color: #e3f2fd;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid #ddd;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        .summary-note {
+            background-color: #fffde7;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 40px;
+            border-left: 5px solid #f1c40f;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Daily Briefing 2026-01-26</h1>
+        <p class="subtitle">基于2026年1月26日前后互联网热点的事实核查与背景分析</p>
+    </header>
+
+    <main class="briefing-container">
+        <section class="section section-china">
+            <h2 class="section-title">中国互联网热点</h2>
+
+            <article class="hotspot-item">
+                <h3 class="hotspot-title">1. 印度尼帕病毒疫情暴发，死亡率高达40%-75%</h3>
+                <div class="verdict verdict-basically-true">基本属实</div>
+                <details>
+                    <summary>事实核查与背景上下文</summary>
+                    <div class="details-content">
+                        <p><strong>事实核查</strong>：印度西孟加拉邦在2026年1月确认爆发尼帕病毒疫情。根据《独立报》（The Independent）报道，当地已报告5例确诊病例，近100人被要求居家隔离。世界卫生组织（WHO）指出，尼帕病毒感染的病死率在40%至100%之间，取决于当地的早期发现和临床管理能力。因此，“死亡率高达40%-75%”的说法在已知数据范围内。</p>
+                        <p><strong>背景上下文</strong>：尼帕病毒是一种由果蝠传播的致命人畜共患病毒，可通过被污染的食物（如生椰枣汁）或直接接触传播给人类，引发严重脑炎和呼吸道疾病。印度曾多次爆发疫情（2001、2007、2018年）。此次疫情与孟加拉国同期发生的疫情（WHO报告2例死亡）共同引发了区域及全球关注。该病毒被世卫组织列为优先病原体，目前尚无获批的疫苗或特效药。</p>
+                    </div>
+                </details>
+                <div class="source-links">
+                    <a href="https://www.who.int/zh/emergencies/disease-outbreak-news/item/2024-DON508" target="_blank">WHO关于孟加拉国尼帕病毒疫情的官方报告</a>
+                    <a href="https://www.the-independent.com/asia/india/india-nipah-virus-outbreak-kolkata-cases-b2905473.html" target="_blank">《独立报》关于印度西孟加拉邦疫情的报道</a>
+                </div>
+            </article>
+
+            <article class="hotspot-item">
+                <h3 class="hotspot-title">2. 警方查明夫妻网购娃娃菜中毒毒源，两人均进ICU</h3>
+                <div class="verdict verdict-true">属实</div>
+                <details>
+                    <summary>事实核查与背景上下文</summary>
+                    <div class="details-content">
+                        <p><strong>事实核查</strong>：根据《红星新闻》（经澎湃新闻转载）报道，浙江台州天台县一对夫妻于2025年12月食用网购的娃娃菜后，出现全身出血等症状，被医院诊断为“杀鼠剂（溴鼠灵）中毒”，并送入ICU抢救。警方介入调查后，在涉事娃娃菜中检测出老鼠药成分，已立案侦查。电商平台已下架相关商家商品。</p>
+                        <p><strong>背景上下文</strong>：事件暴露了生鲜电商供应链在包装材料安全上的潜在风险。警方初步调查显示，毒源为包裹娃娃菜的旧报纸，该报纸在回收储存过程中沾染了杀鼠剂，商家为压缩成本使用其包装，导致有毒物质渗透污染蔬菜。此事引发公众对网购食品安全和平台监管责任的广泛讨论。</p>
+                    </div>
+                </details>
+                <div class="source-links">
+                    <a href="https://m.thepaper.cn/newsDetail_forward_32458710" target="_blank">澎湃新闻转载《红星新闻》的详细报道</a>
+                </div>
+            </article>
+
+            <article class="hotspot-item">
+                <h3 class="hotspot-title">3. 两个00后刮腻子一年营收100多万</h3>
+                <div class="verdict verdict-partially-true">部分属实，需澄清细节</div>
+                <details>
+                    <summary>事实核查与背景上下文</summary>
+                    <div class="details-content">
+                        <p><strong>事实核查</strong>：根据《半岛晨报》（搜狐转载）报道，由两位00后美术生（小郭、小民）和其中一人的女友梦星组成的三人工作室，在2025年承接浮雕壁画项目，年度流水（营收）为100多万元人民币。扣除约40万元成本后，三人平均年收入约为20万元。因此，“一年营收100多万”指工作室总流水，而非个人纯利润。</p>
+                        <p><strong>背景上下文</strong>：“刮腻子”在此指代浮雕壁画创作，是一种需要美术功底和施工技巧的工艺。报道中的“狼尾兄弟”通过短视频平台展示创作过程而走红，反映了年轻人利用专业技能和自媒体结合创业的新模式。他们的案例也被部分网友视为“行行出状元”的励志故事，同时引发了关于媒体报道是否过度美化“年入百万”的讨论。</p>
+                    </div>
+                </details>
+                <div class="source-links">
+                    <a href="https://m.sohu.com/a/980047499_349247" target="_blank">《半岛晨报》通过搜狐网的详细报道</a>
+                </div>
+            </article>
+
+            <article class="hotspot-item">
+                <h3 class="hotspot-title">4. 32GB内存价格涨至三四千元，厂商利润率高达82%</h3>
+                <div class="verdict verdict-basically-true">基本属实，基于市场预测</div>
+                <details>
+                    <summary>事实核查与背景上下文</summary>
+                    <div class="details-content">
+                        <p><strong>事实核查</strong>：根据新浪财经转载快科技报道，援引瑞银（UBS）预测，由于AI算力需求爆发和产能向高带宽内存（HBM）倾斜导致供应紧张，DRAM内存价格持续暴涨。预测到2026年底，32GB DDR5内存条价格可能达到3000-4000元人民币。同时，瑞银预测主要内存制造商SK海力士的营业利润率（OPM）在2026年第四季度可能达到82%。</p>
+                        <p><strong>背景上下文</strong>：此轮内存涨价始于2025年下半年，被行业称为“史上最强”涨价周期。根本原因是AI服务器对高性能存储的指数级需求，与消费电子、PC、智能汽车等领域争夺有限的传统DRAM产能。新华社《经济参考报》也报道了价格飙升对下游产业的冲击。高利润率预测反映了市场对存储芯片卖方市场的预期。</p>
+                    </div>
+                </details>
+                <div class="source-links">
+                    <a href="https://finance.sina.com.cn/tech/roll/2026-01-12/doc-inhhamhf8099912.shtml" target="_blank">新浪财经转载快科技报道（含价格和利润率预测）</a>
+                    <a href="http://jjckb.xinhuanet.com/20260114/a1889eea286d4acfa065da13e1cf0a34/c.html" target="_blank">新华社《经济参考报》关于内存涨价的行业分析</a>
+                </div>
+            </article>
+
+            <article class="hotspot-item">
+                <h3 class="hotspot-title">5. 从两个大局读懂“十五五”战略谋划</h3>
+                <div class="verdict verdict-true">属实，为官方政策解读</div>
+                <details>
+                    <summary>事实核查与背景上下文</summary>
+                    <div class="details-content">
+                        <p><strong>事实核查</strong>：此热点源于《人民日报》客户端发表的“任平”文章（由人民网转载），旨在从“中华民族伟大复兴的战略全局”和“世界百年未有之大变局”这两个大局的高度，解读党中央对“十五五”（第十五个五年规划，2026-2030年）的战略谋划和顶层设计。</p>
+                        <p><strong>背景上下文</strong>：“两个大局”是习近平新时代中国特色社会主义思想中谋划工作的基本出发点。文章指出，“十五五”规划建议是对未来五年中国式现代化战略任务的部署，强调中华民族伟大复兴与世界百年变局的深刻互动，以及中国共产党在其中的引领作用。这类解读文章通常在重要政策节点发布，旨在统一思想、凝聚共识。</p>
+                    </div>
+                </details>
+                <div class="source-links">
+                    <a href="http://politics.people.com.cn/n1/2026/0125/c461001-40652238.html" target="_blank">人民网转载的《人民日报》客户端文章</a>
+                </div>
+            </article>
+        </section>
+
+        <section class="section section-global">
+            <h2 class="section-title">全球热点</h2>
+
+            <article class="hotspot-item">
+                <h3 class="hotspot-title">1. Super Bowl LX 2026及相关NFL赛事</h3>
+                <div class="verdict verdict-true">属实</div>
+                <details>
+                    <summary>事实核查与背景上下文</summary>
+                    <div class="details-content">
+                        <p><strong>事实核查</strong>：美国职业橄榄球大联盟（NFL）第60届超级碗（Super Bowl LX）已确定于2026年2月8日（当地时间）在加利福尼亚州圣克拉拉的李维斯体育场（Levi's Stadium）举行。该体育场是旧金山49人队的主场。</p>
+                        <p><strong>背景上下文</strong>：超级碗是美国收视率最高的电视节目之一，不仅是体育赛事，更是文化盛宴，包含中场秀和大量广告。其举办地点通常提前数年确定。相关NFL赛事（如季后赛）的热度在超级碗前夕自然攀升。Twitter/Google上的趋势反映了全球体育迷对赛事筹备、球队动态（如爱国者、海鹰、公
