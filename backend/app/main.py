@@ -58,5 +58,3 @@ def read_root() -> dict:
 def health_check() -> dict:
     """Health check endpoint for monitoring."""
     return {"status": "healthy", "service": "HomeNews API"}
-
-
