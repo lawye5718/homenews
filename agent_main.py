@@ -4,15 +4,16 @@ from datetime import datetime
 from crewai import Agent, Task, Crew, Process, LLM
 from crewai_tools import ScrapeWebsiteTool, SerperDevTool
 
-# --- 1. 配置 LLM (DeepSeek) ---
-# 增加 timeout 防止长任务中断
-# 注意：DeepSeek 有时会触发 Content Exists Risk，需要 Prompt 尽量客观平和
-deepseek_llm = LLM(
-    model="deepseek/deepseek-chat", 
-    base_url="https://api.deepseek.com",
-    api_key=os.environ.get("DEEPSEEK_API_KEY"),
-    temperature=0.7, 
-    timeout=600 
+# --- 1. 配置 LLM (NVIDIA NIM) ---
+# 替换为 NVIDIA API 配置
+# 使用 NVIDIA GLM-4.7 模型，避免 DeepSeek 的 Content Exists Risk 问题
+nvidia_llm = LLM(
+    model="openai/z-ai/glm-4.7",  # 使用 openai/ 前缀强制 LiteLLM 使用兼容模式
+    base_url="https://integrate.api.nvidia.com/v1",
+    api_key=os.environ.get("NVIDIA_API_KEY"),
+    temperature=0.7,
+    max_tokens=1024,
+    timeout=600
 )
 
 # --- 2. 初始化工具 ---
@@ -72,7 +73,7 @@ china_scout = Agent(
     {HUMANIZER_PROTOCOL}
     """,
     tools=[search_tool, scrape_tool],
-    llm=deepseek_llm,
+    llm=nvidia_llm,
     verbose=True
 )
 
@@ -91,7 +92,7 @@ global_scout = Agent(
     {HUMANIZER_PROTOCOL}
     """,
     tools=[search_tool, scrape_tool],
-    llm=deepseek_llm,
+    llm=nvidia_llm,
     verbose=True
 )
 
@@ -109,7 +110,7 @@ legal_scout = Agent(
     {HUMANIZER_PROTOCOL}
     """,
     tools=[search_tool, scrape_tool],
-    llm=deepseek_llm,
+    llm=nvidia_llm,
     verbose=True
 )
 
@@ -135,7 +136,7 @@ health_sports_scout = Agent(
     {HUMANIZER_PROTOCOL}
     """,
     tools=[search_tool, scrape_tool],
-    llm=deepseek_llm,
+    llm=nvidia_llm,
     verbose=True
 )
 
@@ -157,7 +158,7 @@ health_analyst = Agent(
     {HUMANIZER_PROTOCOL}
     """,
     tools=[scrape_tool],
-    llm=deepseek_llm,
+    llm=nvidia_llm,
     verbose=True
 )
 
@@ -185,7 +186,7 @@ legal_scholar = Agent(
     {HUMANIZER_PROTOCOL}
     """,
     tools=[search_tool, scrape_tool],
-    llm=deepseek_llm,
+    llm=nvidia_llm,
     verbose=True
 )
 
@@ -205,7 +206,7 @@ researcher = Agent(
     {HUMANIZER_PROTOCOL}
     """,
     tools=[scrape_tool],
-    llm=deepseek_llm,
+    llm=nvidia_llm,
     verbose=True
 )
 
@@ -245,7 +246,7 @@ editor = Agent(
     
     {HUMANIZER_PROTOCOL}
     """,
-    llm=deepseek_llm,
+    llm=nvidia_llm,
     verbose=True
 )
 
@@ -408,8 +409,8 @@ task_publish = Task(
 def run():
     print("🚀 Starting Daily News Agent (5-Section Edition)...")
     
-    if not os.environ.get("DEEPSEEK_API_KEY"):
-        print("❌ Error: DEEPSEEK_API_KEY not found in environment variables.")
+    if not os.environ.get("NVIDIA_API_KEY"):
+        print("❌ Error: NVIDIA_API_KEY not found in environment variables.")
         sys.exit(1)
     
     # 更新：包含所有8个智能体和8个任务
