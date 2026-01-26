@@ -1,10 +1,15 @@
 from contextlib import asynccontextmanager
+import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.database.session import engine, Base
 from app.api.v1 import router as api_v1_router
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
@@ -15,11 +20,11 @@ async def lifespan(app: FastAPI):
     """
     # Startup: Create database tables
     Base.metadata.create_all(bind=engine)
-    print("✅ Database tables created")
+    logger.info("Database tables created")
     yield
     # Shutdown: Cleanup database connections
     engine.dispose()
-    print("✅ Database connections disposed")
+    logger.info("Database connections disposed")
 
 
 app = FastAPI(

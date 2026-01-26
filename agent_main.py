@@ -1,9 +1,17 @@
 # agent_main.py
 import os
 import sys
+import logging
 from datetime import datetime
 from crewai import Agent, Task, Crew, Process, LLM
 from crewai_tools import ScrapeWebsiteTool
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 # 尝试多种导入方式来解决不同版本 CrewAI 的 SerperDevTool 兼容性问题
 try:
@@ -18,7 +26,7 @@ except ImportError:
                 self.api_key = api_key
                 self.n_results = n_results
                 self.country = country
-                print("⚠️ SerperDevTool not available. Using mock class.")
+                logger.warning("SerperDevTool not available. Using mock class.")
             
             def run(self, query):
                 return f"Mock result for: {query}"
@@ -40,14 +48,14 @@ deepseek_llm = LLM(
 # 针对全球新闻，我们希望搜索结果偏向国际/美国（serper 支持 gl 参数，但在 wrapper 中通常自动处理或需在 query 中指定）
 SERPER_API_KEY = os.environ.get("SERPER_API_KEY")
 if not SERPER_API_KEY:
-    print("⚠️ SERPER_API_KEY not set. Search functionality will be limited.")
+    logger.warning("SERPER_API_KEY not set. Search functionality will be limited.")
     search_tool = None
 else:
     try:
         # 默认搜索工具
         search_tool = SerperDevTool(api_key=SERPER_API_KEY)
     except Exception as e:
-        print(f"⚠️ Error initializing SerperDevTool: {e}")
+        logger.error(f"Error initializing SerperDevTool: {e}")
         search_tool = None
 
 scrape_tool = ScrapeWebsiteTool()
@@ -247,7 +255,7 @@ def run() -> None:
         ValueError: If required API keys are missing or crew execution fails
         IOError: If unable to write output file
     """
-    print("🚀 Starting Daily News Agent (Optimized for Quality Sources)...")
+    logger.info("Starting Daily News Agent (Optimized for Quality Sources)")
     
     news_crew = Crew(
         agents=[china_scout, global_scout, legal_scout, researcher, editor],
@@ -260,24 +268,24 @@ def run() -> None:
         result = news_crew.kickoff()
         
         if not result:
-            raise ValueError("❌ Crew execution returned empty result")
+            raise ValueError("Crew execution returned empty result")
         
         final_html = extract_html_from_markdown(str(result))
         
         if not final_html:
-            raise ValueError("❌ Failed to extract HTML content from result")
+            raise ValueError("Failed to extract HTML content from result")
         
         output_path = "index.html"
         try:
             with open(output_path, "w", encoding="utf-8") as f:
                 f.write(final_html)
         except IOError as e:
-            raise IOError(f"❌ Failed to write output file: {e}") from e
+            raise IOError(f"Failed to write output file: {e}") from e
         
-        print(f"✅ Report generated successfully: {output_path}")
+        logger.info(f"Report generated successfully: {output_path}")
         
     except Exception as e:
-        print(f"❌ Error during execution: {e}")
+        logger.error(f"Error during execution: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":
