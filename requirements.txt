@@ -1,25 +1,14 @@
 fastapi==0.104.1
 uvicorn==0.24.0
 sqlalchemy==2.0.23
-pydantic==2.5.2
-pydantic-settings==2.1.0
-email-validator==2.1.1
-python-jose[cryptography]==3.3.0
-passlib[bcrypt]==1.7.4
-python-multipart==0.0.6
-aiofiles==23.2.1
-requests==2.31.0
-jinja2==3.1.2
-celery==5.3.6
+pydantic==2.5.0
+celery==5.3.4
 redis==5.0.1
+python-multipart==0.0.6
 psycopg2-binary==2.9.9
-httpx==0.25.1
-beautifulsoup4==4.12.2
-feedparser==6.0.10
-lxml==4.9.3
+alembic==1.13.1
 
 # AI Agent dependencies
-crewai
-crewai-tools
-langchain_openai
-python-dotenv
+crewai[tools]>=0.28.0
+langchain-openai>=0.0.5
+python-dotenv>=1.0.0

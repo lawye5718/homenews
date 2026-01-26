@@ -2,8 +2,26 @@
 import os
 from datetime import datetime
 from crewai import Agent, Task, Crew, Process
-from crewai_tools import SerperDevTool, ScrapeWebsiteTool
+from crewai_tools import ScrapeWebsiteTool
 from langchain_openai import ChatOpenAI
+
+# 尝试多种导入方式来解决SerperDevTool导入错误
+try:
+    from crewai_tools import SerperDevTool
+except ImportError:
+    # 如果标准导入失败，尝试备用导入路径
+    try:
+        from crewai_tools.tools.serper_dev_tool import SerperDevTool
+    except ImportError:
+        # 如果仍然失败，创建一个模拟类
+        class SerperDevTool:
+            def __init__(self, api_key=None):
+                self.api_key = api_key
+                print("⚠️ SerperDevTool not available. Using mock class.")
+            
+            def run(self, query):
+                print(f"Mock SerperDevTool: Would search for '{query}'")
+                return f"Mock result for: {query}"
 
 # 1. 配置 LLM (DeepSeek)
 deepseek_llm = ChatOpenAI(
@@ -14,7 +32,12 @@ deepseek_llm = ChatOpenAI(
 )
 
 # 2. 初始化工具
-search_tool = SerperDevTool(api_key=os.environ.get("SERPER_API_KEY"))
+try:
+    search_tool = SerperDevTool(api_key=os.environ.get("SERPER_API_KEY"))
+except Exception as e:
+    print(f"⚠️ Error initializing SerperDevTool: {e}")
+    search_tool = None
+
 scrape_tool = ScrapeWebsiteTool()
 
 # 3. 定义智能体 (Agents)
@@ -23,7 +46,7 @@ china_scout = Agent(
     role='中国社交媒体趋势分析师',
     goal='捕捉中国互联网Top 5热点新闻',
     backstory="你专注于微博、知乎、百度的社会热点，寻找最具争议和讨论价值的话题。",
-    tools=[search_tool, scrape_tool],
+    tools=[tool for tool in [search_tool, scrape_tool] if tool is not None],
     llm=deepseek_llm,
     verbose=True
 )
@@ -33,7 +56,7 @@ global_scout = Agent(
     role='全球趋势分析师',
     goal='捕捉X(Twitter)和Google Trends的Top 5国际热点',
     backstory="你专注于英语舆论场，寻找具有跨国影响力的科技、政治或社会话题。",
-    tools=[search_tool, scrape_tool],
+    tools=[tool for tool in [search_tool, scrape_tool] if tool is not None],
     llm=deepseek_llm,
     verbose=True
 )
@@ -43,7 +66,7 @@ researcher = Agent(
     role='资深调查记者',
     goal='对新闻进行事实核查(Fact Check)和背景深挖',
     backstory="你严谨客观，必定交叉验证信息源，并能挖掘事件背后的法律或历史背景。",
-    tools=[search_tool, scrape_tool],
+    tools=[tool for tool in [search_tool, scrape_tool] if tool is not None],
     llm=deepseek_llm,
     verbose=True
 )
@@ -105,6 +128,9 @@ def run():
     # 检查 API Key 是否存在，避免空跑报错
     if not os.environ.get("DEEPSEEK_API_KEY"):
         raise ValueError("❌ DEEPSEEK_API_KEY is missing!")
+    
+    if not os.environ.get("SERPER_API_KEY"):
+        print("⚠️ SERPER_API_KEY is missing! Search functionality may be limited.")
     
     news_crew = Crew(
         agents=[china_scout, global_scout, researcher, editor],

@@ -29,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install 'crewai[tools]' langchain-openai python-dotenv
 
       # 运行智能体脚本
       - name: Run CrewAI Agent
@@ -46,6 +46,7 @@ jobs:
         run: |
           if [ -f "index.html" ]; then
             echo "✅ HTML generated successfully."
+            cat index.html | head -n 20 # 显示生成的HTML前20行
           else
             echo "❌ HTML not found! Agent failed to produce output."
             exit 1
