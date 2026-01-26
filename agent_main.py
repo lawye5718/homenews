@@ -50,19 +50,24 @@ HUMANIZER_PROTOCOL = """
 
 # --- 3. 定义智能体 (Agents) ---
 
-# 【中国情报官】 - 多源整合 + 去敏感化
+# 【中文新闻编辑】 - 多源整合 + 中立客观
 china_scout = Agent(
-    role='资深社会观察编辑',
-    goal='筛选今日中国互联网最具讨论价值的Top 5社会热点，每条新闻整合至少3个不同信源',
+    role='News Editor for Chinese Media',
+    goal='Select 5 newsworthy stories from Chinese-language sources with 3+ source verification',
     backstory=f"""
-    你是一名拥有十年经验的社会版面主编。
-    你的选材标准非常严格，致力于【去伪存真】：
-    1. 剔除无效信息：过滤掉纯粹的明星娱乐八卦、无实质内容的公关通稿。
-    2. 关注核心议题：聚焦于就业环境、教育现状、科技发展、民生福祉等与普通人息息相关的议题。
-    3. 深度视角：不只看热搜排名，要看话题背后的社会意义。
-    4. 多源整合：每个热点必须整合至少3个不同角度的信源（官方叙事、民间讨论、专业分析）。
+    You are an experienced news editor with 10 years of editorial experience.
     
-    注意：在汇报时请保持客观、中立的媒体语调，避免使用激进或引发争议的敏感词汇，以免触发内容过滤。
+    Your selection criteria:
+    1. Filter out low-quality content: entertainment gossip and promotional press releases.
+    2. Focus on substantive topics: employment, education, technology, and public welfare.
+    3. Deep perspective: Look beyond trending topics to find meaningful stories.
+    4. Multi-source integration: Each story must integrate at least 3 different perspectives.
+    
+    Style Guidelines:
+    - Maintain objective, neutral journalistic tone
+    - Use factual, descriptive language
+    - Focus on concrete events and developments
+    - Avoid inflammatory or controversial terminology
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -232,7 +237,7 @@ editor = Agent(
        - Include collapsible sections for deep analysis content.
     
     5. **Five Section Layout**:
-       - Section 1: China News (中国新闻)
+       - Section 1: Chinese-language News (中文新闻)
        - Section 2: Global News (全球新闻)
        - Section 3: Legal News (法律新闻)
        - Section 4: Health & Sports News + Deep Analysis (健康与运动)
@@ -248,12 +253,12 @@ editor = Agent(
 
 task_china = Task(
     description="""
-    1. 搜索今日中国社会最具讨论价值的5个议题。
-    2. 来源：财新、澎湃、知乎日报、凤凰网等深度媒体。
-    3. 要求：避开敏感词，客观陈述事实，重点挖掘民生与科技类话题。
-    4. 多源整合：每个热点必须整合至少3个不同角度的信源（官方叙事、民间讨论、专业分析）。
+    1. Search for 5 newsworthy stories from Chinese-language media sources.
+    2. Sources: Major news outlets and reputable media platforms.
+    3. Requirements: Focus on factual reporting, emphasize technology and public welfare topics.
+    4. Multi-source integration: Each story must integrate at least 3 different source perspectives.
     """,
-    expected_output="5个经过筛选的高质量中国新闻，每条包含多信源整合和来源链接。",
+    expected_output="5 curated news stories from Chinese media, each with multi-source integration and source links.",
     agent=china_scout
 )
 
@@ -344,7 +349,7 @@ task_legal_analysis = Task(
 task_research = Task(
     description="""
     Compile ALL inputs from the 5 sections:
-    1. China News (中国新闻)
+    1. Chinese-language News (中文新闻)
     2. Global News (全球新闻)
     3. Legal News (法律新闻)
     4. Health & Sports News + Deep Analysis (健康与运动)
@@ -378,7 +383,7 @@ task_publish = Task(
     - **Layout**: 
       - Use a **CSS Grid** (Bento Box style) for the news cards.
       - **Five Section Layout**:
-        1. 中国新闻 (China News) - Gradient blue theme
+        1. 中文新闻 (Chinese-language News) - Gradient blue theme
         2. 全球新闻 (Global News) - Must display **English Headline** prominently
         3. 法律新闻 (Legal News) - Gradient purple theme
         4. 健康与运动 (Health & Sports) - Gradient green theme, with collapsible deep analysis
@@ -386,7 +391,7 @@ task_publish = Task(
       - **Tags**: Use small pill-shaped tags for categories (e.g., "Tech", "Law", "Society", "Health", "Academic").
       - **Collapsible Panels**: Use `<details>` and `<summary>` for deep analysis content to keep the page clean.
       - **Responsive Design**: 
-        - Desktop: 2-column grid for China/Global, then full-width sections
+        - Desktop: 2-column grid for Chinese/Global, then full-width sections
         - Tablet: 2-column grid
         - Mobile: Single column stacked layout
     - **Tone Check**: Ensure the summary text sounds human-written (punchy, avoiding AI clichés).
@@ -450,7 +455,7 @@ def run():
         
         print(f"✅ Report generated successfully: {output_path}")
         print("📊 Report includes 5 sections:")
-        print("   1. 中国新闻 (China News)")
+        print("   1. 中文新闻 (Chinese-language News)")
         print("   2. 全球新闻 (Global News)")
         print("   3. 法律新闻 (Legal News)")
         print("   4. 健康与运动 (Health & Sports + Deep Analysis)")
