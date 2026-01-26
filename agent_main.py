@@ -50,7 +50,7 @@ HUMANIZER_PROTOCOL = """
 
 # --- 3. 定义智能体 (Agents) ---
 
-# 【中文新闻编辑】 - 多源整合 + 中立客观
+# 【Chinese Media Editor】 - Multi-source integration + Neutral objective tone
 china_scout = Agent(
     role='News Editor for Chinese Media',
     goal='Select 5 newsworthy stories from Chinese-language sources with 3+ source verification',
