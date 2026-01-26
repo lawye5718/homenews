@@ -21,7 +21,7 @@ HomeNews is a system designed to aggregate news feeds and integrate with home au
 
 ### For the AI News Agent (快速安装)
 1. Install minimal dependencies: `pip install -r requirements-agent.txt`
-2. Configure environment variables (DEEPSEEK_API_KEY, SERPER_API_KEY)
+2. Configure environment variables (NVIDIA_API_KEY, SERPER_API_KEY)
 3. Run the news agent: `python agent_main.py`
 
 ### For the Full Backend API
@@ -36,7 +36,7 @@ TBD
 
 ## 新增功能：AI自动化新闻简报系统
 
-本项目集成了一个使用DeepSeek V3和CrewAI的自动化新闻简报系统。
+本项目集成了一个使用NVIDIA GLM-4.7和CrewAI的自动化新闻简报系统。
 
 ### 功能特点
 
@@ -88,7 +88,7 @@ TBD
 ### 技术栈
 
 - **AI框架**: CrewAI
-- **语言模型**: DeepSeek V3
+- **语言模型**: NVIDIA GLM-4.7
 - **搜索工具**: SerperDevTool
 - **部署**: GitHub Actions + GitHub Pages
 
@@ -96,7 +96,7 @@ TBD
 
 要启用自动化新闻简报功能，需要配置以下环境变量：
 
-1. **DEEPSEEK_API_KEY**: DeepSeek API密钥
+1. **NVIDIA_API_KEY**: NVIDIA API密钥 (从 build.nvidia.com 获取)
 2. **SERPER_API_KEY**: Serper.dev API密钥
 
 ### 部署指南

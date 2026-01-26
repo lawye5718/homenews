@@ -5,7 +5,7 @@
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                         HomeNews AI Agent System                    │
-│                    (Powered by DeepSeek V3 + CrewAI)               │
+│                    (Powered by NVIDIA GLM-4.7 + CrewAI)            │
 └─────────────────────────────────────────────────────────────────────┘
 
                               ┌─────────────┐
@@ -173,11 +173,11 @@
 - **Runtime**: ~15-30 minutes (depending on search/analysis)
 - **Output**: index.html deployed to GitHub Pages
 - **Required Secrets**:
-  - DEEPSEEK_API_KEY
+  - NVIDIA_API_KEY
   - SERPER_API_KEY
 
 ### Environment
 - Python 3.11
 - CrewAI framework
-- DeepSeek V3 LLM
+- NVIDIA GLM-4.7 LLM
 - SerperDev search API

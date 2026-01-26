@@ -265,7 +265,7 @@ Analysis agents use Deep Humanizer Protocol:
 ## Configuration
 
 No additional configuration is required beyond the existing setup:
-- `DEEPSEEK_API_KEY`: DeepSeek API key
+- `NVIDIA_API_KEY`: NVIDIA API key (from build.nvidia.com)
 - `SERPER_API_KEY`: Serper.dev API key
 
 The system will automatically execute all new features when run.
