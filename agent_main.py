@@ -1,8 +1,17 @@
 import os
 import sys
+import smtplib
+from pathlib import Path
 from datetime import datetime
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from crewai import Agent, Task, Crew, Process, LLM
 from crewai_tools import ScrapeWebsiteTool, SerperDevTool
+
+# --- 配置常量 ---
+MIN_HTML_LENGTH = 50000  # Minimum expected HTML length in bytes
+MIN_PARAGRAPH_COUNT = 10  # Minimum expected paragraph count
+MIN_LINK_COUNT = 5  # Minimum expected link count
 
 # --- 1. 配置 LLM (NVIDIA NIM) ---
 # 替换为 NVIDIA API 配置
@@ -449,8 +458,24 @@ task_research = Task(
     Ensure English headlines are preserved for Global news.
     **CRITICAL**: Preserve ALL original source URLs from all sections - news articles, research papers, court documents, law review articles, etc.
     Format source URLs clearly so they can be displayed as clickable links in the final HTML.
+    
+    **Output Format Requirements**:
+    Structure the output in clear markdown with:
+    - Clear section headers (# Section Name)
+    - Each news item with:
+      * ## News Headline
+      * Category tag
+      * Full summary text
+      * Sources: [URL1], [URL2], [URL3]
+    - Each analysis with:
+      * ## Analysis Title
+      * Complete 5000+ word content with all subsections
+      * All source citations with URLs
+    
+    Make it easy for the next agent to parse and convert to HTML.
+    Include ALL content - do not truncate or summarize.
     """,
-    expected_output="Master Report Markdown with all 5 sections, complete analyses, and all source URLs preserved.",
+    expected_output="Master Report Markdown with all 5 sections, complete analyses, all source URLs preserved, and clear structure for HTML conversion.",
     agent=researcher,
     context=[task_china, task_global, task_legal, task_health_sports, task_health_analysis, task_legal_analysis]
 )
@@ -531,22 +556,218 @@ task_publish = Task(
     }}
     ```
     
+    **CRITICAL - Content Population Requirements**:
+    YOU MUST populate ALL sections with the ACTUAL CONTENT from the research report.
+    DO NOT create empty framework/skeleton HTML.
+    
+    For each news item, you MUST include:
+    - The actual headline/title from the research report
+    - The full summary text (1000+ words)
+    - All source URLs as clickable links
+    - Relevant category tags
+    
+    For each analysis report, you MUST include:
+    - The complete 5000+ word analysis text
+    - All section headings and content
+    - All source citations and links
+    - Collapsible structure with "Read More" functionality
+    
+    **Example Structure for a News Card**:
+    ```html
+    <div class="card bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+      <span class="inline-block px-3 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full mb-3">Tech</span>
+      <h3 class="font-serif text-2xl font-bold mb-3">[ACTUAL NEWS HEADLINE HERE]</h3>
+      <div class="prose prose-lg">
+        [ACTUAL FULL NEWS SUMMARY TEXT HERE - 1000+ words from research report]
+      </div>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <a href="[ACTUAL SOURCE URL]" class="text-xs px-2 py-1 bg-gray-100 rounded-full hover:bg-gray-200">Source 1</a>
+        <a href="[ACTUAL SOURCE URL]" class="text-xs px-2 py-1 bg-gray-100 rounded-full hover:bg-gray-200">Source 2</a>
+      </div>
+    </div>
+    ```
+    
+    **Example Structure for Collapsible Analysis**:
+    ```html
+    <details class="card bg-white rounded-xl shadow-lg p-6">
+      <summary class="cursor-pointer font-serif text-2xl font-bold hover:text-blue-600">
+        [ACTUAL ANALYSIS TITLE HERE] ▼
+      </summary>
+      <div class="mt-4 prose prose-lg max-w-none">
+        [ACTUAL COMPLETE 5000+ WORD ANALYSIS CONTENT HERE]
+      </div>
+    </details>
+    ```
+    
     **Output**: 
     - ONLY the raw HTML code, starting with `<!DOCTYPE html>`.
-    - Complete, production-ready HTML with all animations and card-based styling.
+    - Complete, production-ready HTML with ALL ACTUAL CONTENT from the research report.
+    - NO placeholder text, NO empty sections, NO skeleton frameworks.
+    - Every section must have real news items and analyses from the research report.
     """,
     expected_output="Final HTML String with 5 sections, card-based responsive layout, collapsible groups, and smooth animations.",
     agent=editor,
     context=[task_research]
 )
 
-# --- 5. 执行流程 ---
+# --- 5. 辅助函数：报告保存和邮件发送 ---
+
+def setup_reports_directory():
+    """Create directory for saving markdown reports"""
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    reports_dir = Path(f"reports/{current_date}")
+    reports_dir.mkdir(parents=True, exist_ok=True)
+    return reports_dir
+
+def save_markdown_report(content, filename, reports_dir):
+    """Save a report as markdown file"""
+    filepath = reports_dir / filename
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(content)
+    print(f"✅ Saved report: {filepath}")
+    return filepath
+
+def send_email_report(subject, body, attachments=None):
+    """Send email report to configured address"""
+    mail_address = os.environ.get("mailadd")
+    
+    if not mail_address:
+        print("⚠️ Email address (mailadd) not configured, skipping email send")
+        return False
+    
+    # Check for email server configuration
+    smtp_server = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
+    smtp_port = int(os.environ.get("SMTP_PORT", "587"))
+    smtp_user = os.environ.get("SMTP_USER")
+    smtp_password = os.environ.get("SMTP_PASSWORD")
+    
+    if not smtp_user or not smtp_password:
+        print("⚠️ SMTP credentials not configured (SMTP_USER, SMTP_PASSWORD), skipping email send")
+        return False
+    
+    try:
+        # Create message
+        msg = MIMEMultipart()
+        msg['From'] = smtp_user
+        msg['To'] = mail_address
+        msg['Subject'] = subject
+        
+        # Add body
+        msg.attach(MIMEText(body, 'plain', 'utf-8'))
+        
+        # Add attachments if provided
+        if attachments:
+            for attachment_path in attachments:
+                if Path(attachment_path).exists():
+                    with open(attachment_path, 'r', encoding='utf-8') as f:
+                        attachment = MIMEText(f.read(), 'plain', 'utf-8')
+                        attachment.add_header('Content-Disposition', 'attachment', 
+                                            filename=Path(attachment_path).name)
+                        msg.attach(attachment)
+        
+        # Send email
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()
+            server.login(smtp_user, smtp_password)
+            server.send_message(msg)
+        
+        print(f"✅ Email sent successfully to {mail_address}")
+        return True
+        
+    except Exception as e:
+        print(f"⚠️ Failed to send email: {e}")
+        return False
+
+def sanitize_filename(agent_role):
+    """Sanitize agent role for use in filename"""
+    return agent_role.replace(' ', '_').replace('/', '_')
+
+def create_email_body(current_date, section_count, report_count, reports_dir, model_info=""):
+    """Create standardized email body for report delivery"""
+    model_suffix = f" ({model_info})" if model_info else ""
+    return f"""Daily News Briefing Report - {current_date}{model_suffix}
+
+This email contains the daily news briefing reports generated by the AI News Agent.
+
+Report Summary:
+- {section_count} major sections covered
+- {report_count} intermediate reports generated
+- All reports attached as markdown files
+
+Reports are also saved locally in: {reports_dir}
+
+Please find the attached reports for detailed analysis.
+
+---
+Generated by HomeNews AI Agent{model_suffix}
+"""
+
+# --- 6. 执行流程 ---
+def validate_html_content(html_content):
+    """Validate that the HTML contains actual content, not just framework"""
+    required_sections = [
+        "中文新闻",  # Chinese News
+        "全球新闻",  # Global News  
+        "法律新闻",  # Legal News
+        "健康与运动", # Health & Sports
+        "法律学术"   # Legal Analysis
+    ]
+    
+    validation_passed = True
+    issues = []
+    
+    # Check for DOCTYPE
+    if not html_content.strip().startswith("<!DOCTYPE html>") and not html_content.strip().startswith("<html"):
+        issues.append("Missing DOCTYPE or html tag")
+        validation_passed = False
+    
+    # Check for each required section
+    for section in required_sections:
+        if section not in html_content:
+            issues.append(f"Missing section: {section}")
+            validation_passed = False
+    
+    # Check for content indicators (should have multiple paragraphs, not just headers)
+    if html_content.count("<p>") < MIN_PARAGRAPH_COUNT:
+        issues.append(f"Suspiciously low paragraph count: {html_content.count('<p>')} (expected {MIN_PARAGRAPH_COUNT}+)")
+        validation_passed = False
+    
+    # Check for links
+    if html_content.count("<a ") < MIN_LINK_COUNT:
+        issues.append(f"Suspiciously low link count: {html_content.count('<a ')} (expected source links)")
+        validation_passed = False
+    
+    # Check minimum length (should be substantial)
+    if len(html_content) < MIN_HTML_LENGTH:
+        issues.append(f"HTML too short: {len(html_content)} bytes (expected {MIN_HTML_LENGTH}+)")
+        validation_passed = False
+    
+    if not validation_passed:
+        print("⚠️ HTML Validation Issues Found:")
+        for issue in issues:
+            print(f"  - {issue}")
+    else:
+        print("✅ HTML validation passed")
+        print(f"  - HTML length: {len(html_content)} bytes")
+        print(f"  - Paragraph count: {html_content.count('<p>')}")
+        print(f"  - Link count: {html_content.count('<a ')}")
+    
+    return validation_passed, issues
+
 def run():
     print("🚀 Starting Daily News Agent (5-Section Edition)...")
     
     if not os.environ.get("NVIDIA_API_KEY"):
         print("❌ Error: NVIDIA_API_KEY not found in environment variables.")
         sys.exit(1)
+    
+    # Setup reports directory
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    reports_dir = setup_reports_directory()
+    print(f"📁 Reports will be saved to: {reports_dir}")
+    
+    # Store all reports for email
+    saved_reports = []
     
     # 使用 try-except 捕获可能的 API 错误，并在失败时切换到备用模型
     try:
@@ -577,25 +798,80 @@ def run():
         )
         
         result = news_crew.kickoff()
+        
+        # Save intermediate task outputs as markdown
+        print("\n📝 Saving intermediate reports...")
+        try:
+            # Get task outputs
+            task_outputs = news_crew.tasks
+            for i, task in enumerate(task_outputs):
+                if hasattr(task, 'output') and task.output:
+                    task_name = f"task_{i+1}_{sanitize_filename(task.agent.role)}.md"
+                    content = str(task.output)
+                    saved_file = save_markdown_report(content, task_name, reports_dir)
+                    saved_reports.append(saved_file)
+        except Exception as e:
+            print(f"⚠️ Could not save intermediate reports: {e}")
+        
         final_html = str(result)
+        
+        # Log result for debugging
+        print(f"\n📝 Raw result length: {len(final_html)} characters")
+        print(f"📝 First 500 chars of result:\n{final_html[:500]}")
+        
+        # Save the research report (markdown version before HTML conversion)
+        # Find the researcher task by matching agent role instead of hardcoded index
+        try:
+            research_output = None
+            for task in task_outputs:
+                if hasattr(task, 'agent') and 'Researcher' in task.agent.role:
+                    research_output = task.output
+                    break
+            
+            if research_output:
+                research_md = save_markdown_report(
+                    str(research_output), 
+                    "master_research_report.md", 
+                    reports_dir
+                )
+                saved_reports.append(research_md)
+        except Exception as e:
+            print(f"⚠️ Could not save research report: {e}")
         
         # 清洗 Markdown 标记
         if "```html" in final_html:
             final_html = final_html.split("```html")[1].split("```")[0]
         elif "```" in final_html:
             final_html = final_html.split("```")[1].split("```")[0]
+        
+        # Validate HTML content
+        print("\n🔍 Validating HTML content...")
+        validation_passed, issues = validate_html_content(final_html)
+        
+        if not validation_passed:
+            print("⚠️ HTML validation failed, but saving anyway for review")
             
         output_path = "index.html"
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(final_html.strip())
         
-        print(f"✅ Report generated successfully: {output_path}")
+        print(f"\n✅ Report generated successfully: {output_path}")
         print("📊 Report includes 5 sections:")
         print("   1. 中文新闻 (Chinese-language News)")
         print("   2. 全球新闻 (Global News)")
         print("   3. 法律新闻 (Legal News)")
         print("   4. 健康与运动 (Health & Sports + Deep Analysis)")
         print("   5. 法律学术分析 (Legal Analysis & Law Review Articles)")
+        
+        # Send email with all reports
+        print("\n📧 Preparing to send email report...")
+        email_body = create_email_body(current_date, 5, len(saved_reports), reports_dir)
+        
+        send_email_report(
+            subject=f"Daily News Briefing - {current_date}",
+            body=email_body,
+            attachments=saved_reports
+        )
         
     except Exception as e:
         print(f"⚠️ Primary model failed with error: {e}")
@@ -775,24 +1051,60 @@ def run():
             )
             
             result = news_crew_deepseek.kickoff()
+            
+            # Save intermediate reports
+            print("\n📝 Saving intermediate reports (backup model)...")
+            try:
+                task_outputs = news_crew_deepseek.tasks
+                for i, task in enumerate(task_outputs):
+                    if hasattr(task, 'output') and task.output:
+                        task_name = f"backup_task_{i+1}_{sanitize_filename(task.agent.role)}.md"
+                        content = str(task.output)
+                        saved_file = save_markdown_report(content, task_name, reports_dir)
+                        saved_reports.append(saved_file)
+            except Exception as e:
+                print(f"⚠️ Could not save intermediate reports: {e}")
+            
             final_html = str(result)
+            
+            # Log result for debugging
+            print(f"\n📝 Raw result length: {len(final_html)} characters")
             
             # 清洗 Markdown 标记
             if "```html" in final_html:
                 final_html = final_html.split("```html")[1].split("```")[0]
             elif "```" in final_html:
                 final_html = final_html.split("```")[1].split("```")[0]
+            
+            # Validate HTML content
+            print("\n🔍 Validating HTML content...")
+            validation_passed, issues = validate_html_content(final_html)
+            
+            if not validation_passed:
+                print("⚠️ HTML validation failed, but saving anyway for review")
                 
             output_path = "index.html"
             with open(output_path, "w", encoding="utf-8") as f:
                 f.write(final_html.strip())
             
-            print(f"✅ Report generated successfully with second backup model (DeepSeek Official API): {output_path}")
+            print(f"\n✅ Report generated successfully with second backup model (DeepSeek Official API): {output_path}")
             print("📊 Report includes 4 sections (Chinese news skipped to avoid content policy issues):")
             print("   1. 全球新闻 (Global News)")
             print("   2. 法律新闻 (Legal News)")
             print("   3. 健康与运动 (Health & Sports + Deep Analysis)")
             print("   4. 法律学术分析 (Legal Analysis & Law Review Articles)")
+            
+            # Send email with reports
+            print("\n📧 Preparing to send email report...")
+            email_body = create_email_body(
+                current_date, 4, len(saved_reports), reports_dir, 
+                "DeepSeek Backup Model"
+            )
+            send_email_report(
+                subject=f"Daily News Briefing - {current_date} (Backup Model)",
+                body=email_body,
+                attachments=saved_reports
+            )
             
         except Exception as deepseek_error:
             print(f"⚠️ Second backup model also failed with error: {deepseek_error}")
@@ -801,66 +1113,75 @@ def run():
             # 使用第三备用模型重试 (nvidia/llama-3.3-nemotron-super-49b-v1.5)
             try:
                 
-                # 重新创建 agents（跳过 china_scout），使用第三备用 LLM
-                global_scout_deepseek = Agent(
+                # 重新创建 agents，使用第三备用 LLM (包含所有5个板块)
+                china_scout_backup = Agent(
+                    role=china_scout.role,
+                    goal=china_scout.goal,
+                    backstory=china_scout.backstory,
+                    tools=china_scout.tools,
+                    llm=backup_llm,
+                    verbose=True
+                )
+                
+                global_scout_backup = Agent(
                     role=global_scout.role,
                     goal=global_scout.goal,
                     backstory=global_scout.backstory,
                     tools=global_scout.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                legal_scout_deepseek = Agent(
+                legal_scout_backup = Agent(
                     role=legal_scout.role,
                     goal=legal_scout.goal,
                     backstory=legal_scout.backstory,
                     tools=legal_scout.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                health_sports_scout_deepseek = Agent(
+                health_sports_scout_backup = Agent(
                     role=health_sports_scout.role,
                     goal=health_sports_scout.goal,
                     backstory=health_sports_scout.backstory,
                     tools=health_sports_scout.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                health_analyst_deepseek = Agent(
+                health_analyst_backup = Agent(
                     role=health_analyst.role,
                     goal=health_analyst.goal,
                     backstory=health_analyst.backstory,
                     tools=health_analyst.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                legal_scholar_deepseek = Agent(
+                legal_scholar_backup = Agent(
                     role=legal_scholar.role,
                     goal=legal_scholar.goal,
                     backstory=legal_scholar.backstory,
                     tools=legal_scholar.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                researcher_deepseek = Agent(
+                researcher_backup = Agent(
                     role=researcher.role,
                     goal=researcher.goal,
                     backstory=researcher.backstory,
                     tools=researcher.tools,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
-                editor_deepseek = Agent(
+                editor_backup = Agent(
                     role=editor.role,
                     goal=editor.goal,
                     backstory=editor.backstory,
-                    llm=deepseek_llm,
+                    llm=backup_llm,
                     verbose=True
                 )
                 
@@ -945,25 +1266,61 @@ def run():
                 )
                 
                 result = news_crew_backup.kickoff()
+                
+                # Save intermediate reports
+                print("\n📝 Saving intermediate reports (third backup model)...")
+                try:
+                    task_outputs = news_crew_backup.tasks
+                    for i, task in enumerate(task_outputs):
+                        if hasattr(task, 'output') and task.output:
+                            task_name = f"backup3_task_{i+1}_{sanitize_filename(task.agent.role)}.md"
+                            content = str(task.output)
+                            saved_file = save_markdown_report(content, task_name, reports_dir)
+                            saved_reports.append(saved_file)
+                except Exception as e:
+                    print(f"⚠️ Could not save intermediate reports: {e}")
+                
                 final_html = str(result)
+                
+                # Log result for debugging
+                print(f"\n📝 Raw result length: {len(final_html)} characters")
                 
                 # 清洗 Markdown 标记
                 if "```html" in final_html:
                     final_html = final_html.split("```html")[1].split("```")[0]
                 elif "```" in final_html:
                     final_html = final_html.split("```")[1].split("```")[0]
+                
+                # Validate HTML content
+                print("\n🔍 Validating HTML content...")
+                validation_passed, issues = validate_html_content(final_html)
+                
+                if not validation_passed:
+                    print("⚠️ HTML validation failed, but saving anyway for review")
                     
                 output_path = "index.html"
                 with open(output_path, "w", encoding="utf-8") as f:
                     f.write(final_html.strip())
                 
-                print(f"✅ Report generated successfully with third backup model (nvidia/llama-3.3-nemotron-super-49b-v1.5): {output_path}")
+                print(f"\n✅ Report generated successfully with third backup model (nvidia/llama-3.3-nemotron-super-49b-v1.5): {output_path}")
                 print("📊 Report includes 5 sections:")
                 print("   1. 中文新闻 (Chinese-language News)")
                 print("   2. 全球新闻 (Global News)")
                 print("   3. 法律新闻 (Legal News)")
                 print("   4. 健康与运动 (Health & Sports + Deep Analysis)")
                 print("   5. 法律学术分析 (Legal Analysis & Law Review Articles)")
+                
+                # Send email with reports
+                print("\n📧 Preparing to send email report...")
+                email_body = create_email_body(
+                    current_date, 5, len(saved_reports), reports_dir,
+                    "Third Backup Model"
+                )
+                send_email_report(
+                    subject=f"Daily News Briefing - {current_date} (Third Backup)",
+                    body=email_body,
+                    attachments=saved_reports
+                )
                 
             except Exception as backup_error:
                 print(f"❌ Critical Error: All three models failed.")
