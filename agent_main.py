@@ -33,7 +33,11 @@ USE_DEEPSEEK = os.environ.get("USE_DEEPSEEK", "false").lower() == "true"
 
 # 邮件配置 (从环境变量读取或使用默认值)
 SMTP_SERVER = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
-SMTP_PORT = int(os.environ.get("SMTP_PORT", 587))
+try:
+    SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
+except ValueError:
+    print("⚠️ Invalid SMTP_PORT value, using default 587")
+    SMTP_PORT = 587
 SMTP_USER = os.environ.get("SMTP_USER")      # 发件人邮箱
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD") # 邮箱应用密码
 EMAIL_TO = os.environ.get("EMAIL_TO")        # 收件人邮箱
@@ -915,6 +919,7 @@ def send_email_report(file_path):
         print("   Set SMTP_USER, SMTP_PASSWORD, and EMAIL_TO environment variables to enable email.")
         return
 
+    server = None
     try:
         msg = MIMEMultipart()
         msg['From'] = SMTP_USER
@@ -932,10 +937,15 @@ def send_email_report(file_path):
         server.starttls()
         server.login(SMTP_USER, SMTP_PASSWORD)
         server.send_message(msg)
-        server.quit()
         print(f"✅ Email sent successfully to {EMAIL_TO}")
     except Exception as e:
         print(f"❌ Failed to send email: {e}")
+    finally:
+        if server:
+            try:
+                server.quit()
+            except:
+                pass  # Ignore errors when closing connection
 
 # --- 5. 执行流程 ---
 def run():
