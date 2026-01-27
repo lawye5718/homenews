@@ -2,7 +2,8 @@ import os
 import sys
 from datetime import datetime, timedelta
 from crewai import Agent, Task, Crew, Process, LLM
-from crewai_tools import ScrapeWebsiteTool, SerperDevTool
+from crewai_tools import SerperDevTool
+from custom_scrape_tool import SafeScrapeWebsiteTool
 
 # --- Configuration Constants ---
 # 强制获取精确的今天和昨天的日期，用于搜索过滤
@@ -23,10 +24,13 @@ CTX_WINDOW = 128000
 # 针对问题1：旧闻 (2024/2022) - 在代码层面硬编码 after:YYYY-MM-DD 搜索参数，物理屏蔽旧网页
 SEARCH_SUFFIX = f" after:{YESTERDAY_STR}"
 
-# --- 1. 配置 LLM (NVIDIA NIM) ---
-# 替换为 NVIDIA API 配置
-# 使用 NVIDIA meta/llama-3.1-405b-instruct 模型 (高性能稳定)
-# 参考 NVIDIA 官方示范代码配置
+# 环境变量：是否使用 DeepSeek 作为主模型
+# 设置 USE_DEEPSEEK=true 时，自动选择 DeepSeek 作为主要大模型
+USE_DEEPSEEK = os.environ.get("USE_DEEPSEEK", "false").lower() == "true"
+
+# --- 1. 配置 LLM ---
+# DeepSeek API 配置 - 可作为主模型使用（通过 USE_DEEPSEEK=true 环境变量控制）
+# 使用 DeepSeek Chat 模型 (降低幻觉，提高准确性)
 # max_tokens 设置为 32000（必须足够大以容纳长文）
 # temperature 降低到 0.4 以保持专注和减少幻觉
 # 针对问题2：假深度 (只有一句话) - 提供足够的token容量和更低温度以支持长文生成
@@ -35,19 +39,6 @@ SEARCH_SUFFIX = f" after:{YESTERDAY_STR}"
 # 2. 1000+ 字的详细新闻摘要（每个板块 5 条新闻 = 5000+ 字）
 # 3. 5000+ 字的深度分析报告通过分段生成（健康分析 3 篇 + 法律分析 3 篇）
 # 4. 综合研究报告和最终 HTML 生成
-nvidia_llm = LLM(
-    model="meta/llama-3.1-405b-instruct",
-    base_url="https://integrate.api.nvidia.com/v1",
-    api_key=os.environ.get("NVIDIA_API_KEY"),
-    temperature=0.4,  # 低温以保持专注
-    top_p=0.9,
-    max_tokens=32000,  # 必须足够大以容纳长文
-    stream=True,
-    timeout=600
-)
-
-# 第二备用模型配置 - 使用 DeepSeek 官方 API (中国版)
-# 在主模型调用失败时使用，为避免敏感问题跳过中国新闻板块
 deepseek_llm = LLM(
     model="deepseek-chat",
     base_url="https://api.deepseek.com",
@@ -59,7 +50,20 @@ deepseek_llm = LLM(
     timeout=600
 )
 
-# 第三备用模型配置 - 在第二备用模型失败时使用
+# NVIDIA NIM 配置 - 使用 NVIDIA meta/llama-3.1-405b-instruct 模型 (高性能稳定)
+# 参考 NVIDIA 官方示范代码配置
+nvidia_llm = LLM(
+    model="meta/llama-3.1-405b-instruct",
+    base_url="https://integrate.api.nvidia.com/v1",
+    api_key=os.environ.get("NVIDIA_API_KEY"),
+    temperature=0.4,  # 低温以保持专注
+    top_p=0.9,
+    max_tokens=32000,  # 必须足够大以容纳长文
+    stream=True,
+    timeout=600
+)
+
+# 第三备用模型配置 - 在其他模型失败时使用
 backup_llm = LLM(
     model="nvidia/llama-3.3-nemotron-super-49b-v1.5",
     base_url="https://integrate.api.nvidia.com/v1",
@@ -71,10 +75,23 @@ backup_llm = LLM(
     timeout=600
 )
 
+# 根据环境变量选择主模型
+# 当 USE_DEEPSEEK=true 时，使用 DeepSeek 作为主模型
+# 否则使用 NVIDIA 模型作为主模型
+if USE_DEEPSEEK:
+    print("🔧 使用 DeepSeek 作为主要大模型 (USE_DEEPSEEK=true)")
+    primary_llm = deepseek_llm
+    fallback_llm = nvidia_llm
+else:
+    print("🔧 使用 NVIDIA 作为主要大模型 (USE_DEEPSEEK=false)")
+    primary_llm = nvidia_llm
+    fallback_llm = deepseek_llm
+
 # --- 2. 初始化工具 ---
 # 增加搜索结果数量以提高准确性
 search_tool = SerperDevTool(n_results=15)
-scrape_tool = ScrapeWebsiteTool()
+# 使用增强的安全爬虫工具，自动处理PDF、Cloudflare阻止、乱码等问题
+scrape_tool = SafeScrapeWebsiteTool()
 
 # ==============================================================================
 # Deep Humanizer Protocol (深层去伪协议) - 增强版
@@ -160,7 +177,7 @@ china_scout = Agent(
     {HUMANIZER_PROTOCOL}
     """,
     tools=[search_tool, scrape_tool],
-    llm=nvidia_llm,
+    llm=primary_llm,
     verbose=True
 )
 
@@ -209,7 +226,7 @@ global_scout = Agent(
     {HUMANIZER_PROTOCOL}
     """,
     tools=[search_tool, scrape_tool],
-    llm=nvidia_llm,
+    llm=primary_llm,
     verbose=True
 )
 
@@ -260,7 +277,7 @@ legal_scout = Agent(
     {HUMANIZER_PROTOCOL}
     """,
     tools=[search_tool, scrape_tool],
-    llm=nvidia_llm,
+    llm=primary_llm,
     verbose=True
 )
 
@@ -298,7 +315,7 @@ health_sports_scout = Agent(
     {HUMANIZER_PROTOCOL}
     """,
     tools=[search_tool, scrape_tool],
-    llm=nvidia_llm,
+    llm=primary_llm,
     verbose=True
 )
 
@@ -343,7 +360,7 @@ health_analyst = Agent(
     {HUMANIZER_PROTOCOL}
     """,
     tools=[scrape_tool],
-    llm=nvidia_llm,
+    llm=primary_llm,
     verbose=True
 )
 
@@ -384,7 +401,7 @@ legal_scholar = Agent(
     {HUMANIZER_PROTOCOL}
     """,
     tools=[search_tool, scrape_tool],
-    llm=nvidia_llm,
+    llm=primary_llm,
     verbose=True
 )
 
@@ -425,7 +442,7 @@ researcher = Agent(
     {HUMANIZER_PROTOCOL}
     """,
     tools=[scrape_tool],
-    llm=nvidia_llm,
+    llm=primary_llm,
     verbose=True
 )
 
@@ -469,7 +486,7 @@ editor = Agent(
     
     {HUMANIZER_PROTOCOL}
     """,
-    llm=nvidia_llm,
+    llm=primary_llm,
     verbose=True
 )
 
@@ -937,164 +954,172 @@ def run():
         
     except Exception as e:
         print(f"⚠️ Primary model failed with error: {e}")
-        print("🔄 Retrying with second backup model: deepseek-chat (DeepSeek Official API)")
+        print(f"🔄 Retrying with fallback model")
         
-        # 检查是否有 DeepSeek API Key
-        if not os.environ.get("DEEPSEEK_API_KEY"):
-            print("⚠️ Warning: DEEPSEEK_API_KEY not found, will try third backup model instead")
-            # 如果没有 DeepSeek API Key，直接跳到第三备用模型
+        # 检查是否需要使用第三备用模型
+        fallback_available = True
+        if USE_DEEPSEEK and not os.environ.get("NVIDIA_API_KEY"):
+            print("⚠️ Warning: Fallback NVIDIA_API_KEY not found, will try third backup model instead")
+            fallback_available = False
+        elif not USE_DEEPSEEK and not os.environ.get("DEEPSEEK_API_KEY"):
+            print("⚠️ Warning: Fallback DEEPSEEK_API_KEY not found, will try third backup model instead")
+            fallback_available = False
+        
+        if not fallback_available:
+            # 如果没有备用 API Key，直接跳到第三备用模型
             try:
                 print("🔄 Using third backup model: nvidia/llama-3.3-nemotron-super-49b-v1.5")
                 # 这里会跳到第三备用模型的逻辑
-                raise Exception("DEEPSEEK_API_KEY not available, switching to third backup")
+                raise Exception("Fallback API key not available, switching to third backup")
             except:
                 pass  # 继续到下面的第三备用模型逻辑
         
         # 如果是 Content Risk，提示用户调整 Prompt
         if "Content Exists Risk" in str(e):
-            print("⚠️ Suggestion: The system prompt might contain sensitive keywords. Trying DeepSeek with modified workflow.")
+            print("⚠️ Suggestion: The system prompt might contain sensitive keywords. Trying fallback model with modified workflow.")
         
-        # 使用第二备用模型重试 (DeepSeek Official API)
-        # 注意：跳过中国新闻部分以避免内容审查问题
+        # 使用备用模型重试
+        # 注意：如果使用DeepSeek作为备用，跳过中国新闻部分以避免内容审查问题
         try:
-            print("⚠️ Note: Skipping Chinese news section to avoid content policy issues with DeepSeek API")
+            if not USE_DEEPSEEK:
+                print("⚠️ Note: Skipping Chinese news section to avoid potential content policy issues with DeepSeek fallback")
             
-            # 重新创建 agents（跳过 china_scout），使用第二备用 LLM (DeepSeek)
-            global_scout_deepseek = Agent(
+            # 重新创建 agents（如果使用DeepSeek作为备用则跳过 china_scout），使用备用 LLM
+            global_scout_fallback = Agent(
                 role=global_scout.role,
                 goal=global_scout.goal,
                 backstory=global_scout.backstory,
                 tools=global_scout.tools,
-                llm=deepseek_llm,
+                llm=fallback_llm,
                 verbose=True
             )
             
-            legal_scout_deepseek = Agent(
+            legal_scout_fallback = Agent(
                 role=legal_scout.role,
                 goal=legal_scout.goal,
                 backstory=legal_scout.backstory,
                 tools=legal_scout.tools,
-                llm=deepseek_llm,
+                llm=fallback_llm,
                 verbose=True
             )
             
-            health_sports_scout_deepseek = Agent(
+            health_sports_scout_fallback = Agent(
                 role=health_sports_scout.role,
                 goal=health_sports_scout.goal,
                 backstory=health_sports_scout.backstory,
                 tools=health_sports_scout.tools,
-                llm=deepseek_llm,
+                llm=fallback_llm,
                 verbose=True
             )
             
-            health_analyst_deepseek = Agent(
+            health_analyst_fallback = Agent(
                 role=health_analyst.role,
                 goal=health_analyst.goal,
                 backstory=health_analyst.backstory,
                 tools=health_analyst.tools,
-                llm=deepseek_llm,
+                llm=fallback_llm,
                 verbose=True
             )
             
-            legal_scholar_deepseek = Agent(
+            legal_scholar_fallback = Agent(
                 role=legal_scholar.role,
                 goal=legal_scholar.goal,
                 backstory=legal_scholar.backstory,
                 tools=legal_scholar.tools,
-                llm=deepseek_llm,
+                llm=fallback_llm,
                 verbose=True
             )
             
-            researcher_deepseek = Agent(
+            researcher_fallback = Agent(
                 role=researcher.role,
                 goal=researcher.goal,
                 backstory=researcher.backstory,
                 tools=researcher.tools,
-                llm=deepseek_llm,
+                llm=fallback_llm,
                 verbose=True
             )
             
-            editor_deepseek = Agent(
+            editor_fallback = Agent(
                 role=editor.role,
                 goal=editor.goal,
                 backstory=editor.backstory,
-                llm=deepseek_llm,
+                llm=fallback_llm,
                 verbose=True
             )
             
             # 重新创建任务（跳过 task_china），使用第二备用 agents
-            task_global_deepseek = Task(
+            task_global_fallback = Task(
                 description=task_global.description,
                 expected_output=task_global.expected_output,
-                agent=global_scout_deepseek
+                agent=global_scout_fallback
             )
             
-            task_legal_deepseek = Task(
+            task_legal_fallback = Task(
                 description=task_legal.description,
                 expected_output=task_legal.expected_output,
-                agent=legal_scout_deepseek
+                agent=legal_scout_fallback
             )
             
-            task_health_sports_deepseek = Task(
+            task_health_sports_fallback = Task(
                 description=task_health_sports.description,
                 expected_output=task_health_sports.expected_output,
-                agent=health_sports_scout_deepseek
+                agent=health_sports_scout_fallback
             )
             
-            task_health_analysis_deepseek = Task(
+            task_health_analysis_fallback = Task(
                 description=task_health_analysis.description,
                 expected_output=task_health_analysis.expected_output,
-                agent=health_analyst_deepseek,
-                context=[task_health_sports_deepseek]
+                agent=health_analyst_fallback,
+                context=[task_health_sports_fallback]
             )
             
-            task_legal_analysis_deepseek = Task(
+            task_legal_analysis_fallback = Task(
                 description=task_legal_analysis.description,
                 expected_output=task_legal_analysis.expected_output,
-                agent=legal_scholar_deepseek,
-                context=[task_global_deepseek, task_legal_deepseek]  # 跳过中国新闻上下文
+                agent=legal_scholar_fallback,
+                context=[task_global_fallback, task_legal_fallback]  # 跳过中国新闻上下文
             )
             
-            task_research_deepseek = Task(
+            task_research_fallback = Task(
                 description=task_research.description,
                 expected_output=task_research.expected_output,
-                agent=researcher_deepseek,
-                context=[task_global_deepseek, task_legal_deepseek, 
-                        task_health_sports_deepseek, task_health_analysis_deepseek, task_legal_analysis_deepseek]  # 跳过中国新闻
+                agent=researcher_fallback,
+                context=[task_global_fallback, task_legal_fallback, 
+                        task_health_sports_fallback, task_health_analysis_fallback, task_legal_analysis_fallback]  # 跳过中国新闻
             )
             
             task_publish_deepseek = Task(
                 description=task_publish.description,
                 expected_output=task_publish.expected_output,
-                agent=editor_deepseek,
-                context=[task_research_deepseek]
+                agent=editor_fallback,
+                context=[task_research_fallback]
             )
             
             # 创建新的 Crew，使用第二备用模型（跳过中国新闻）
-            news_crew_deepseek = Crew(
+            news_crew_fallback = Crew(
                 agents=[
-                    global_scout_deepseek, 
-                    legal_scout_deepseek, 
-                    health_sports_scout_deepseek,
-                    health_analyst_deepseek,
-                    legal_scholar_deepseek,
-                    researcher_deepseek, 
-                    editor_deepseek
+                    global_scout_fallback, 
+                    legal_scout_fallback, 
+                    health_sports_scout_fallback,
+                    health_analyst_fallback,
+                    legal_scholar_fallback,
+                    researcher_fallback, 
+                    editor_fallback
                 ],
                 tasks=[
-                    task_global_deepseek, 
-                    task_legal_deepseek, 
-                    task_health_sports_deepseek,
-                    task_health_analysis_deepseek,
-                    task_legal_analysis_deepseek,
-                    task_research_deepseek, 
+                    task_global_fallback, 
+                    task_legal_fallback, 
+                    task_health_sports_fallback,
+                    task_health_analysis_fallback,
+                    task_legal_analysis_fallback,
+                    task_research_fallback, 
                     task_publish_deepseek
                 ],
                 process=Process.sequential,
                 verbose=True
             )
             
-            result = news_crew_deepseek.kickoff()
+            result = news_crew_fallback.kickoff()
             final_html = str(result)
             
             # 清洗 Markdown 标记
