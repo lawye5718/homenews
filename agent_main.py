@@ -759,6 +759,8 @@ task_publish = Task(
     description=f"""
     Generate the final `index.html` file based on the Research Report with TODAY's date: {TODAY_STR}.
     
+    **CRITICAL INSTRUCTION**: You MUST use the ACTUAL news content, titles, summaries, and source URLs from the Research Report provided in the context. DO NOT generate placeholder text or fake content. Every single piece of text must come directly from the research report.
+    
     **UI 交互逻辑 (关键 - 针对问题7)**: 
     之前的版本 "Read More" 跳转到外部链接是**错误**的。
     
@@ -772,38 +774,41 @@ task_publish = Task(
     
     **HTML 结构模板 (必须严格遵守)**:
     
+    IMPORTANT: The text in square brackets [] below are PLACEHOLDER DESCRIPTIONS showing what type of content to insert. You MUST replace them with the ACTUAL REAL content from the Research Report. DO NOT output the literal placeholder text.
+    
     对于每个新闻或分析项，使用以下结构：
     
     ```html
     <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm mb-4">
-        <h3 class="font-bold text-xl mb-2 text-stone-900">[标题]</h3>
+        <h3 class="font-bold text-xl mb-2 text-stone-900">[REPLACE THIS: Insert the actual news title from the research report]</h3>
         <p class="text-sm text-gray-500 mb-2">日期: {TODAY_STR}</p>
-        <p class="mb-4 text-stone-700">[摘要前 200-300 字...]</p>
+        <p class="mb-4 text-stone-700">[REPLACE THIS: Insert the first 200-300 characters of the actual summary from the research report]</p>
         
         <details class="group mb-4">
             <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
                 📖 阅读完整报道 / Read Deep Analysis
             </summary>
             <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                [在这里插入完整的 1000字报道 或 5000字深度分析内容]
+                [REPLACE THIS: Insert the COMPLETE 1000+ word summary OR 5000+ word analysis from the research report - DO NOT TRUNCATE]
             </div>
         </details>
         
         <div class="mt-4 text-xs text-gray-400">
             <span class="font-semibold">信息来源 / Sources:</span>
-            [在这里插入来源链接，显示为可点击徽章]
-            <a href="[URL1]" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
-            <a href="[URL2]" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
-            <a href="[URL3]" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
+            [REPLACE THIS: Insert the actual source URLs from the research report as clickable badges]
+            <a href="[ACTUAL_URL_1]" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+            <a href="[ACTUAL_URL_2]" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
+            <a href="[ACTUAL_URL_3]" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
         </div>
     </div>
     ```
     
     **CRITICAL DATA RULES**:
-    1. **NO EXTERNAL LINKS IN READ MORE**: "Read More" 必须是 `<details>` 标签，不是 `<a>` 标签
-    2. **FULL CONTENT INSIDE**: 必须将生成的完整内容（1000字或5000字）放入 `<details>` 内部
-    3. **SOURCE URLs AS FOOTNOTES**: 所有原始链接必须作为脚注徽章显示在底部
-    4. **DISPLAY ALL {NEWS_ITEMS_PER_SECTION} NEWS ITEMS**: Each section MUST show ALL {NEWS_ITEMS_PER_SECTION} news items provided
+    1. **USE REAL CONTENT ONLY**: You MUST extract and use the actual news titles, summaries, analysis, and source URLs from the Research Report context. DO NOT make up placeholder text like "新闻标题 1", "新闻摘要 1...", "完整报道内容 1..." etc.
+    2. **NO EXTERNAL LINKS IN READ MORE**: "Read More" 必须是 `<details>` 标签，不是 `<a>` 标签
+    3. **FULL CONTENT INSIDE**: 必须将从研究报告中提取的完整内容（1000字或5000字）放入 `<details>` 内部
+    4. **SOURCE URLs AS FOOTNOTES**: 所有原始链接必须作为脚注徽章显示在底部
+    5. **DISPLAY ALL {NEWS_ITEMS_PER_SECTION} NEWS ITEMS**: Each section MUST show ALL {NEWS_ITEMS_PER_SECTION} news items provided in the research report
     
     **DESIGN SYSTEM (New York Times Style with 5-Column Layout)**:
     1. **Library**: Use Tailwind CSS (`<script src="https://cdn.tailwindcss.com"></script>`).
@@ -818,20 +823,27 @@ task_publish = Task(
        - **Header**: Simple, centered, serif headline "Daily Insight - {TODAY_STR}". Thin border-bottom.
        - **Main Container**: Use CSS Grid with 5 columns on desktop (grid-cols-5), responsive on mobile/tablet
        - **Each Column Represents One Section**:
-         1. Column 1: 中文新闻 (Chinese-language News) - Show ALL {NEWS_ITEMS_PER_SECTION} news items
-         2. Column 2: 全球新闻 (Global News) - Show ALL {NEWS_ITEMS_PER_SECTION} items with **English Headlines** prominent
-         3. Column 3: 法律新闻 (Legal News) - Show ALL {NEWS_ITEMS_PER_SECTION} items
-         4. Column 4: 健康与运动 (Health & Sports) - Show ALL {NEWS_ITEMS_PER_SECTION} items + {DEEP_ANALYSIS_ITEMS} deep analysis (collapsible)
-         5. Column 5: 法律学术分析 (Legal Analysis) - Show {LEGAL_ANALYSIS_ITEMS} deep analysis reports (collapsible)
+         1. Column 1: 中文新闻 (Chinese-language News) - Show ALL {NEWS_ITEMS_PER_SECTION} news items WITH REAL TITLES AND CONTENT from research report
+         2. Column 2: 全球新闻 (Global News) - Show ALL {NEWS_ITEMS_PER_SECTION} items WITH REAL TITLES AND CONTENT with **English Headlines** prominent
+         3. Column 3: 法律新闻 (Legal News) - Show ALL {NEWS_ITEMS_PER_SECTION} items WITH REAL TITLES AND CONTENT
+         4. Column 4: 健康与运动 (Health & Sports) - Show ALL {NEWS_ITEMS_PER_SECTION} items WITH REAL TITLES AND CONTENT + {DEEP_ANALYSIS_ITEMS} deep analysis (collapsible)
+         5. Column 5: 法律学术分析 (Legal Analysis) - Show {LEGAL_ANALYSIS_ITEMS} deep analysis reports WITH REAL TITLES AND CONTENT (collapsible)
        - **Responsive**: Use `lg:grid-cols-5 md:grid-cols-2 grid-cols-1` for mobile/tablet adaptation
        - **Cards**: Clean layout. White background `bg-white`. Thin border `border border-stone-200`. No heavy shadows (`shadow-sm` at most).
        - **Typography**: High readability. Line height 1.6+.
     
+    **FINAL REMINDER - ABSOLUTELY CRITICAL**:
+    - You MUST extract ALL actual news titles, summaries, full content, and source URLs from the Research Report in your context
+    - DO NOT generate fake placeholder text like "新闻标题 1", "新闻摘要 1...", "完整报道内容 1...", "健康与运动深度分析内容 2..." etc.
+    - Every single piece of text in the HTML must be REAL content from the research report
+    - If you cannot find the content in the research report, output an error message instead of placeholders
+    
     **Output**: 
     - ONLY the raw HTML code (starting with `<!DOCTYPE html>`).
-    - Ensure ALL {NEWS_ITEMS_PER_SECTION} items in each section are displayed.
+    - Ensure ALL {NEWS_ITEMS_PER_SECTION} items in each section are displayed WITH THEIR ACTUAL REAL CONTENT.
     - Include proper date: {TODAY_STR}
     - Use `<details>` for expandable content, NOT external links
+    - USE REAL CONTENT FROM RESEARCH REPORT, NOT PLACEHOLDERS
     """,
     expected_output="Final production-ready HTML with 5-column grid layout, all news items displayed, <details> tags for expandable content, source URLs as footnote badges, and excellent readability.",
     agent=editor,
