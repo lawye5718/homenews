@@ -379,11 +379,17 @@ legal_scholar = Agent(
 # 【深度研究员】 - 架构师（更新：整合5个板块）
 researcher = Agent(
     role='Chief Researcher & Architect',
-    goal=f'Synthesize all inputs into a structured report with ALL {NEWS_ITEMS_PER_SECTION} items per section, VERIFYING ALL URLs ARE PRESENT, ALL CONTENT is preserved in full, ALL DATES are from {CURRENT_YEAR}, and ALL WORD COUNTS meet requirements',
+    goal=f'Synthesize all inputs into a structured report with ALL {NEWS_ITEMS_PER_SECTION} items per section, VERIFYING ALL URLs ARE PRESENT, ALL CONTENT is preserved in full, ALL DATES are from {CURRENT_YEAR}, and ALL WORD COUNTS meet requirements. NEVER GENERATE PLACEHOLDER TEXT.',
     backstory=f"""
     You are responsible for data integrity and structural integrity of the report.
     You must ensure that every single news item passed to the Editor has a VALID, CLICKABLE URL.
     Do not summarize away the links or the content. The Editor needs them for the HTML.
+    
+    **ABSOLUTELY CRITICAL - NO PLACEHOLDER TEXT**:
+    - You MUST use ONLY the ACTUAL content from the previous tasks (scouts and analysts)
+    - DO NOT make up fake content or placeholder text like "新闻标题 1", "新闻摘要 1", etc.
+    - If a task did not provide proper content, report an error instead of generating placeholders
+    - Every title, summary, and URL must come directly from the source tasks
     
     **CRITICAL REQUIREMENTS**:
     1. All FIVE sections must be present with complete data
@@ -396,13 +402,13 @@ researcher = Agent(
     8. English headlines are preserved exactly as written for Global news
     9. Deep analysis reports (5000+ words each) are properly integrated with all citations as footnotes
     10. **VERIFICATION STEP**: Check that every single news item has:
-       - Title
+       - Title (REAL, from source task, not "新闻标题 1")
        - Publication Date from {CURRENT_YEAR} (not 2023, 2024, or 2025)
-       - Full 1000+ word summary (or 5000+ for deep analysis) - verified word count
-       - At least one Source URL formatted as footnote
+       - Full 1000+ word summary (REAL content, not "新闻摘要 1..." or placeholders) - verified word count
+       - At least one Source URL formatted as footnote (REAL URL, not "#")
        If any of these are missing, flag it clearly to the user
-    9. Organize the content strictly into the 5 sections with clear boundaries
-    10. Ensure all controversial aspects and conflicting viewpoints are preserved
+    11. Organize the content strictly into the 5 sections with clear boundaries
+    12. Ensure all controversial aspects and conflicting viewpoints are preserved
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -725,6 +731,12 @@ task_research = Task(
     4. Health & Sports News + Deep Analysis (健康与运动) - ALL {NEWS_ITEMS_PER_SECTION} news items with 1000+ word summaries PLUS {DEEP_ANALYSIS_ITEMS} deep analysis reports with 5000+ words each from {CURRENT_YEAR}
     5. Legal Analysis & Law Review Articles (法律学术分析) - {LEGAL_ANALYSIS_ITEMS} law review analyses with 5000+ words each
     
+    **ABSOLUTELY CRITICAL - NO PLACEHOLDER TEXT**:
+    - You MUST extract and use ONLY the ACTUAL content from the context tasks (task_china, task_global, task_legal, etc.)
+    - DO NOT generate fake placeholder content like "News Item 1: Title: [中文标题]" or "Summary: [EXACTLY 1000+ word...]"
+    - Every title, summary, date, and URL must come directly from the actual task outputs
+    - If you cannot find the actual content in the context, output an error message
+    
     **CRITICAL REQUIREMENTS**:
     - Verify that ALL FIVE SECTIONS exist with complete data
     - **VERIFY ALL DATES**: Every news item must be from {CURRENT_YEAR} - flag any from 2023, 2024, or 2025
@@ -739,15 +751,15 @@ task_research = Task(
     - **DO NOT SUMMARIZE OR TRUNCATE**: Pass through all content in full length to the editor
     - **PRESERVE CONTROVERSIAL ASPECTS**: Ensure all conflicting viewpoints and debates are included
     
-    **Output Structure**:
+    **Output Structure** (NOTE: The format below shows the structure - you MUST fill it with REAL content from the tasks, NOT placeholder text):
     For each section, organize as:
     Section Name:
-      Item 1: Title, Publication Date ({CURRENT_YEAR}), Full Summary (1000+ words), Footnoted Source URLs
-      Item 2: Title, Publication Date ({CURRENT_YEAR}), Full Summary (1000+ words), Footnoted Source URLs
-      Item 3: Title, Publication Date ({CURRENT_YEAR}), Full Summary (1000+ words), Footnoted Source URLs
-      Item 4: Title, Publication Date ({CURRENT_YEAR}), Full Summary (1000+ words), Footnoted Source URLs
-      Item 5: Title, Publication Date ({CURRENT_YEAR}), Full Summary (1000+ words), Footnoted Source URLs
-      [Plus deep analysis if applicable]
+      Item 1: [REAL Title from task], [REAL Date from task], [REAL Full 1000+ word Summary from task], [REAL Footnoted Source URLs from task]
+      Item 2: [REAL Title from task], [REAL Date from task], [REAL Full 1000+ word Summary from task], [REAL Footnoted Source URLs from task]
+      Item 3: [REAL Title from task], [REAL Date from task], [REAL Full 1000+ word Summary from task], [REAL Footnoted Source URLs from task]
+      Item 4: [REAL Title from task], [REAL Date from task], [REAL Full 1000+ word Summary from task], [REAL Footnoted Source URLs from task]
+      Item 5: [REAL Title from task], [REAL Date from task], [REAL Full 1000+ word Summary from task], [REAL Footnoted Source URLs from task]
+      [Plus deep analysis if applicable - WITH REAL CONTENT]
     """,
     expected_output=f"Master Report with ALL 5 sections, each containing ALL news items ({NEWS_ITEMS_PER_SECTION} per section except Legal Analysis with {LEGAL_ANALYSIS_ITEMS}), complete 1000+ word summaries, 5000+ word analyses, ALL source URLs preserved as footnotes, and ALL dates verified to be from {CURRENT_YEAR}.",
     agent=researcher,
