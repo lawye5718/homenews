@@ -36,7 +36,8 @@ SMTP_SERVER = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
 try:
     SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
 except ValueError:
-    print("⚠️ Invalid SMTP_PORT value (must be a number), using default 587")
+    invalid_value = os.environ.get("SMTP_PORT")
+    print(f"⚠️ Invalid SMTP_PORT value '{invalid_value}' (must be a number), using default 587")
     SMTP_PORT = 587
 SMTP_USER = os.environ.get("SMTP_USER")      # 发件人邮箱
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD") # 邮箱应用密码
