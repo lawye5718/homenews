@@ -36,7 +36,7 @@ SMTP_SERVER = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
 try:
     SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
 except ValueError:
-    print("⚠️ Invalid SMTP_PORT value, using default 587")
+    print("⚠️ Invalid SMTP_PORT value (must be a number), using default 587")
     SMTP_PORT = 587
 SMTP_USER = os.environ.get("SMTP_USER")      # 发件人邮箱
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD") # 邮箱应用密码
@@ -45,7 +45,7 @@ EMAIL_TO = os.environ.get("EMAIL_TO")        # 收件人邮箱
 # --- 1. 配置 LLM ---
 # DeepSeek API 配置 - 可作为主模型使用（通过 USE_DEEPSEEK=true 环境变量控制）
 # 使用 DeepSeek Chat 模型 (降低幻觉，提高准确性)
-# max_tokens 设置为 8000（DeepSeek 支持更大值，但我们保持一致性）
+# max_tokens 设置为 8000（DeepSeek 实际支持更大值如 64K，但我们保持一致性）
 # temperature 降低到 0.4 以保持专注和减少幻觉
 # 针对问题2：假深度 (只有一句话) - 提供足够的token容量和更低温度以支持长文生成
 # 这有助于：
@@ -944,7 +944,7 @@ def send_email_report(file_path):
         if server:
             try:
                 server.quit()
-            except:
+            except Exception:
                 pass  # Ignore errors when closing connection
 
 # --- 5. 执行流程 ---
