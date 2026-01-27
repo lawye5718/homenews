@@ -2,7 +2,8 @@ import os
 import sys
 from datetime import datetime, timedelta
 from crewai import Agent, Task, Crew, Process, LLM
-from crewai_tools import ScrapeWebsiteTool, SerperDevTool
+from crewai_tools import SerperDevTool
+from custom_scrape_tool import SafeScrapeWebsiteTool
 
 # --- Configuration Constants ---
 # 强制获取精确的今天和昨天的日期，用于搜索过滤
@@ -89,7 +90,8 @@ else:
 # --- 2. 初始化工具 ---
 # 增加搜索结果数量以提高准确性
 search_tool = SerperDevTool(n_results=15)
-scrape_tool = ScrapeWebsiteTool()
+# 使用增强的安全爬虫工具，自动处理PDF、Cloudflare阻止、乱码等问题
+scrape_tool = SafeScrapeWebsiteTool()
 
 # ==============================================================================
 # Deep Humanizer Protocol (深层去伪协议) - 增强版
