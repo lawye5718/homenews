@@ -5,58 +5,131 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Insight - 2026-01-27</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #fafaf9; }
-        h1, h2, h3 { font-family: 'Merriweather', serif; }
+        * { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, .font-serif { font-family: 'Merriweather', serif; }
     </style>
 </head>
-<body class="bg-stone-50 text-stone-900 min-h-screen">
+<body class="bg-stone-50 min-h-screen">
     <header class="border-b border-stone-300 py-6 bg-white">
         <div class="container mx-auto px-4">
-            <h1 class="text-3xl md:text-4xl font-bold text-center">Daily Insight</h1>
+            <h1 class="font-serif text-3xl md:text-4xl font-bold text-center text-stone-900">Daily Insight</h1>
             <p class="text-center text-stone-600 mt-2">2026-01-27</p>
         </div>
     </header>
 
     <main class="container mx-auto px-4 py-8">
-        <div class="bg-red-50 border-l-4 border-red-500 p-6 mb-8 rounded">
-            <h2 class="text-xl font-bold text-red-800 mb-2">⚠️ Content Generation Error</h2>
-            <p class="text-red-700">
-                <strong>Critical Data Missing:</strong> The Research Report containing the actual news titles, summaries, full content (1000-word reports / 5000-word analyses), and source URLs was not provided in the context.
-            </p>
-            <p class="text-red-700 mt-2">
-                The context stated: "<em>我需要先查看前面任务中收集到的具体内容，才能为您编译完整的报告... 但我需要实际访问这些搜索结果来获取具体内容.</em>"
-            </p>
-            <p class="text-red-700 mt-2">
-                <strong>Instruction Compliance:</strong> As per the critical directive, I must not generate placeholder text like "新闻标题 1" or "完整报道内容 1...". Every piece of text in the HTML must be real content from the research report. Since that data is unavailable, I am outputting this error message instead.
-            </p>
-            <p class="text-red-700 mt-2">
-                To generate the correct 5-column New York Times style report, please provide the complete Research Report data containing:
-            </p>
-            <ul class="list-disc pl-5 mt-2 text-red-700">
-                <li>5 Chinese News items (with titles, 200-300 char previews, 1000+ word full reports, source URLs)</li>
-                <li>5 Global News items (with English titles, previews, full reports, source URLs)</li>
-                <li>5 Legal News items (with titles, previews, full reports, source URLs)</li>
-                <li>5 Health & Sports items (with titles, previews, full reports, source URLs) + 3 deep analyses</li>
-                <li>3 Legal Academic Analysis items (with titles, previews, 5000+ word analyses, source URLs)</li>
-            </ul>
+        <div class="grid lg:grid-cols-5 md:grid-cols-2 grid-cols-1 gap-6">
+            <!-- Column 1: 中文新闻 -->
+            <div>
+                <h2 class="font-serif text-2xl font-bold mb-6 pb-2 border-b border-stone-300 text-stone-900">中文新闻</h2>
+                <div class="space-y-6">
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">错误：内容缺失</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-01-27</p>
+                        <p class="mb-4 text-stone-700">无法生成此栏目。提供的上下文中未包含实际的中文新闻研究数据。没有可用的新闻标题、摘要、完整报道或源URL。请确保提供了完整的Research Report内容。</p>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">信息来源 / Sources:</span>
+                            <span class="ml-2 text-red-600">无可用数据</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 2: 全球新闻 -->
+            <div>
+                <h2 class="font-serif text-2xl font-bold mb-6 pb-2 border-b border-stone-300 text-stone-900">全球新闻</h2>
+                <div class="space-y-6">
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">Error: Missing Content</h3>
+                        <p class="text-sm text-gray-500 mb-2">Date: 2026-01-27</p>
+                        <p class="mb-4 text-stone-700">Cannot generate this section. The provided context does not contain actual Global News research data. No news titles, summaries, full reports, or source URLs are available. Please ensure the complete Research Report content is provided.</p>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">Sources:</span>
+                            <span class="ml-2 text-red-600">No data available</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 3: 法律新闻 -->
+            <div>
+                <h2 class="font-serif text-2xl font-bold mb-6 pb-2 border-b border-stone-300 text-stone-900">法律新闻</h2>
+                <div class="space-y-6">
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">错误：内容缺失</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-01-27</p>
+                        <p class="mb-4 text-stone-700">无法生成此栏目。提供的上下文中未包含实际的法律新闻研究数据。没有可用的新闻标题、摘要、完整报道或源URL。请确保提供了完整的Research Report内容。</p>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">信息来源 / Sources:</span>
+                            <span class="ml-2 text-red-600">无可用数据</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 4: 健康与运动 -->
+            <div>
+                <h2 class="font-serif text-2xl font-bold mb-6 pb-2 border-b border-stone-300 text-stone-900">健康与运动</h2>
+                <div class="space-y-6">
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">错误：内容缺失</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-01-27</p>
+                        <p class="mb-4 text-stone-700">无法生成此栏目。提供的上下文中未包含实际的健康与运动新闻研究数据。没有可用的新闻标题、摘要、完整报道或源URL。请确保提供了完整的Research Report内容。</p>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">信息来源 / Sources:</span>
+                            <span class="ml-2 text-red-600">无可用数据</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 5: 法律学术分析 -->
+            <div>
+                <h2 class="font-serif text-2xl font-bold mb-6 pb-2 border-b border-stone-300 text-stone-900">法律学术分析</h2>
+                <div class="space-y-6">
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">错误：内容缺失</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-01-27</p>
+                        <p class="mb-4 text-stone-700">无法生成此栏目。提供的上下文中未包含实际的法律学术分析研究数据。没有可用的分析标题、完整5000字论文或源URL。请确保提供了完整的Research Report内容。</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 阅读完整分析 / Read Deep Analysis
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                <p><strong>深度分析内容不可用。</strong> 根据指令，我不能生成占位符文本或虚构内容。必须使用从研究报告中提取的实际内容。由于提供的上下文中没有研究报告，因此无法显示5000字的深度分析。</p>
+                                <p>要生成正确的报告，需要提供包含以下内容的实际Research Report：</p>
+                                <ul class="list-disc pl-5 mt-2">
+                                    <li>每个部分的5个新闻项目（法律分析为3个）</li>
+                                    <li>每个项目的真实标题、日期、1000+字摘要</li>
+                                    <li>深度分析的完整5000+字文本</li>
+                                    <li>所有源URL链接</li>
+                                </ul>
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">信息来源 / Sources:</span>
+                            <span class="ml-2 text-red-600">无可用数据</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Placeholder structure comment for reference -->
-        <!--
-        <div class="grid lg:grid-cols-5 md:grid-cols-2 grid-cols-1 gap-6">
-            <section>中文新闻 (Chinese News) - 5 cards with real content would go here</section>
-            <section>全球新闻 (Global News) - 5 cards with real content would go here</section>
-            <section>法律新闻 (Legal News) - 5 cards with real content would go here</section>
-            <section>健康与运动 (Health & Sports) - 5 cards + 3 deep analyses with real content would go here</section>
-            <section>法律学术分析 (Legal Analysis) - 3 deep analyses with real content would go here</section>
+        <div class="mt-12 pt-6 border-t border-stone-300 text-center text-stone-500 text-sm">
+            <p><strong>系统状态：</strong> 报告生成失败 - 缺少基础数据。</p>
+            <p class="mt-2">原因：提供的"上下文"不包含实际的Research Report内容，只有搜索过程的描述。根据指令，我不能生成占位符文本，必须使用真实的研究报告数据。</p>
+            <p class="mt-2">解决方案：请提供包含实际新闻标题、摘要、完整内容和源URL的Research Report。</p>
         </div>
-        -->
     </main>
 
-    <footer class="border-t border-stone-300 py-6 text-center text-stone-500 text-sm bg-white">
-        <p>Daily Insight Report. Data integrity enforced: No placeholder content permitted.</p>
+    <footer class="border-t border-stone-300 py-6 bg-white mt-8">
+        <div class="container mx-auto px-4 text-center text-stone-500 text-sm">
+            <p>Daily Insight Report • 2026-01-27 • 数据完整性错误：缺少研究报告内容</p>
+        </div>
     </footer>
 </body>
 </html>
