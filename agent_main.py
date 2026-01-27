@@ -1,5 +1,8 @@
 import os
 import sys
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timedelta
 from crewai import Agent, Task, Crew, Process, LLM
 from crewai_tools import SerperDevTool
@@ -28,10 +31,22 @@ SEARCH_SUFFIX = f" after:{YESTERDAY_STR}"
 # 设置 USE_DEEPSEEK=true 时，自动选择 DeepSeek 作为主要大模型
 USE_DEEPSEEK = os.environ.get("USE_DEEPSEEK", "false").lower() == "true"
 
+# 邮件配置 (从环境变量读取或使用默认值)
+SMTP_SERVER = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
+try:
+    SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
+except ValueError:
+    invalid_value = os.environ.get("SMTP_PORT")
+    print(f"⚠️ Invalid SMTP_PORT value '{invalid_value}' (must be a number), using default 587")
+    SMTP_PORT = 587
+SMTP_USER = os.environ.get("SMTP_USER")      # 发件人邮箱
+SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD") # 邮箱应用密码
+EMAIL_TO = os.environ.get("EMAIL_TO")        # 收件人邮箱
+
 # --- 1. 配置 LLM ---
 # DeepSeek API 配置 - 可作为主模型使用（通过 USE_DEEPSEEK=true 环境变量控制）
 # 使用 DeepSeek Chat 模型 (降低幻觉，提高准确性)
-# max_tokens 设置为 32000（必须足够大以容纳长文）
+# max_tokens 设置为 8000（DeepSeek 实际支持更大值如 64K，但我们保持一致性）
 # temperature 降低到 0.4 以保持专注和减少幻觉
 # 针对问题2：假深度 (只有一句话) - 提供足够的token容量和更低温度以支持长文生成
 # 这有助于：
@@ -45,20 +60,22 @@ deepseek_llm = LLM(
     api_key=os.environ.get("DEEPSEEK_API_KEY"),
     temperature=0.4,  # 低温以保持专注
     top_p=0.9,
-    max_tokens=32000,  # 必须足够大以容纳长文
+    max_tokens=8000,  # 安全值，避免 API 限制问题
     stream=True,
     timeout=600
 )
 
 # NVIDIA NIM 配置 - 使用 NVIDIA meta/llama-3.1-405b-instruct 模型 (高性能稳定)
 # 参考 NVIDIA 官方示范代码配置
+# [CRITICAL FIX] max_tokens 从 32000 改为 8000，避免 API 400 错误
+# NVIDIA API 限制为 8192 tokens，使用 8000 作为安全值
 nvidia_llm = LLM(
     model="meta/llama-3.1-405b-instruct",
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=os.environ.get("NVIDIA_API_KEY"),
     temperature=0.4,  # 低温以保持专注
     top_p=0.9,
-    max_tokens=32000,  # 必须足够大以容纳长文
+    max_tokens=8000,  # 安全值，NVIDIA API 上限为 8192
     stream=True,
     timeout=600
 )
@@ -70,7 +87,7 @@ backup_llm = LLM(
     api_key=os.environ.get("NVIDIA_API_KEY"),
     temperature=0.4,  # 低温以保持专注
     top_p=0.9,
-    max_tokens=32000,  # 必须足够大以容纳长文
+    max_tokens=8000,  # 安全值，避免 API 限制问题
     stream=True,
     timeout=600
 )
@@ -895,6 +912,42 @@ task_publish = Task(
     context=[task_research]
 )
 
+# --- 辅助功能: 邮件发送 ---
+def send_email_report(file_path):
+    """发送 HTML 报告到指定邮箱"""
+    if not (SMTP_USER and SMTP_PASSWORD and EMAIL_TO):
+        print("⚠️ Email configuration missing. Skipping email sending.")
+        print("   Set SMTP_USER, SMTP_PASSWORD, and EMAIL_TO environment variables to enable email.")
+        return
+
+    server = None
+    try:
+        msg = MIMEMultipart()
+        msg['From'] = SMTP_USER
+        msg['To'] = EMAIL_TO
+        msg['Subject'] = f"Daily News Report - {CURRENT_DATE}"
+
+        # 读取 HTML 内容作为邮件正文
+        with open(file_path, 'r', encoding='utf-8') as f:
+            html_content = f.read()
+        
+        msg.attach(MIMEText(html_content, 'html'))
+
+        # 连接 SMTP 服务器
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        server.starttls()
+        server.login(SMTP_USER, SMTP_PASSWORD)
+        server.send_message(msg)
+        print(f"✅ Email sent successfully to {EMAIL_TO}")
+    except Exception as e:
+        print(f"❌ Failed to send email: {e}")
+    finally:
+        if server:
+            try:
+                server.quit()
+            except Exception:
+                pass  # Ignore errors when closing connection
+
 # --- 5. 执行流程 ---
 def run():
     print("🚀 Starting Daily News Agent (NYT Style Edition)...")
@@ -939,18 +992,33 @@ def run():
             final_html = final_html.split("```html")[1].split("```")[0]
         elif "```" in final_html:
             final_html = final_html.split("```")[1].split("```")[0]
-            
+        
+        # 创建 reports 文件夹并保存文件
+        output_dir = "reports"
+        os.makedirs(output_dir, exist_ok=True)
+        filename = f"news_{CURRENT_DATE}.html"
+        file_path = os.path.join(output_dir, filename)
+        
+        # 保存到 reports 文件夹
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(final_html.strip())
+        
+        # 同时更新根目录的 index.html 以便 GitHub Pages 显示
         output_path = "index.html"
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(final_html.strip())
         
         print(f"✅ Report generated successfully: {output_path}")
+        print(f"✅ Report also saved to: {file_path}")
         print("📊 Report includes 5 sections:")
         print("   1. 中文新闻 (Chinese-language News)")
         print("   2. 全球新闻 (Global News)")
         print("   3. 法律新闻 (Legal News)")
         print("   4. 健康与运动 (Health & Sports + Deep Analysis)")
         print("   5. 法律学术分析 (Legal Analysis & Law Review Articles)")
+        
+        # 发送邮件
+        send_email_report(file_path)
         
     except Exception as e:
         print(f"⚠️ Primary model failed with error: {e}")
@@ -1127,17 +1195,32 @@ def run():
                 final_html = final_html.split("```html")[1].split("```")[0]
             elif "```" in final_html:
                 final_html = final_html.split("```")[1].split("```")[0]
-                
+            
+            # 创建 reports 文件夹并保存文件
+            output_dir = "reports"
+            os.makedirs(output_dir, exist_ok=True)
+            filename = f"news_{CURRENT_DATE}.html"
+            file_path = os.path.join(output_dir, filename)
+            
+            # 保存到 reports 文件夹
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(final_html.strip())
+            
+            # 同时更新根目录的 index.html 以便 GitHub Pages 显示
             output_path = "index.html"
             with open(output_path, "w", encoding="utf-8") as f:
                 f.write(final_html.strip())
             
             print(f"✅ Report generated successfully with second backup model (DeepSeek Official API): {output_path}")
+            print(f"✅ Report also saved to: {file_path}")
             print("📊 Report includes 4 sections (Chinese news skipped to avoid content policy issues):")
             print("   1. 全球新闻 (Global News)")
             print("   2. 法律新闻 (Legal News)")
             print("   3. 健康与运动 (Health & Sports + Deep Analysis)")
             print("   4. 法律学术分析 (Legal Analysis & Law Review Articles)")
+            
+            # 发送邮件
+            send_email_report(file_path)
             
         except Exception as deepseek_error:
             print(f"⚠️ Second backup model also failed with error: {deepseek_error}")
@@ -1306,18 +1389,33 @@ def run():
                     final_html = final_html.split("```html")[1].split("```")[0]
                 elif "```" in final_html:
                     final_html = final_html.split("```")[1].split("```")[0]
-                    
+                
+                # 创建 reports 文件夹并保存文件
+                output_dir = "reports"
+                os.makedirs(output_dir, exist_ok=True)
+                filename = f"news_{CURRENT_DATE}.html"
+                file_path = os.path.join(output_dir, filename)
+                
+                # 保存到 reports 文件夹
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(final_html.strip())
+                
+                # 同时更新根目录的 index.html 以便 GitHub Pages 显示
                 output_path = "index.html"
                 with open(output_path, "w", encoding="utf-8") as f:
                     f.write(final_html.strip())
                 
                 print(f"✅ Report generated successfully with third backup model (nvidia/llama-3.3-nemotron-super-49b-v1.5): {output_path}")
+                print(f"✅ Report also saved to: {file_path}")
                 print("📊 Report includes 5 sections:")
                 print("   1. 中文新闻 (Chinese-language News)")
                 print("   2. 全球新闻 (Global News)")
                 print("   3. 法律新闻 (Legal News)")
                 print("   4. 健康与运动 (Health & Sports + Deep Analysis)")
                 print("   5. 法律学术分析 (Legal Analysis & Law Review Articles)")
+                
+                # 发送邮件
+                send_email_report(file_path)
                 
             except Exception as backup_error:
                 print(f"❌ Critical Error: All three models failed.")
