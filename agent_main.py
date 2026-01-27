@@ -18,11 +18,18 @@ DEEP_ANALYSIS_ITEMS = 3
 # 增加上下文窗口以防止长文截断
 CTX_WINDOW = 128000
 
+# 严格的日期搜索过滤器 (Google Search Syntax)
+# 加上这个后缀，Google会强制过滤掉旧闻
+# 针对问题1：旧闻 (2024/2022) - 在代码层面硬编码 after:YYYY-MM-DD 搜索参数，物理屏蔽旧网页
+SEARCH_SUFFIX = f" after:{YESTERDAY_STR}"
+
 # --- 1. 配置 LLM (NVIDIA NIM) ---
 # 替换为 NVIDIA API 配置
 # 使用 NVIDIA meta/llama-3.1-405b-instruct 模型 (高性能稳定)
 # 参考 NVIDIA 官方示范代码配置
-# max_tokens 设置为 8000（适中），temperature 降低到 0.6 以减少幻觉
+# max_tokens 设置为 32000（必须足够大以容纳长文）
+# temperature 降低到 0.4 以保持专注和减少幻觉
+# 针对问题2：假深度 (只有一句话) - 提供足够的token容量和更低温度以支持长文生成
 # 这有助于：
 # 1. 提高 LLM 对指令的遵循度（减少偷懒和幻觉）
 # 2. 1000+ 字的详细新闻摘要（每个板块 5 条新闻 = 5000+ 字）
@@ -32,9 +39,9 @@ nvidia_llm = LLM(
     model="meta/llama-3.1-405b-instruct",
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=os.environ.get("NVIDIA_API_KEY"),
-    temperature=0.6,  # 降低温度以减少幻觉，增加遵循度
+    temperature=0.4,  # 低温以保持专注
     top_p=0.9,
-    max_tokens=8000,  # 单次回复上限，避免截断
+    max_tokens=32000,  # 必须足够大以容纳长文
     stream=True,
     timeout=600
 )
@@ -45,9 +52,9 @@ deepseek_llm = LLM(
     model="deepseek-chat",
     base_url="https://api.deepseek.com",
     api_key=os.environ.get("DEEPSEEK_API_KEY"),
-    temperature=0.6,
+    temperature=0.4,  # 低温以保持专注
     top_p=0.9,
-    max_tokens=8000,
+    max_tokens=32000,  # 必须足够大以容纳长文
     stream=True,
     timeout=600
 )
@@ -57,9 +64,9 @@ backup_llm = LLM(
     model="nvidia/llama-3.3-nemotron-super-49b-v1.5",
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=os.environ.get("NVIDIA_API_KEY"),
-    temperature=0.6,
+    temperature=0.4,  # 低温以保持专注
     top_p=0.9,
-    max_tokens=8000,
+    max_tokens=32000,  # 必须足够大以容纳长文
     stream=True,
     timeout=600
 )
@@ -120,8 +127,10 @@ china_scout = Agent(
     
     **搜索策略** (针对问题1和3：获取今日争议性新闻):
     - **不要搜** "中国新闻" 或 "China News"
-    - **要搜**: "微博热搜 争议 {TODAY_STR}", "知乎 吵架 {TODAY_STR}", "网友 抵制 {CURRENT_YEAR_MONTH}", "官方 通报 争议 最新"
+    - **要搜**: "微博热搜 争议{SEARCH_SUFFIX}", "知乎 吵架{SEARCH_SUFFIX}", "网友 抵制{SEARCH_SUFFIX}", "官方 通报 争议{SEARCH_SUFFIX}"
+    - **核心搜索词组合**: "争议{SEARCH_SUFFIX}", "冲突{SEARCH_SUFFIX}", "抗议{SEARCH_SUFFIX}", "辩论{SEARCH_SUFFIX}", "舆论{SEARCH_SUFFIX}"
     - 关键词必须包含: "争议"、"冲突"、"辩论"、"抗议"、"抵制"、"舆论"、"反对"
+    - 搜索参数中包含 "after:{YESTERDAY_STR}" 以物理屏蔽旧网页
     - 必须锁定 **{TODAY_STR} 或 {YESTERDAY_STR}** 发生的具体事件
     - 严禁使用 2024年、2023年或更早的旧闻
     
@@ -164,8 +173,10 @@ global_scout = Agent(
     
     **搜索策略** (针对问题1和3：获取今日争议性新闻):
     - **不要搜**: "Global News today" 或 "World News"
-    - **要搜**: "Protest {TODAY_STR}", "Scandal breaking {TODAY_STR}", "Controversial ruling {TODAY_STR}", "Debate viral {TODAY_STR}", "Lawsuit filed {TODAY_STR}"
+    - **要搜**: "Protest{SEARCH_SUFFIX}", "Scandal{SEARCH_SUFFIX}", "Controversial ruling{SEARCH_SUFFIX}", "Debate{SEARCH_SUFFIX}", "Lawsuit filed{SEARCH_SUFFIX}"
+    - **核心搜索词组合**: "controversy{SEARCH_SUFFIX}", "conflict{SEARCH_SUFFIX}", "protest{SEARCH_SUFFIX}", "scandal{SEARCH_SUFFIX}", "backlash{SEARCH_SUFFIX}", "outrage{SEARCH_SUFFIX}"
     - 关键词必须包含: "controversy", "conflict", "protest", "scandal", "debate", "backlash", "outrage"
+    - 搜索参数中包含 "after:{YESTERDAY_STR}" 以物理屏蔽旧网页
     - 必须是过去 24 小时 ({TODAY_STR} 或 {YESTERDAY_STR}) 内的突发事件
     - 严禁使用 2024、2023 或更早的旧闻
     
@@ -213,10 +224,11 @@ legal_scout = Agent(
     1. **不要** 找 "新法律颁布" (New legislation)、"新规" (New regulation)、"政策出台"
     2. **要找** 正在进行的庭审、刚刚做出的争议性判决、或者引发公愤的起诉 (Active Litigation/Verdicts)
     3. **搜索关键词**: 
-       - "Lawsuit filed {TODAY_STR}", "Court verdict controversial {TODAY_STR}"
-       - "Supreme Court hearing {TODAY_STR}", "判决争议 {TODAY_STR}"
-       - "v." (原告诉被告的格式，如 "Apple v. Epic", "张三 v. 某公司")
-       - "起诉", "庭审", "判决", "案件", "诉讼"
+       - "Lawsuit filed{SEARCH_SUFFIX}", "Court verdict{SEARCH_SUFFIX}", "v.{SEARCH_SUFFIX}"
+       - "Supreme Court{SEARCH_SUFFIX}", "Trial{SEARCH_SUFFIX}", "判决{SEARCH_SUFFIX}", "诉讼{SEARCH_SUFFIX}"
+       - **核心搜索词组合**: "v.{SEARCH_SUFFIX}", "lawsuit{SEARCH_SUFFIX}", "verdict{SEARCH_SUFFIX}", "ruling{SEARCH_SUFFIX}", "court case{SEARCH_SUFFIX}"
+       - "起诉{SEARCH_SUFFIX}", "庭审{SEARCH_SUFFIX}", "判决{SEARCH_SUFFIX}", "案件{SEARCH_SUFFIX}"
+    - 搜索参数中包含 "after:{YESTERDAY_STR}" 以物理屏蔽旧网页
     - 必须是 {TODAY_STR} 或 {YESTERDAY_STR} 的最新案件进展
     - 严禁使用 2024、2023 或更早的旧案件
     
@@ -466,14 +478,15 @@ editor = Agent(
 task_china = Task(
     description=f"""
     **搜索策略** (针对问题1：获取今日最新新闻):
-    1. 搜索词必须包含今日日期和争议关键词:
-       - "微博热搜 争议 {TODAY_STR}"
-       - "知乎 吵架 {CURRENT_YEAR_MONTH}"
-       - "网友 抵制 最新 {CURRENT_YEAR}"
-       - "官方 通报 争议 {TODAY_STR}"
-       - "舆论 反对 {TODAY_STR}"
+    1. 搜索词必须包含日期过滤和争议关键词:
+       - "微博热搜 争议{SEARCH_SUFFIX}"
+       - "知乎 吵架{SEARCH_SUFFIX}"
+       - "网友 抵制{SEARCH_SUFFIX}"
+       - "官方 通报 争议{SEARCH_SUFFIX}"
+       - "舆论 反对{SEARCH_SUFFIX}"
     2. **日期验证**：必须找到 5 个 {TODAY_STR} 或 {YESTERDAY_STR} 发生的、引起巨大争议的社会新闻
     3. **严格过滤**：拒绝任何 2024年、2023年或更早的旧闻
+    4. **物理日期屏蔽**：所有搜索查询自动包含 "after:{YESTERDAY_STR}" 参数
     
     **报道要求** (针对问题8：综合性事实报道):
     对每个新闻，利用 ScrapeWebsiteTool 抓取多方报道，写出 **1000字以上** 的事实综述，必须包含：
@@ -504,15 +517,16 @@ task_china = Task(
 task_global = Task(
     description=f"""
     **搜索策略** (针对问题1和3：获取今日争议性新闻):
-    1. 搜索词必须包含今日日期和争议关键词:
-       - "Protest breaking {TODAY_STR}"
-       - "Scandal controversy {TODAY_STR}"
-       - "Controversial ruling latest {TODAY_STR}"
-       - "Debate viral {TODAY_STR}"
-       - "Lawsuit filed {TODAY_STR}"
-       - "Backlash outrage {TODAY_STR}"
+    1. 搜索词必须包含日期过滤和争议关键词:
+       - "Protest{SEARCH_SUFFIX}"
+       - "Scandal{SEARCH_SUFFIX}"
+       - "Controversial ruling{SEARCH_SUFFIX}"
+       - "Debate{SEARCH_SUFFIX}"
+       - "Lawsuit filed{SEARCH_SUFFIX}"
+       - "Backlash{SEARCH_SUFFIX}"
     2. **日期验证**：选择 {NEWS_ITEMS_PER_SECTION} 个 {TODAY_STR} 或 {YESTERDAY_STR} 发生的、具有全球结构性影响和重大争议的事件
     3. **严格过滤**：拒绝任何 2024、2023 或更早的旧闻
+    4. **物理日期屏蔽**：所有搜索查询自动包含 "after:{YESTERDAY_STR}" 参数
     
     **报道要求** (针对问题8：综合性事实报道):
     - **保留英文原标题** + 综合中文分析（**1000字以上**）
@@ -549,15 +563,17 @@ task_legal = Task(
     **搜索策略** (针对问题1和4：获取今日实际案例，不要新法规):
     1. **不要搜**: "新法律颁布", "New legislation", "新规", "政策出台"
     2. **要搜**: 
-       - "Lawsuit filed {TODAY_STR}"
-       - "Court verdict controversial {TODAY_STR}"
-       - "Supreme Court hearing {TODAY_STR}"
-       - "判决争议 {TODAY_STR}"
-       - "起诉 最新 {TODAY_STR}"
-       - "庭审 {CURRENT_YEAR_MONTH}"
+       - "Lawsuit filed{SEARCH_SUFFIX}"
+       - "Court verdict{SEARCH_SUFFIX}"
+       - "Supreme Court{SEARCH_SUFFIX}"
+       - "v.{SEARCH_SUFFIX}"
+       - "判决{SEARCH_SUFFIX}"
+       - "起诉{SEARCH_SUFFIX}"
+       - "庭审{SEARCH_SUFFIX}"
        - 搜索包含 "v." 的案件名称（如 "Apple v. Epic", "张三 v. 某公司"）
     3. **日期验证**：找到 {NEWS_ITEMS_PER_SECTION} 个 {TODAY_STR} 或 {YESTERDAY_STR} 有最新进展的争议性法律案件
     4. **严格过滤**：拒绝任何 2024、2023 或更早的案件，只要今日有新进展的案件
+    5. **物理日期屏蔽**：所有搜索查询自动包含 "after:{YESTERDAY_STR}" 参数
     
     **报道要求** (针对问题8：综合性案件报道):
     对每个案件，写出 **1000字以上** 的综合法律分析，必须包含：
