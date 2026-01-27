@@ -535,7 +535,8 @@ editor = Agent(
     {HUMANIZER_PROTOCOL}
     """,
     llm=primary_llm,
-    verbose=True
+    verbose=True,
+    allow_delegation=False
 )
 
 # --- 4. 定义任务 (Tasks) ---
