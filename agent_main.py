@@ -95,30 +95,32 @@ HUMANIZER_PROTOCOL = """
 # 【Chinese Media Editor】 - Multi-source integration + Neutral objective tone
 china_scout = Agent(
     role='News Editor for Chinese Media',
-    goal=f'Select EXACTLY {NEWS_ITEMS_PER_SECTION} newsworthy stories from TODAY published in Chinese-language sources with 3+ source verification and comprehensive 1000+ word summaries for EACH story',
+    goal=f'Select EXACTLY {NEWS_ITEMS_PER_SECTION} controversial newsworthy stories from {CURRENT_YEAR} (NOT 2023 or earlier) published in Chinese-language sources with 3+ source verification and comprehensive 1000+ word summaries for EACH story',
     backstory=f"""
-    You are an experienced news editor with 10 years of editorial experience.
+    You are an experienced news editor with 10 years of editorial experience specializing in controversial and academically significant topics.
     
     **CRITICAL REQUIREMENTS**:
     - You MUST return EXACTLY {NEWS_ITEMS_PER_SECTION} news stories, no more, no less
-    - Each story MUST be from TODAY or the last 24 hours
-    - Each story MUST have a minimum of 1000 words of detailed analysis
-    - Search for news using date-specific keywords: "今天", "最新", "{CURRENT_YEAR_MONTH}"
+    - Each story MUST be from {CURRENT_YEAR} (specifically TODAY or the last 24 hours in {CURRENT_YEAR})
+    - ABSOLUTELY NO stories from 2023, 2024, or 2025 - only {CURRENT_YEAR} news
+    - Each story MUST have EXACTLY 1000 words or MORE of detailed analysis (verify word count)
+    - Search for news using date-specific keywords: "今天", "最新", "{CURRENT_YEAR_MONTH}", "{CURRENT_YEAR}"
     
     Your selection criteria:
-    1. Filter out low-quality content: entertainment gossip and promotional press releases.
-    2. Focus on substantive topics FROM TODAY: employment, education, technology, and public welfare.
-    3. Deep perspective: Look beyond trending topics to find meaningful stories happening NOW.
-    4. Multi-source integration: Each story must integrate at least 3 different perspectives.
-    5. **Comprehensive reporting**: Each news summary must be at least 1000 words with detailed analysis including background, context, multiple viewpoints, and implications.
-    6. **Source documentation**: Include original URLs for every source cited (news articles, official documents, social media posts).
+    1. Filter out low-quality content: entertainment gossip, promotional press releases, simple positive reports, and natural disasters.
+    2. **Focus on controversial topics with high academic value FROM TODAY ({CURRENT_YEAR})**: Stories with significant social debate, suitable for doctoral thesis research, reflecting important societal value conflicts and controversies.
+    3. Deep perspective: Look beyond trending topics to find meaningful, controversial stories with multiple stakeholder perspectives happening NOW in {CURRENT_YEAR}.
+    4. Multi-source integration: Each story must integrate at least 3 different perspectives, especially conflicting viewpoints.
+    5. **Comprehensive reporting**: Each news summary must be EXACTLY 1000 words or more with detailed analysis including background, context, multiple viewpoints, and implications. Use specific data, quotes, and examples.
+    6. **Source documentation with footnotes**: Include original URLs for every source cited (news articles, official documents, social media posts) formatted as numbered footnotes [1], [2], etc.
     
     Style Guidelines:
-    - Maintain objective, neutral journalistic tone
-    - Use factual, descriptive language
-    - Focus on concrete events and developments
-    - Avoid inflammatory or controversial terminology
-    - Always provide clickable source links
+    - Maintain objective, neutral journalistic tone while presenting controversial viewpoints
+    - Use factual, descriptive language with specific data and quotes
+    - Focus on concrete events and developments with measurable impact
+    - Present multiple conflicting perspectives fairly
+    - Always provide clickable source links formatted as numbered footnotes
+    - VERIFY all news is from {CURRENT_YEAR}, not from previous years
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -130,23 +132,26 @@ china_scout = Agent(
 # 【全球情报官】 - 强制英文源 + 多源整合
 global_scout = Agent(
     role='International News Analyst (English Sources)',
-    goal=f'Identify EXACTLY {NEWS_ITEMS_PER_SECTION} Global events from TODAY using ONLY English primary sources, with 3+ sources per story and comprehensive 1000+ word analysis for EACH story',
+    goal=f'Identify EXACTLY {NEWS_ITEMS_PER_SECTION} Global controversial events from {CURRENT_YEAR} (NOT 2023 or earlier) using ONLY English primary sources, with 3+ sources per story and comprehensive 1000+ word analysis for EACH story',
     backstory=f"""
-    You strictly adhere to English-language primary sources and TODAY's breaking news.
+    You strictly adhere to English-language primary sources and {CURRENT_YEAR}'s breaking news with controversial angles.
     
     **CRITICAL REQUIREMENTS**:
     - You MUST return EXACTLY {NEWS_ITEMS_PER_SECTION} news stories, no more, no less
-    - Each story MUST be from TODAY or the last 24 hours
-    - Each story MUST have a minimum of 1000 words of detailed analysis
-    - Search for news using date-specific keywords: "today", "breaking", "latest {CURRENT_YEAR}"
+    - Each story MUST be from {CURRENT_YEAR} (specifically TODAY or the last 24 hours in {CURRENT_YEAR})
+    - ABSOLUTELY NO stories from 2023, 2024, or 2025 - only {CURRENT_YEAR} news
+    - Each story MUST have EXACTLY 1000 words or MORE of detailed analysis (verify word count)
+    - Search for news using date-specific keywords: "today", "breaking", "latest {CURRENT_YEAR}", "{CURRENT_YEAR}"
     
     Your Logic:
-    1. Tech: Focus on fundamental breakthroughs from TODAY (AI, Space), not PR stunts.
-    2. Geopolitics: Focus on strategic implications and factual developments happening NOW.
+    1. Tech: Focus on controversial breakthroughs with ethical debates from {CURRENT_YEAR} (AI regulation conflicts, privacy vs innovation), not PR stunts.
+    2. Geopolitics: Focus on controversial strategic implications and conflicting national interests happening NOW in {CURRENT_YEAR}.
     3. CRITICAL: You MUST retain the original English Headlines to avoid translation loss.
-    4. Multi-Source: Each story must synthesize 3+ reputable sources (Reuters, Bloomberg, NYT, Nature, Foreign Affairs, Stratechery).
-    5. **Comprehensive reporting**: Each news summary must be at least 1000 words with detailed analysis including background, expert opinions, data, and global implications.
-    6. **Source documentation**: Include original URLs for every source cited (news articles, research papers, analysis pieces).
+    4. Multi-Source: Each story must synthesize 3+ reputable sources (Reuters, Bloomberg, NYT, Nature, Foreign Affairs, Stratechery) with emphasis on conflicting viewpoints.
+    5. **Controversial focus**: Prioritize stories with significant academic value, suitable for doctoral research, reflecting major societal debates and value conflicts.
+    6. **Comprehensive reporting**: Each news summary must be EXACTLY 1000 words or more with detailed analysis including background, expert opinions with conflicting views, data, and global implications.
+    7. **Source documentation with footnotes**: Include original URLs for every source cited (news articles, research papers, analysis pieces) formatted as numbered footnotes [1], [2], etc.
+    8. **Date verification**: Confirm all news is from {CURRENT_YEAR}, reject any news from 2023, 2024, or 2025.
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -158,21 +163,24 @@ global_scout = Agent(
 # 【法律情报官】 - 多源整合
 legal_scout = Agent(
     role='Global Legal News Curator',
-    goal=f'Identify EXACTLY {NEWS_ITEMS_PER_SECTION} landmark legal events from TODAY (SCOTUS, EU CJEU, China SPC) with multi-source verification and comprehensive 1000+ word legal analysis for EACH case',
+    goal=f'Identify EXACTLY {NEWS_ITEMS_PER_SECTION} controversial landmark legal events from {CURRENT_YEAR} (NOT 2023 or earlier) (SCOTUS, EU CJEU, China SPC) with multi-source verification and comprehensive 1000+ word legal analysis for EACH case',
     backstory=f"""
     **CRITICAL REQUIREMENTS**:
     - You MUST return EXACTLY {NEWS_ITEMS_PER_SECTION} legal news stories, no more, no less
-    - Each story MUST be from TODAY or the last 24-48 hours
-    - Each story MUST have a minimum of 1000 words of detailed legal analysis
+    - Each story MUST be from {CURRENT_YEAR} (specifically TODAY or the last 24-48 hours in {CURRENT_YEAR})
+    - ABSOLUTELY NO stories from 2023, 2024, or 2025 - only {CURRENT_YEAR} news
+    - Each story MUST have EXACTLY 1000 words or MORE of detailed legal analysis (verify word count)
     - Search for news using date-specific keywords: "today", "latest", "{CURRENT_YEAR}"
     
-    Focus on "Hard Law" developments from TODAY:
-    1. Landmark Rulings: Supreme Court decisions that change precedent.
-    2. Major Legislation: EU AI Act, GDPR, Antitrust laws.
-    3. Corporate Litigation: Significant Big Tech lawsuits.
-    4. Multi-Source: Each legal development must include court documents, expert commentary, and news coverage.
-    5. **Comprehensive reporting**: Each legal news summary must be at least 1000 words with detailed legal analysis including case background, legal reasoning, precedents, and implications.
-    6. **Source documentation**: Include original URLs for court documents, legislation texts, expert analyses, and news articles.
+    Focus on controversial "Hard Law" developments from {CURRENT_YEAR}:
+    1. Landmark Rulings: Supreme Court decisions that change precedent with significant controversy and public debate.
+    2. Major Legislation: EU AI Act, GDPR, Antitrust laws with multi-stakeholder conflicts.
+    3. Corporate Litigation: Significant Big Tech lawsuits with broad societal implications.
+    4. **Controversial focus**: Prioritize cases with significant academic value, suitable for doctoral legal research, reflecting major legal and social value conflicts.
+    5. Multi-Source: Each legal development must include court documents, expert commentary (especially conflicting legal opinions), and news coverage.
+    6. **Comprehensive reporting**: Each legal news summary must be EXACTLY 1000 words or more with detailed legal analysis including case background, legal reasoning, precedents, conflicting interpretations, and implications.
+    7. **Source documentation with footnotes**: Include original URLs for court documents, legislation texts, expert analyses, and news articles formatted as numbered footnotes [1], [2], etc.
+    8. **Date verification**: Confirm all news is from {CURRENT_YEAR}, reject any news from 2023, 2024, or 2025.
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -184,14 +192,15 @@ legal_scout = Agent(
 # 【健康与运动新闻情报官】 - 新增：科学期刊来源
 health_sports_scout = Agent(
     role='Health & Sports Science Reporter',
-    goal=f'Identify EXACTLY {NEWS_ITEMS_PER_SECTION} health and sports science news from THIS WEEK from peer-reviewed sources with comprehensive 1000+ word scientific summaries for EACH story',
+    goal=f'Identify EXACTLY {NEWS_ITEMS_PER_SECTION} controversial health and sports science news from THIS WEEK in {CURRENT_YEAR} (NOT 2023 or earlier) from peer-reviewed sources with comprehensive 1000+ word scientific summaries for EACH story',
     backstory=f"""
-    You are a science journalist specializing in health and sports research.
+    You are a science journalist specializing in controversial health and sports research with significant academic value.
     
     **CRITICAL REQUIREMENTS**:
     - You MUST return EXACTLY {NEWS_ITEMS_PER_SECTION} news stories, no more, no less
-    - Each story MUST be from THIS WEEK (last 7 days) with recent publication dates
-    - Each story MUST have a minimum of 1000 words of detailed scientific analysis
+    - Each story MUST be from THIS WEEK in {CURRENT_YEAR} (last 7 days) with recent publication dates
+    - ABSOLUTELY NO stories from 2023, 2024, or 2025 - only {CURRENT_YEAR} research
+    - Each story MUST have EXACTLY 1000 words or MORE of detailed scientific analysis (verify word count)
     - Search for news using date-specific keywords: "{CURRENT_YEAR}", "latest", "new study", "recent research"
     
     Your priority sources (in order):
@@ -202,12 +211,14 @@ health_sports_scout = Agent(
     5. Sports Medicine journals
     
     Selection Criteria:
-    - Focus on peer-reviewed research published THIS WEEK with practical implications
-    - Prioritize studies with large sample sizes and robust methodology
-    - Include both breaking research and emerging trends
+    - Focus on controversial peer-reviewed research published THIS WEEK in {CURRENT_YEAR} with significant debate and conflicting interpretations
+    - **Controversial focus**: Prioritize studies with contested findings, methodological debates, or conflicting expert opinions - suitable for doctoral research
+    - Prioritize studies with large sample sizes and robust methodology that challenge existing paradigms
+    - Include breaking research with emerging scientific controversies
     - Avoid sensationalized health claims without scientific backing
-    - **Comprehensive reporting**: Each news summary must be at least 1000 words with detailed scientific background, methodology, results, analysis, and practical implications
-    - **Source documentation**: Include original URLs for journal articles, research papers, and scientific publications
+    - **Comprehensive reporting**: Each news summary must be EXACTLY 1000 words or more with detailed scientific background, methodology, results, conflicting interpretations, analysis, and practical implications
+    - **Source documentation with footnotes**: Include original URLs for journal articles, research papers, and scientific publications formatted as numbered footnotes [1], [2], etc.
+    - **Date verification**: Confirm all research is from {CURRENT_YEAR}, reject any research from 2023, 2024, or 2025.
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -219,24 +230,25 @@ health_sports_scout = Agent(
 # 【健康分析师】 - 新增：深度分析报告
 health_analyst = Agent(
     role='Health Science Analyst',
-    goal='Generate comprehensive 5000+ word deep analysis reports for top 3 health/sports stories',
+    goal='Generate comprehensive 5000+ word deep analysis reports with footnoted citations for top 3 controversial health/sports stories',
     backstory=f"""
-    You are an expert science communicator who makes complex research accessible through detailed, comprehensive analysis.
+    You are an expert science communicator who makes complex controversial research accessible through detailed, comprehensive analysis with proper citations.
     
-    For each of the Top 3 health/sports stories, create a comprehensive 5000+ word analysis including:
-    1. **Executive Summary**: Overview of significance with engaging prose
-    2. **Background & Context**: Historical and scientific context with concrete examples
-    3. **Methodology**: Research design and methods explained in accessible yet thorough detail
-    4. **Findings & Results**: Key discoveries with specific data points, statistical analysis ("subjects ran 15% faster" not "performance improved")
-    5. **Scientific Implications**: Impact on scientific understanding and future research directions
-    6. **Practical Applications**: Detailed actionable advice for readers with real-world applications
-    7. **Critical Analysis**: Comprehensive evaluation of strengths, limitations, and caveats
-    8. **Conclusion**: Summary and future directions
+    For each of the Top 3 health/sports stories, create a comprehensive analysis of EXACTLY 5000 words or MORE including:
+    1. **Executive Summary**: Overview of significance with engaging prose (must contribute to 5000+ word count)
+    2. **Background & Context**: Historical and scientific context with concrete examples and controversies (must contribute to 5000+ word count)
+    3. **Methodology**: Research design and methods explained in accessible yet thorough detail (must contribute to 5000+ word count)
+    4. **Findings & Results**: Key discoveries with specific data points, statistical analysis ("subjects ran 15% faster" not "performance improved") (must contribute to 5000+ word count)
+    5. **Scientific Implications**: Impact on scientific understanding, future research directions, and areas of controversy (must contribute to 5000+ word count)
+    6. **Practical Applications**: Detailed actionable advice for readers with real-world applications (must contribute to 5000+ word count)
+    7. **Critical Analysis**: Comprehensive evaluation of strengths, limitations, controversies, and caveats (must contribute to 5000+ word count)
+    8. **Conclusion**: Summary and future directions (must contribute to 5000+ word count)
     
     **Critical Requirements**:
-    - Minimum 5000 words per analysis report
-    - Include ALL original source URLs (research papers, journals, related studies)
-    - Provide comprehensive, detailed analysis - not superficial summaries
+    - EXACTLY 5000 words or MORE per analysis report (verify word count - count actual content words)
+    - Include ALL original source URLs formatted as numbered footnotes [1], [2], etc. (research papers, journals, related studies)
+    - Provide comprehensive, detailed analysis with in-depth examination of controversies - not superficial summaries
+    - Focus on controversial aspects, conflicting interpretations, and academic debates suitable for doctoral research
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -248,30 +260,31 @@ health_analyst = Agent(
 # 【法律学者】 - 新增：法律评论文章分析
 legal_scholar = Agent(
     role='Comparative Law Scholar',
-    goal='Analyze law review articles from top US law schools with 5000+ word comprehensive analyses',
+    goal='Analyze controversial law review articles from top US law schools with 5000+ word comprehensive analyses with footnoted citations',
     backstory=f"""
-    You are a comparative law expert specializing in US-China legal issues.
+    You are a comparative law expert specializing in controversial US-China legal issues with significant academic value.
     
     Your workflow:
-    1. Identify 3-5 key legal issues from current US and China hot topics
+    1. Identify 3-5 key controversial legal issues from current US and China hot topics with significant debate
     2. Search law review articles from top 10 US law schools:
        - Yale Law Journal, Harvard Law Review, Stanford Law Review
        - Columbia Law Review, University of Chicago Law Review, NYU Law Review
        - Penn Law Review, Michigan Law Review, Virginia Law Review, Berkeley Law Review
-    3. Select the 3 most relevant and recent articles
-    4. For each article, generate a comprehensive 5000+ word analysis:
-       - Article Overview & Introduction (700-900 words): Thesis and context with engaging language
-       - Legal Framework & Doctrinal Background (900-1100 words): Legal doctrines with real-world examples
-       - Key Arguments & Analysis (1200-1500 words): Detailed breakdown with specific cases and implications
-       - Comparative Perspective (700-900 words): US-China legal comparison
-       - Connection to Hot Topics (700-900 words): Relate to current events with concrete details
-       - Practical & Policy Implications (600-800 words): Real-world legal consequences
-       - Critical Assessment (200-400 words): Evaluate strengths and weaknesses
+    3. Select the 3 most relevant, recent, and controversial articles with significant scholarly debate
+    4. For each article, generate a comprehensive analysis of EXACTLY 5000 words or MORE:
+       - Article Overview & Introduction (700-900 words): Thesis and context with engaging language highlighting controversies
+       - Legal Framework & Doctrinal Background (900-1100 words): Legal doctrines with real-world examples and areas of conflict
+       - Key Arguments & Analysis (1200-1500 words): Detailed breakdown with specific cases, conflicting interpretations, and implications
+       - Comparative Perspective (700-900 words): US-China legal comparison highlighting differences and controversies
+       - Connection to Hot Topics (700-900 words): Relate to current controversial events with concrete details and conflicts
+       - Practical & Policy Implications (600-800 words): Real-world legal consequences and policy debates
+       - Critical Assessment (200-400 words): Evaluate strengths, weaknesses, and areas of scholarly disagreement
     
     **Critical Requirements**:
-    - Minimum 5000 words per analysis report
-    - Include ALL original source URLs (law review articles, cases, statutes, related sources)
-    - Provide comprehensive, detailed legal analysis - not superficial summaries
+    - EXACTLY 5000 words or MORE per analysis report (verify word count - count actual content words)
+    - Include ALL original source URLs formatted as numbered footnotes [1], [2], etc. (law review articles, cases, statutes, related sources)
+    - Provide comprehensive, detailed legal analysis with in-depth examination of controversies - not superficial summaries
+    - Focus on controversial legal debates suitable for doctoral legal research
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -283,7 +296,7 @@ legal_scholar = Agent(
 # 【深度研究员】 - 架构师（更新：整合5个板块）
 researcher = Agent(
     role='Chief Researcher & Architect',
-    goal=f'Synthesize all inputs into a structured report with ALL {NEWS_ITEMS_PER_SECTION} items per section, VERIFYING ALL URLs ARE PRESENT and ALL CONTENT is preserved in full',
+    goal=f'Synthesize all inputs into a structured report with ALL {NEWS_ITEMS_PER_SECTION} items per section, VERIFYING ALL URLs ARE PRESENT, ALL CONTENT is preserved in full, ALL DATES are from {CURRENT_YEAR}, and ALL WORD COUNTS meet requirements',
     backstory=f"""
     You are responsible for data integrity and structural integrity of the report.
     You must ensure that every single news item passed to the Editor has a VALID, CLICKABLE URL.
@@ -292,17 +305,21 @@ researcher = Agent(
     **CRITICAL REQUIREMENTS**:
     1. All FIVE sections must be present with complete data
     2. **EACH SECTION MUST HAVE ALL {NEWS_ITEMS_PER_SECTION} NEWS ITEMS** (except Legal Scholarship which has {LEGAL_ANALYSIS_ITEMS})
-    3. **DO NOT TRUNCATE OR SUMMARIZE**: Pass through all 1000+ word summaries in full
-    4. **DO NOT TRUNCATE OR SUMMARIZE**: Pass through all 5000+ word analyses in full
-    5. Every news story must have its Source URLs clearly listed and separated
-    6. English headlines are preserved exactly as written for Global news
-    7. Deep analysis reports (5000+ words each) are properly integrated with all citations
-    8. **VERIFICATION STEP**: Check that every single news item has:
+    3. **VERIFY ALL DATES**: Ensure all news items are from {CURRENT_YEAR}, reject any from 2023, 2024, or 2025
+    4. **VERIFY WORD COUNTS**: Ensure each news summary has 1000+ words and each analysis has 5000+ words
+    5. **DO NOT TRUNCATE OR SUMMARIZE**: Pass through all 1000+ word summaries in full
+    6. **DO NOT TRUNCATE OR SUMMARIZE**: Pass through all 5000+ word analyses in full
+    7. Every news story must have its Source URLs clearly listed and separated as numbered footnotes
+    8. English headlines are preserved exactly as written for Global news
+    9. Deep analysis reports (5000+ words each) are properly integrated with all citations as footnotes
+    10. **VERIFICATION STEP**: Check that every single news item has:
        - Title
-       - Full 1000+ word summary (or 5000+ for deep analysis)
-       - At least one Source URL
+       - Publication Date from {CURRENT_YEAR} (not 2023, 2024, or 2025)
+       - Full 1000+ word summary (or 5000+ for deep analysis) - verified word count
+       - At least one Source URL formatted as footnote
        If any of these are missing, flag it clearly to the user
     9. Organize the content strictly into the 5 sections with clear boundaries
+    10. Ensure all controversial aspects and conflicting viewpoints are preserved
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -346,132 +363,154 @@ editor = Agent(
 
 task_china = Task(
     description=f"""
-    1. Search for TODAY's {NEWS_ITEMS_PER_SECTION} most newsworthy stories from Chinese-language media sources published in the last 24 hours.
-       Use search queries like: "China news today", "中国新闻 今天", "微博热搜 今日", "知乎热榜 最新"
+    1. Search for {CURRENT_YEAR}'s {NEWS_ITEMS_PER_SECTION} most controversial and newsworthy stories from Chinese-language media sources published in the last 24 hours in {CURRENT_YEAR}.
+       Use search queries like: "China news today {CURRENT_YEAR}", "中国新闻 今天 {CURRENT_YEAR}", "微博热搜 今日", "知乎热榜 最新 {CURRENT_YEAR}"
+       **CRITICAL**: Verify the publication date is in {CURRENT_YEAR}. Reject any news from 2023, 2024, or 2025.
     2. Sources: Major news outlets and reputable media platforms (今日头条, 新浪新闻, 澎湃新闻, etc.).
-    3. Requirements: Focus on factual reporting, emphasize technology and public welfare topics FROM TODAY.
-    4. Multi-source integration: Each story must integrate at least 3 different source perspectives.
-    5. **CRITICAL - Word count requirement**: Each news summary MUST be at least 1000 words, providing comprehensive detail with context, background, analysis, and implications.
-    6. **Source links required**: Include original document links (URLs) for each source cited.
+    3. **Controversial focus**: Prioritize stories with significant social controversy, public debate, and conflicting stakeholder views. Suitable for doctoral thesis research. Avoid simple positive reports and natural disasters.
+    4. Multi-source integration: Each story must integrate at least 3 different source perspectives with conflicting viewpoints.
+    5. **CRITICAL - Word count requirement**: Each news summary MUST be EXACTLY 1000 words or MORE (verify word count), providing comprehensive detail with context, background, multiple conflicting viewpoints, analysis, and implications.
+    6. **Footnote requirement**: Include original document links (URLs) for each source cited formatted as numbered footnotes [1], [2], [3], etc.
     7. **Output format**: Return exactly {NEWS_ITEMS_PER_SECTION} news items in this format:
        
        News Item 1:
        Title: [Title in Chinese]
-       Summary: [1000+ word comprehensive summary]
-       Sources: [URL1], [URL2], [URL3]
+       Publication Date: [{CURRENT_YEAR}-MM-DD]
+       Summary: [EXACTLY 1000+ word comprehensive summary with footnoted sources]
+       Sources: 
+       [1] URL1
+       [2] URL2
+       [3] URL3
        
        [Repeat for items 2-{NEWS_ITEMS_PER_SECTION}]
     """,
-    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} curated news stories from Chinese media published TODAY (1000+ words each), each with multi-source integration and source links.",
+    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} curated controversial news stories from Chinese media published in {CURRENT_YEAR} (1000+ words each), each with multi-source integration, footnoted citations, and verified {CURRENT_YEAR} publication dates.",
     agent=china_scout
 )
 
 task_global = Task(
     description=f"""
-    1. Search for TODAY's breaking news using these queries:
-       - "Breaking news today Reuters"
+    1. Search for {CURRENT_YEAR}'s controversial breaking news using these queries:
+       - "Breaking news today Reuters {CURRENT_YEAR}"
        - "Tech news today {CURRENT_YEAR}"
-       - "Global news latest 24 hours"
-       - "Technology breakthrough today"
-       - "Geopolitics news today"
-    2. Select {NEWS_ITEMS_PER_SECTION} events with global structural impact published in the last 24 hours.
-    3. RETURN FORMAT: English Headline + Comprehensive Chinese Analysis (1000+ words).
-    4. Multi-Source: Each story must synthesize 3+ sources (Reuters, Bloomberg, NYT, Nature, etc).
-    5. **CRITICAL - Word count requirement**: Each news summary MUST be at least 1000 words, providing comprehensive analysis with context, background, expert opinions, and implications.
-    6. **Source links required**: Include original document links (URLs) for each source cited.
-    7. **Output format**: Return exactly {NEWS_ITEMS_PER_SECTION} news items in this format:
+       - "Global controversial news latest 24 hours {CURRENT_YEAR}"
+       - "Technology controversy today {CURRENT_YEAR}"
+       - "Geopolitics controversy news today {CURRENT_YEAR}"
+       **CRITICAL**: Verify the publication date is in {CURRENT_YEAR}. Reject any news from 2023, 2024, or 2025.
+    2. Select {NEWS_ITEMS_PER_SECTION} controversial events with global structural impact and significant debate published in the last 24 hours in {CURRENT_YEAR}.
+    3. RETURN FORMAT: English Headline + Comprehensive Chinese Analysis (EXACTLY 1000+ words).
+    4. Multi-Source: Each story must synthesize 3+ sources (Reuters, Bloomberg, NYT, Nature, etc) with emphasis on conflicting viewpoints.
+    5. **Controversial focus**: Prioritize stories with significant ethical debates, policy conflicts, or academic controversy. Suitable for doctoral research. Avoid simple positive reports.
+    6. **CRITICAL - Word count requirement**: Each news summary MUST be EXACTLY 1000 words or MORE (verify word count), providing comprehensive analysis with context, background, expert opinions with conflicting views, and implications.
+    7. **Footnote requirement**: Include original document links (URLs) for each source cited formatted as numbered footnotes [1], [2], [3], etc.
+    8. **Output format**: Return exactly {NEWS_ITEMS_PER_SECTION} news items in this format:
        
        News Item 1:
        English Title: [Title in English]
-       Chinese Summary: [1000+ word comprehensive summary in Chinese]
-       Sources: [URL1], [URL2], [URL3]
+       Publication Date: [{CURRENT_YEAR}-MM-DD]
+       Chinese Summary: [EXACTLY 1000+ word comprehensive summary in Chinese with footnoted sources]
+       Sources:
+       [1] URL1
+       [2] URL2
+       [3] URL3
        
        [Repeat for items 2-{NEWS_ITEMS_PER_SECTION}]
     """,
-    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} Global news items published TODAY (1000+ words each) with English Titles and multi-source verification, including source URLs.",
+    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} Global controversial news items published in {CURRENT_YEAR} (1000+ words each) with English Titles, multi-source verification, footnoted citations, and verified {CURRENT_YEAR} publication dates.",
     agent=global_scout
 )
 
 task_legal = Task(
     description=f"""
-    Search for TODAY's most significant court rulings or legislative drafts (US/EU/CN) from the last 24-48 hours.
+    Search for {CURRENT_YEAR}'s most controversial and significant court rulings or legislative drafts (US/EU/CN) from the last 24-48 hours in {CURRENT_YEAR}.
     Use search queries like:
-    - "Supreme Court ruling today {CURRENT_YEAR}"
-    - "Legal news today USA"
-    - "Court decision latest"
-    - "EU legislation today"
-    - "China legal news today"
+    - "Supreme Court controversial ruling today {CURRENT_YEAR}"
+    - "Legal controversy news today USA {CURRENT_YEAR}"
+    - "Court decision controversial latest {CURRENT_YEAR}"
+    - "EU legislation controversy today {CURRENT_YEAR}"
+    - "China legal controversy news today {CURRENT_YEAR}"
+    **CRITICAL**: Verify the publication date is in {CURRENT_YEAR}. Reject any news from 2023, 2024, or 2025.
     
-    Focus on IP, Antitrust, AI Regulation, Privacy Law.
-    Multi-Source: Each legal development must include court documents, expert commentary, and news coverage.
-    **CRITICAL - Word count requirement**: Each legal news summary MUST be at least 1000 words, providing comprehensive legal analysis with case background, legal reasoning, precedents, and implications.
-    **Source links required**: Include original document links (URLs) - court documents, legislation, expert analysis, and news articles.
+    Focus on controversial IP, Antitrust, AI Regulation, Privacy Law cases with significant public debate.
+    **Controversial focus**: Prioritize cases with significant academic value and legal controversy, suitable for doctoral legal research, reflecting major legal and social value conflicts. Avoid simple rulings without controversy.
+    Multi-Source: Each legal development must include court documents, expert commentary (especially conflicting legal opinions), and news coverage.
+    **CRITICAL - Word count requirement**: Each legal news summary MUST be EXACTLY 1000 words or MORE (verify word count), providing comprehensive legal analysis with case background, legal reasoning, precedents, conflicting interpretations, and implications.
+    **Footnote requirement**: Include original document links (URLs) - court documents, legislation, expert analysis, and news articles formatted as numbered footnotes [1], [2], [3], etc.
     **Output format**: Return exactly {NEWS_ITEMS_PER_SECTION} news items in this format:
     
     Legal Update 1:
     Title: [Case/Legislation Title]
-    Summary: [1000+ word comprehensive legal analysis]
-    Sources: [Court document URL], [Expert analysis URL], [News URL]
+    Date: [{CURRENT_YEAR}-MM-DD]
+    Summary: [EXACTLY 1000+ word comprehensive legal analysis with footnoted sources]
+    Sources:
+    [1] Court document URL
+    [2] Expert analysis URL
+    [3] News URL
     
     [Repeat for items 2-{NEWS_ITEMS_PER_SECTION}]
     """,
-    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} Key Legal Updates from TODAY (1000+ words each) with multi-source citations and original document URLs.",
+    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} Key Controversial Legal Updates from {CURRENT_YEAR} (1000+ words each) with multi-source citations, footnoted references, and verified {CURRENT_YEAR} publication dates.",
     agent=legal_scout
 )
 
 # 【新增】健康与运动新闻任务
 task_health_sports = Task(
     description=f"""
-    1. Search for the top {NEWS_ITEMS_PER_SECTION} RECENT health and sports science news published in the last week.
+    1. Search for the top {NEWS_ITEMS_PER_SECTION} RECENT controversial health and sports science news published in the last week in {CURRENT_YEAR}.
        Use search queries like:
-       - "health research {CURRENT_YEAR} latest"
-       - "sports science breakthrough today"
-       - "medical study published this week"
-       - "fitness research new {CURRENT_YEAR}"
+       - "health research controversy {CURRENT_YEAR} latest"
+       - "sports science controversial breakthrough today {CURRENT_YEAR}"
+       - "medical study debate published this week {CURRENT_YEAR}"
+       - "fitness research controversial new {CURRENT_YEAR}"
+       **CRITICAL**: Verify the publication date is in {CURRENT_YEAR}. Reject any research from 2023, 2024, or 2025.
     2. Priority sources: Scientific American, Nature, Science Magazine, The Lancet, JAMA, NEJM, Sports Medicine journals.
     3. Focus on:
-       - New research findings with practical health implications
-       - Sports science breakthroughs
-       - Exercise and fitness studies
-       - Nutrition research
-    4. Include the journal/source name, publication date, and key findings.
-    5. **CRITICAL - Word count requirement**: Each news summary MUST be at least 1000 words, providing comprehensive scientific detail including methodology, results, analysis, and practical implications.
-    6. **Source links required**: Include original document links (URLs) - journal articles, research papers, and scientific publications.
+       - New controversial research findings with significant debate and conflicting interpretations
+       - Sports science breakthroughs with contested results
+       - Exercise and fitness studies with methodological debates
+       - Nutrition research with conflicting expert opinions
+       - Research suitable for doctoral thesis with significant academic value
+    4. Include the journal/source name, publication date (must be {CURRENT_YEAR}), and key controversial findings.
+    5. **CRITICAL - Word count requirement**: Each news summary MUST be EXACTLY 1000 words or MORE (verify word count), providing comprehensive scientific detail including methodology, results, conflicting interpretations, analysis, and practical implications.
+    6. **Footnote requirement**: Include original document links (URLs) - journal articles, research papers, and scientific publications formatted as numbered footnotes [1], [2], [3], etc.
     7. **Output format**: Return exactly {NEWS_ITEMS_PER_SECTION} news items in this format:
     
     Health/Sports Item 1:
     Title: [Research Title]
-    Journal/Source: [Journal Name] - [Publication Date]
-    Summary: [1000+ word comprehensive scientific summary]
-    Sources: [Journal URL], [Related Study URL], [News Coverage URL]
+    Journal/Source: [Journal Name] - [{CURRENT_YEAR}-MM-DD]
+    Summary: [EXACTLY 1000+ word comprehensive scientific summary with footnoted sources]
+    Sources:
+    [1] Journal URL
+    [2] Related Study URL
+    [3] News Coverage URL
     
     [Repeat for items 2-{NEWS_ITEMS_PER_SECTION}]
     """,
-    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} Health/Sports Science news items from THIS WEEK (1000+ words each) with source citations, key findings, and original document URLs.",
+    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} Controversial Health/Sports Science news items from THIS WEEK in {CURRENT_YEAR} (1000+ words each) with source citations, key findings, footnoted references, and verified {CURRENT_YEAR} publication dates.",
     agent=health_sports_scout
 )
 
 # 【新增】健康深度分析任务
 task_health_analysis = Task(
     description=f"""
-    Select the TOP {DEEP_ANALYSIS_ITEMS} most impactful health/sports stories from the collected news.
-    For each of the {DEEP_ANALYSIS_ITEMS} stories, generate a comprehensive in-depth analysis report of at least 5000 words including:
+    Select the TOP {DEEP_ANALYSIS_ITEMS} most impactful and CONTROVERSIAL health/sports stories from the collected news.
+    For each of the {DEEP_ANALYSIS_ITEMS} stories, generate a comprehensive in-depth analysis report of EXACTLY 5000 words or MORE including:
     
-    1. **Executive Summary** (500-700 words): Overview of the research and its significance
-    2. **Background & Context** (800-1000 words): Scientific context with concrete examples, historical perspective
-    3. **Methodology** (600-800 words): Research methodology explained in detail yet accessibly
-    4. **Findings & Results** (1200-1500 words): Key discoveries with specific data points, statistics, and analysis
-    5. **Scientific Implications** (600-800 words): Impact on scientific understanding and future research
-    6. **Practical Applications** (700-900 words): How people can use this information, actionable advice for readers
-    7. **Critical Analysis** (400-600 words): Strengths, limitations, caveats and areas for further research
+    1. **Executive Summary** (500-700 words): Overview of the research and its significance, highlighting controversies
+    2. **Background & Context** (800-1000 words): Scientific context with concrete examples, historical perspective, and areas of debate
+    3. **Methodology** (600-800 words): Research methodology explained in detail yet accessibly, including methodological debates
+    4. **Findings & Results** (1200-1500 words): Key discoveries with specific data points, statistics, analysis, and conflicting interpretations
+    5. **Scientific Implications** (600-800 words): Impact on scientific understanding, future research, and controversial implications
+    6. **Practical Applications** (700-900 words): How people can use this information, actionable advice for readers, areas of uncertainty
+    7. **Critical Analysis** (400-600 words): Strengths, limitations, controversies, caveats and areas for further research
     8. **Conclusion** (200-300 words): Summary of key takeaways and future directions
     
-    **Word count requirement**: Each analysis report must be at least 5000 words total.
-    **Source links required**: Include all original research paper URLs, journal links, and related references.
+    **Word count requirement**: Each analysis report must be EXACTLY 5000 words or MORE total (verify word count - count actual content words).
+    **Footnote requirement**: Include all original research paper URLs, journal links, and related references formatted as numbered footnotes [1], [2], [3], etc.
     
-    IMPORTANT: Follow the Deep Humanizer Protocol. No AI clichés. Use concrete examples and varied sentence structure.
+    IMPORTANT: Follow the Deep Humanizer Protocol. No AI clichés. Use concrete examples and varied sentence structure. Focus on controversial aspects suitable for doctoral research.
     """,
-    expected_output=f"{DEEP_ANALYSIS_ITEMS} comprehensive in-depth analysis reports (5000+ words each) for top health/sports stories with all source URLs.",
+    expected_output=f"{DEEP_ANALYSIS_ITEMS} comprehensive in-depth analysis reports (5000+ words each) for top controversial health/sports stories with all source URLs formatted as footnotes.",
     agent=health_analyst,
     context=[task_health_sports]
 )
@@ -479,30 +518,30 @@ task_health_analysis = Task(
 # 【新增】法律学术分析任务
 task_legal_analysis = Task(
     description=f"""
-    Phase 1: Identify 3-5 key legal issues from current US and China hot topics based on the news collected.
+    Phase 1: Identify 3-5 key CONTROVERSIAL legal issues from current US and China hot topics based on the news collected, focusing on issues with significant debate and conflicting viewpoints.
     
-    Phase 2: Search for relevant law review articles from top 10 US law schools:
+    Phase 2: Search for relevant law review articles from top 10 US law schools that address these controversial issues:
     - Yale Law Journal, Harvard Law Review, Stanford Law Review
     - Columbia Law Review, University of Chicago Law Review, NYU Law Review
     - Penn Law Review, Michigan Law Review, Virginia Law Review, Berkeley Law Review
     
-    Phase 3: Select the {LEGAL_ANALYSIS_ITEMS} most relevant and recent articles.
+    Phase 3: Select the {LEGAL_ANALYSIS_ITEMS} most relevant, recent, and CONTROVERSIAL articles with significant scholarly debate.
     
-    Phase 4: For each article, generate a comprehensive in-depth analysis of at least 5000 words:
-    1. **Article Overview & Introduction** (700-900 words): Summarize thesis with engaging, concrete language and context
-    2. **Legal Framework & Doctrinal Background** (900-1100 words): Explain legal doctrines, precedents, and theoretical foundations using real-world examples
-    3. **Key Arguments & Analysis** (1200-1500 words): Break down arguments in detail with specific cases, statutory analysis, and implications
-    4. **Comparative Perspective** (700-900 words): Compare US and China legal approaches if applicable
-    5. **Connection to Hot Topics** (700-900 words): Relate article to current events with concrete details and real-world examples
-    6. **Practical & Policy Implications** (600-800 words): Real-world legal consequences, policy recommendations
-    7. **Critical Assessment** (200-400 words): Strengths, weaknesses, gaps in the analysis
+    Phase 4: For each article, generate a comprehensive in-depth analysis of EXACTLY 5000 words or MORE:
+    1. **Article Overview & Introduction** (700-900 words): Summarize thesis with engaging, concrete language and context, highlighting controversies
+    2. **Legal Framework & Doctrinal Background** (900-1100 words): Explain legal doctrines, precedents, and theoretical foundations using real-world examples, including areas of legal conflict
+    3. **Key Arguments & Analysis** (1200-1500 words): Break down arguments in detail with specific cases, statutory analysis, conflicting interpretations, and implications
+    4. **Comparative Perspective** (700-900 words): Compare US and China legal approaches if applicable, highlighting differences and controversies
+    5. **Connection to Hot Topics** (700-900 words): Relate article to current controversial events with concrete details and real-world examples
+    6. **Practical & Policy Implications** (600-800 words): Real-world legal consequences, policy recommendations, and areas of debate
+    7. **Critical Assessment** (200-400 words): Strengths, weaknesses, gaps in the analysis, and scholarly disagreements
     
-    **Word count requirement**: Each analysis report must be at least 5000 words total.
-    **Source links required**: Include original law review article URLs, case citations with links, and all referenced sources.
+    **Word count requirement**: Each analysis report must be EXACTLY 5000 words or MORE total (verify word count - count actual content words).
+    **Footnote requirement**: Include original law review article URLs, case citations with links, and all referenced sources formatted as numbered footnotes [1], [2], [3], etc.
     
-    IMPORTANT: Follow the Deep Humanizer Protocol. Technical precision with readable prose. Avoid jargon overload.
+    IMPORTANT: Follow the Deep Humanizer Protocol. Technical precision with readable prose. Avoid jargon overload. Focus on controversial legal debates suitable for doctoral legal research.
     """,
-    expected_output=f"Analysis of {LEGAL_ANALYSIS_ITEMS} law review articles (5000+ words each) connected to current US-China topics with all source URLs.",
+    expected_output=f"Analysis of {LEGAL_ANALYSIS_ITEMS} controversial law review articles (5000+ words each) connected to current US-China topics with all source URLs formatted as footnotes.",
     agent=legal_scholar,
     context=[task_china, task_global, task_legal]
 )
@@ -511,34 +550,37 @@ task_legal_analysis = Task(
 task_research = Task(
     description=f"""
     Compile ALL inputs from the 5 sections ensuring EVERY news item is preserved:
-    1. Chinese-language News (中文新闻) - ALL {NEWS_ITEMS_PER_SECTION} news items with 1000+ word summaries
-    2. Global News (全球新闻) - ALL {NEWS_ITEMS_PER_SECTION} news items with 1000+ word summaries  
-    3. Legal News (法律新闻) - ALL {NEWS_ITEMS_PER_SECTION} news items with 1000+ word summaries
-    4. Health & Sports News + Deep Analysis (健康与运动) - ALL {NEWS_ITEMS_PER_SECTION} news items with 1000+ word summaries PLUS {DEEP_ANALYSIS_ITEMS} deep analysis reports with 5000+ words each
+    1. Chinese-language News (中文新闻) - ALL {NEWS_ITEMS_PER_SECTION} news items with 1000+ word summaries from {CURRENT_YEAR}
+    2. Global News (全球新闻) - ALL {NEWS_ITEMS_PER_SECTION} news items with 1000+ word summaries from {CURRENT_YEAR}
+    3. Legal News (法律新闻) - ALL {NEWS_ITEMS_PER_SECTION} news items with 1000+ word summaries from {CURRENT_YEAR}
+    4. Health & Sports News + Deep Analysis (健康与运动) - ALL {NEWS_ITEMS_PER_SECTION} news items with 1000+ word summaries PLUS {DEEP_ANALYSIS_ITEMS} deep analysis reports with 5000+ words each from {CURRENT_YEAR}
     5. Legal Analysis & Law Review Articles (法律学术分析) - {LEGAL_ANALYSIS_ITEMS} law review analyses with 5000+ words each
     
     **CRITICAL REQUIREMENTS**:
     - Verify that ALL FIVE SECTIONS exist with complete data
+    - **VERIFY ALL DATES**: Every news item must be from {CURRENT_YEAR} - flag any from 2023, 2024, or 2025
+    - **VERIFY WORD COUNTS**: Ensure each summary is 1000+ words and each analysis is 5000+ words
     - **EACH section must have ALL {NEWS_ITEMS_PER_SECTION} news items** (except Legal Analysis which has {LEGAL_ANALYSIS_ITEMS} items)
     - Ensure strict separation of content between sections
-    - Add a "Key Takeaway" one-liner for every major news item
+    - Add a "Key Takeaway" one-liner for every major news item highlighting the controversy
     - Preserve all deep analysis reports in their entirety (5000+ words each)
     - Ensure English headlines are preserved for Global news section
     - **PRESERVE ALL original source URLs** from all sections - news articles, research papers, court documents, law review articles, etc.
-    - Format source URLs clearly and separately so they can be displayed as clickable links in the final HTML
+    - Format source URLs as numbered footnotes [1], [2], [3], etc. so they can be displayed as clickable links in the final HTML
     - **DO NOT SUMMARIZE OR TRUNCATE**: Pass through all content in full length to the editor
+    - **PRESERVE CONTROVERSIAL ASPECTS**: Ensure all conflicting viewpoints and debates are included
     
     **Output Structure**:
     For each section, organize as:
     Section Name:
-      Item 1: Title, Full Summary (1000+ words), Source URLs
-      Item 2: Title, Full Summary (1000+ words), Source URLs
-      Item 3: Title, Full Summary (1000+ words), Source URLs
-      Item 4: Title, Full Summary (1000+ words), Source URLs
-      Item 5: Title, Full Summary (1000+ words), Source URLs
+      Item 1: Title, Publication Date ({CURRENT_YEAR}), Full Summary (1000+ words), Footnoted Source URLs
+      Item 2: Title, Publication Date ({CURRENT_YEAR}), Full Summary (1000+ words), Footnoted Source URLs
+      Item 3: Title, Publication Date ({CURRENT_YEAR}), Full Summary (1000+ words), Footnoted Source URLs
+      Item 4: Title, Publication Date ({CURRENT_YEAR}), Full Summary (1000+ words), Footnoted Source URLs
+      Item 5: Title, Publication Date ({CURRENT_YEAR}), Full Summary (1000+ words), Footnoted Source URLs
       [Plus deep analysis if applicable]
     """,
-    expected_output=f"Master Report with ALL 5 sections, each containing ALL news items ({NEWS_ITEMS_PER_SECTION} per section except Legal Analysis with {LEGAL_ANALYSIS_ITEMS}), complete 1000+ word summaries, 5000+ word analyses, and ALL source URLs preserved.",
+    expected_output=f"Master Report with ALL 5 sections, each containing ALL news items ({NEWS_ITEMS_PER_SECTION} per section except Legal Analysis with {LEGAL_ANALYSIS_ITEMS}), complete 1000+ word summaries, 5000+ word analyses, ALL source URLs preserved as footnotes, and ALL dates verified to be from {CURRENT_YEAR}.",
     agent=researcher,
     context=[task_china, task_global, task_legal, task_health_sports, task_health_analysis, task_legal_analysis]
 )
