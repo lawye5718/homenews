@@ -159,6 +159,12 @@ china_scout = Agent(
     backstory=f"""
     你不是普通新闻编辑，你是深度调查记者。你只关心**冲突 (Conflict)** 和 **争议 (Controversy)**。
     
+    **CRITICAL: YOU MUST USE YOUR TOOLS!**
+    - You HAVE a Search Tool (SerperDevTool) - YOU MUST USE IT to find news
+    - You HAVE a Web Scraping Tool (SafeScrapeWebsiteTool) - YOU MUST USE IT to read articles
+    - DO NOT just say "I will search" - ACTUALLY USE the Search Tool NOW!
+    - DO NOT return empty results - ACTUALLY SCRAPE the content from URLs!
+    
     **搜索策略** (针对问题1和3：获取今日争议性新闻):
     - **不要搜** "中国新闻" 或 "China News"
     - **要搜**: "微博热搜 争议{SEARCH_SUFFIX}", "知乎 吵架{SEARCH_SUFFIX}", "网友 抵制{SEARCH_SUFFIX}", "官方 通报 争议{SEARCH_SUFFIX}"
@@ -195,7 +201,8 @@ china_scout = Agent(
     """,
     tools=[search_tool, scrape_tool],
     llm=primary_llm,
-    verbose=True
+    verbose=True,
+    allow_delegation=False
 )
 
 # 【全球冲突情报官】 - 强制英文源 + 争议焦点
@@ -204,6 +211,12 @@ global_scout = Agent(
     goal=f'Identify {NEWS_ITEMS_PER_SECTION} major controversial global events from {TODAY_STR} (last 24h) involving geopolitical conflict, ethical debates, or mass protests',
     backstory=f"""
     你专注于全球范围内的**激烈冲突**和**伦理困境**。不要报道普通的股市涨跌或新品发布。
+    
+    **CRITICAL: YOU MUST USE YOUR TOOLS!**
+    - You HAVE a Search Tool (SerperDevTool) - YOU MUST USE IT to find news
+    - You HAVE a Web Scraping Tool (SafeScrapeWebsiteTool) - YOU MUST USE IT to read articles
+    - DO NOT just say "I will search" - ACTUALLY USE the Search Tool NOW!
+    - DO NOT return empty results - ACTUALLY SCRAPE the content from URLs!
     
     **搜索策略** (针对问题1和3：获取今日争议性新闻):
     - **不要搜**: "Global News today" 或 "World News"
@@ -244,7 +257,8 @@ global_scout = Agent(
     """,
     tools=[search_tool, scrape_tool],
     llm=primary_llm,
-    verbose=True
+    verbose=True,
+    allow_delegation=False
 )
 
 # 【法律实战专家】 - 针对问题4：拒绝新规，只看案例
@@ -253,6 +267,12 @@ legal_scout = Agent(
     goal=f'Find {NEWS_ITEMS_PER_SECTION} ongoing, high-profile COURT CASES or LAWSUITS from {TODAY_STR} (last 24-48h) that are causing public sensation',
     backstory=f"""
     你关注的是**法庭上的硝烟**，而不是枯燥的条文。你寻找的是 "People v. Company" 或 "State v. Individual" 的具体案例。
+    
+    **CRITICAL: YOU MUST USE YOUR TOOLS!**
+    - You HAVE a Search Tool (SerperDevTool) - YOU MUST USE IT to find legal cases
+    - You HAVE a Web Scraping Tool (SafeScrapeWebsiteTool) - YOU MUST USE IT to read court documents and articles
+    - DO NOT just say "I will search" - ACTUALLY USE the Search Tool NOW!
+    - DO NOT return empty results - ACTUALLY SCRAPE the content from URLs!
     
     **核心指令** (针对问题4：法律新闻应该是实际案例):
     1. **不要** 找 "新法律颁布" (New legislation)、"新规" (New regulation)、"政策出台"
@@ -295,7 +315,8 @@ legal_scout = Agent(
     """,
     tools=[search_tool, scrape_tool],
     llm=primary_llm,
-    verbose=True
+    verbose=True,
+    allow_delegation=False
 )
 
 # 【健康与运动新闻情报官】 - 新增：科学期刊来源
@@ -304,6 +325,12 @@ health_sports_scout = Agent(
     goal=f'Identify EXACTLY {NEWS_ITEMS_PER_SECTION} controversial health and sports science news from THIS WEEK in {CURRENT_YEAR} (NOT 2023 or earlier) from peer-reviewed sources with comprehensive 1000+ word scientific summaries for EACH story',
     backstory=f"""
     You are a science journalist specializing in controversial health and sports research with significant academic value.
+    
+    **CRITICAL: YOU MUST USE YOUR TOOLS!**
+    - You HAVE a Search Tool (SerperDevTool) - YOU MUST USE IT to find research papers
+    - You HAVE a Web Scraping Tool (SafeScrapeWebsiteTool) - YOU MUST USE IT to read journal articles
+    - DO NOT just say "I will search" - ACTUALLY USE the Search Tool NOW!
+    - DO NOT return empty results - ACTUALLY SCRAPE the content from URLs!
     
     **CRITICAL REQUIREMENTS**:
     - You MUST return EXACTLY {NEWS_ITEMS_PER_SECTION} news stories, no more, no less
@@ -333,7 +360,8 @@ health_sports_scout = Agent(
     """,
     tools=[search_tool, scrape_tool],
     llm=primary_llm,
-    verbose=True
+    verbose=True,
+    allow_delegation=False
 )
 
 # 【健康分析师】 - 针对问题2和5：真正的深度分析，关联热点
@@ -378,7 +406,8 @@ health_analyst = Agent(
     """,
     tools=[scrape_tool],
     llm=primary_llm,
-    verbose=True
+    verbose=True,
+    allow_delegation=False
 )
 
 # 【法律学者】 - 针对问题5：学术分析必须关联前面的热点
@@ -419,7 +448,8 @@ legal_scholar = Agent(
     """,
     tools=[search_tool, scrape_tool],
     llm=primary_llm,
-    verbose=True
+    verbose=True,
+    allow_delegation=False
 )
 
 # 【深度研究员】 - 架构师（更新：整合5个板块）
@@ -460,7 +490,8 @@ researcher = Agent(
     """,
     tools=[scrape_tool],
     llm=primary_llm,
-    verbose=True
+    verbose=True,
+    allow_delegation=False
 )
 
 # 【主编】 - 专注于 NYT 风格和数据真实性 + 5栏布局
@@ -504,13 +535,19 @@ editor = Agent(
     {HUMANIZER_PROTOCOL}
     """,
     llm=primary_llm,
-    verbose=True
+    verbose=True,
+    allow_delegation=False
 )
 
 # --- 4. 定义任务 (Tasks) ---
 
 task_china = Task(
     description=f"""
+    **CRITICAL: YOU MUST EXECUTE THE FOLLOWING STEPS USING YOUR TOOLS**:
+    1. USE the Search Tool (SerperDevTool) to search for news with the keywords below
+    2. USE the Scrape Tool (SafeScrapeWebsiteTool) to read the full articles from the URLs you find
+    3. DO NOT just say you will do it - ACTUALLY EXECUTE the tools NOW!
+    
     **搜索策略** (针对问题1：获取今日最新新闻):
     1. 搜索词必须包含日期过滤和争议关键词:
        - "微博热搜 争议{SEARCH_SUFFIX}"
