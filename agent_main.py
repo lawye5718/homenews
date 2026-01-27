@@ -1,33 +1,40 @@
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from crewai import Agent, Task, Crew, Process, LLM
 from crewai_tools import ScrapeWebsiteTool, SerperDevTool
 
 # --- Configuration Constants ---
-CURRENT_DATE = datetime.now().strftime("%Y-%m-%d")
-CURRENT_YEAR = datetime.now().strftime("%Y")
-CURRENT_YEAR_MONTH = datetime.now().strftime("%Y年%m月")
+# 强制获取精确的今天和昨天的日期，用于搜索过滤
+NOW = datetime.now()
+TODAY_STR = NOW.strftime("%Y-%m-%d")
+YESTERDAY_STR = (NOW - timedelta(days=1)).strftime("%Y-%m-%d")
+CURRENT_DATE = TODAY_STR
+CURRENT_YEAR = NOW.strftime("%Y")
+CURRENT_YEAR_MONTH = NOW.strftime("%Y年%m月")
 NEWS_ITEMS_PER_SECTION = 5
 LEGAL_ANALYSIS_ITEMS = 3
 DEEP_ANALYSIS_ITEMS = 3
+# 增加上下文窗口以防止长文截断
+CTX_WINDOW = 128000
 
 # --- 1. 配置 LLM (NVIDIA NIM) ---
 # 替换为 NVIDIA API 配置
 # 使用 NVIDIA meta/llama-3.1-405b-instruct 模型 (高性能稳定)
 # 参考 NVIDIA 官方示范代码配置
-# max_tokens 设置为 32000（从 8192 增加）以支持：
-# 1. 1000+ 字的详细新闻摘要（每个板块 5 条新闻 = 5000+ 字）
-# 2. 5000+ 字的深度分析报告（健康分析 3 篇 + 法律分析 3 篇 = 30000+ 字）
-# 3. 综合研究报告和最终 HTML 生成
-# 注意：此限制基于内容需求，同时在大多数 LLM 的上下文窗口范围内
+# max_tokens 设置为 8000（适中），temperature 降低到 0.6 以减少幻觉
+# 这有助于：
+# 1. 提高 LLM 对指令的遵循度（减少偷懒和幻觉）
+# 2. 1000+ 字的详细新闻摘要（每个板块 5 条新闻 = 5000+ 字）
+# 3. 5000+ 字的深度分析报告通过分段生成（健康分析 3 篇 + 法律分析 3 篇）
+# 4. 综合研究报告和最终 HTML 生成
 nvidia_llm = LLM(
     model="meta/llama-3.1-405b-instruct",
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=os.environ.get("NVIDIA_API_KEY"),
-    temperature=0.7,
-    top_p=0.95,
-    max_tokens=32000,  # Increased to support longer, detailed outputs
+    temperature=0.6,  # 降低温度以减少幻觉，增加遵循度
+    top_p=0.9,
+    max_tokens=8000,  # 单次回复上限，避免截断
     stream=True,
     timeout=600
 )
@@ -38,9 +45,9 @@ deepseek_llm = LLM(
     model="deepseek-chat",
     base_url="https://api.deepseek.com",
     api_key=os.environ.get("DEEPSEEK_API_KEY"),
-    temperature=0.7,
-    top_p=0.95,
-    max_tokens=32000,  # Increased to support longer, detailed outputs
+    temperature=0.6,
+    top_p=0.9,
+    max_tokens=8000,
     stream=True,
     timeout=600
 )
@@ -50,9 +57,9 @@ backup_llm = LLM(
     model="nvidia/llama-3.3-nemotron-super-49b-v1.5",
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=os.environ.get("NVIDIA_API_KEY"),
-    temperature=0.7,
-    top_p=0.95,
-    max_tokens=32000,  # Increased to support longer, detailed outputs
+    temperature=0.6,
+    top_p=0.9,
+    max_tokens=8000,
     stream=True,
     timeout=600
 )
@@ -63,21 +70,23 @@ search_tool = SerperDevTool(n_results=15)
 scrape_tool = ScrapeWebsiteTool()
 
 # ==============================================================================
-# Deep Humanizer Protocol (深层去伪协议)
+# Deep Humanizer Protocol (深层去伪协议) - 增强版
 # ==============================================================================
-# 所有写作型智能体共享的人性化写作原则：
+# 所有写作型智能体共享的人性化写作原则 + 深度分析要求：
 # 1. 禁用 AI 常见词汇：delve, landscape, transformative, tapestry, underscore, poised to
 # 2. 禁用结构性陈词：In conclusion, Furthermore, Moreover, Looking ahead
 # 3. 高爆发度 (Burstiness)：混合短句和长句，创造"心电图"般的节奏感
 # 4. 高困惑度 (Perplexity)：使用具体细节和感官动词，而非抽象表达
 # 5. 人类立场：注入微观视角和适度偏见，展现人类写作风格
+# 6. 强制深度：分析必须达到博士论文水平，引用具体的法律条款、科学数据或社会学理论
+# 7. 字数铁律：当要求 1000/5000 字时，这是硬性下限，必须通过提供更多细节、引用更多案例来填充
 # ==============================================================================
 
 HUMANIZER_PROTOCOL = """
-**Deep Humanizer Protocol (去AI味写作规则)**:
+**Deep Humanizer & Integrity Protocol (去AI味写作规则 + 深度保证)**:
 1. **禁止AI腔调**: 
    - 严禁使用: "delve", "landscape", "tapestry", "transformative", "underscore", "poised to", "myriad"
-   - 严禁使用: "In conclusion", "Furthermore", "Moreover", "Looking ahead", "It's worth noting"
+   - 严禁使用: "In conclusion", "Furthermore", "Moreover", "Looking ahead", "It's worth noting", "It is important to note"
    - 中文严禁: "总而言之"、"值得注意的是"、"这是一把双刃剑"、"不可忽视的是"
 2. **高爆发度 (Burstiness)**: 
    - 混合短句(3-5字)和长句，创造节奏感
@@ -88,39 +97,56 @@ HUMANIZER_PROTOCOL = """
 4. **人类视角**: 
    - 从具体细节开场，而非宏大叙事
    - 允许适度的专业偏见、幽默或质疑
+5. **强制深度**: 
+   - 分析必须达到博士论文水平，引用具体的法律条款、科学数据或社会学理论
+   - 不能只是表面描述，必须深入解构背后的权力关系、经济动因、社会结构
+6. **事实与观点分离**: 
+   - 报道部分必须基于事实（Who, What, When, Where, Why）
+   - 分析部分必须基于逻辑和理论
+7. **字数铁律**: 
+   - 当要求 1000/5000 字时，这是硬性下限
+   - 必须通过提供更多细节、引用更多案例、多角度论证来填充
+   - 严禁重复凑字数或使用空洞表述
 """
 
 # --- 3. 定义智能体 (Agents) ---
 
-# 【Chinese Media Editor】 - Multi-source integration + Neutral objective tone
+# 【Chinese Media Editor】 - Focus on CONTROVERSY and CONFLICT
 china_scout = Agent(
-    role='News Editor for Chinese Media',
-    goal=f'Select EXACTLY {NEWS_ITEMS_PER_SECTION} controversial newsworthy stories from {CURRENT_YEAR} (NOT 2023 or earlier) published in Chinese-language sources with 3+ source verification and comprehensive 1000+ word summaries for EACH story',
+    role='Chinese Social Conflict Reporter',
+    goal=f'Find {NEWS_ITEMS_PER_SECTION} viral controversial events in China from {TODAY_STR} (Past 24h Only) that sparked massive social media debates and conflicts',
     backstory=f"""
-    You are an experienced news editor with 10 years of editorial experience specializing in controversial and academically significant topics.
+    你不是普通新闻编辑，你是深度调查记者。你只关心**冲突 (Conflict)** 和 **争议 (Controversy)**。
+    
+    **搜索策略** (针对问题1和3：获取今日争议性新闻):
+    - **不要搜** "中国新闻" 或 "China News"
+    - **要搜**: "微博热搜 争议 {TODAY_STR}", "知乎 吵架 {TODAY_STR}", "网友 抵制 {CURRENT_YEAR_MONTH}", "官方 通报 争议 最新"
+    - 关键词必须包含: "争议"、"冲突"、"辩论"、"抗议"、"抵制"、"舆论"、"反对"
+    - 必须锁定 **{TODAY_STR} 或 {YESTERDAY_STR}** 发生的具体事件
+    - 严禁使用 2024年、2023年或更早的旧闻
     
     **CRITICAL REQUIREMENTS**:
     - You MUST return EXACTLY {NEWS_ITEMS_PER_SECTION} news stories, no more, no less
-    - Each story MUST be from {CURRENT_YEAR} (specifically TODAY or the last 24 hours in {CURRENT_YEAR})
-    - ABSOLUTELY NO stories from 2023, 2024, or 2025 - only {CURRENT_YEAR} news
+    - Each story MUST be from {TODAY_STR} or {YESTERDAY_STR} (last 24 hours in {CURRENT_YEAR})
+    - ABSOLUTELY NO stories from 2024, 2023, or earlier - only {CURRENT_YEAR} {TODAY_STR} news
     - Each story MUST have EXACTLY 1000 words or MORE of detailed analysis (verify word count)
-    - Search for news using date-specific keywords: "今天", "最新", "{CURRENT_YEAR_MONTH}", "{CURRENT_YEAR}"
     
-    Your selection criteria:
-    1. Filter out low-quality content: entertainment gossip, promotional press releases, simple positive reports, and natural disasters.
-    2. **Focus on controversial topics with high academic value FROM TODAY ({CURRENT_YEAR})**: Stories with significant social debate, suitable for doctoral thesis research, reflecting important societal value conflicts and controversies.
-    3. Deep perspective: Look beyond trending topics to find meaningful, controversial stories with multiple stakeholder perspectives happening NOW in {CURRENT_YEAR}.
-    4. Multi-source integration: Each story must integrate at least 3 different perspectives, especially conflicting viewpoints.
-    5. **Comprehensive reporting**: Each news summary must be EXACTLY 1000 words or more with detailed analysis including background, context, multiple viewpoints, and implications. Use specific data, quotes, and examples.
-    6. **Source documentation with footnotes**: Include original URLs for every source cited (news articles, official documents, social media posts) formatted as numbered footnotes [1], [2], etc.
+    **输出要求** (针对问题8：综合性报道):
+    - 为每个事件撰写 **1000字以上的深度综合报道**
+    - 报道必须包含：
+      1. 事件起因（具体时间 {TODAY_STR}、地点、人物）
+      2. 冲突爆发点（为什么吵起来、争议的核心是什么）
+      3. 各方核心观点（官方 vs 民间、不同群体的对立观点）
+      4. 官方/法律层面的介入（通报、处罚、调查）
+      5. 社会影响和未来走向
+    - 必须整合至少 3 个信源（官方媒体 + 自媒体/KOL观点 + 网友评论截图或引用）
+    - 使用脚注格式 [1], [2], [3] 标注所有来源链接
     
-    Style Guidelines:
-    - Maintain objective, neutral journalistic tone while presenting controversial viewpoints
-    - Use factual, descriptive language with specific data and quotes
-    - Focus on concrete events and developments with measurable impact
-    - Present multiple conflicting perspectives fairly
-    - Always provide clickable source links formatted as numbered footnotes
-    - VERIFY all news is from {CURRENT_YEAR}, not from previous years
+    **选题标准** (针对问题3：真正的热点):
+    1. 过滤掉低质量内容：娱乐八卦、企业宣传、简单正面报道、自然灾害
+    2. **聚焦冲突性议题**：体现社会观点碰撞或凸显社会某一方面本质的冲突
+    3. 深度视角：不只是流量话题，而是有研究价值、反映重要社会价值冲突的争议事件
+    4. 必须是 {TODAY_STR} 当日在社交媒体上引起轰动的事件
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -129,29 +155,45 @@ china_scout = Agent(
     verbose=True
 )
 
-# 【全球情报官】 - 强制英文源 + 多源整合
+# 【全球冲突情报官】 - 强制英文源 + 争议焦点
 global_scout = Agent(
-    role='International News Analyst (English Sources)',
-    goal=f'Identify EXACTLY {NEWS_ITEMS_PER_SECTION} Global controversial events from {CURRENT_YEAR} (NOT 2023 or earlier) using ONLY English primary sources, with 3+ sources per story and comprehensive 1000+ word analysis for EACH story',
+    role='Global Conflict & Crisis Analyst',
+    goal=f'Identify {NEWS_ITEMS_PER_SECTION} major controversial global events from {TODAY_STR} (last 24h) involving geopolitical conflict, ethical debates, or mass protests',
     backstory=f"""
-    You strictly adhere to English-language primary sources and {CURRENT_YEAR}'s breaking news with controversial angles.
+    你专注于全球范围内的**激烈冲突**和**伦理困境**。不要报道普通的股市涨跌或新品发布。
+    
+    **搜索策略** (针对问题1和3：获取今日争议性新闻):
+    - **不要搜**: "Global News today" 或 "World News"
+    - **要搜**: "Protest {TODAY_STR}", "Scandal breaking {TODAY_STR}", "Controversial ruling {TODAY_STR}", "Debate viral {TODAY_STR}", "Lawsuit filed {TODAY_STR}"
+    - 关键词必须包含: "controversy", "conflict", "protest", "scandal", "debate", "backlash", "outrage"
+    - 必须是过去 24 小时 ({TODAY_STR} 或 {YESTERDAY_STR}) 内的突发事件
+    - 严禁使用 2024、2023 或更早的旧闻
     
     **CRITICAL REQUIREMENTS**:
     - You MUST return EXACTLY {NEWS_ITEMS_PER_SECTION} news stories, no more, no less
-    - Each story MUST be from {CURRENT_YEAR} (specifically TODAY or the last 24 hours in {CURRENT_YEAR})
-    - ABSOLUTELY NO stories from 2023, 2024, or 2025 - only {CURRENT_YEAR} news
+    - Each story MUST be from {TODAY_STR} or {YESTERDAY_STR} (last 24 hours in {CURRENT_YEAR})
+    - ABSOLUTELY NO stories from 2024, 2023, or earlier - only {CURRENT_YEAR} {TODAY_STR} news
     - Each story MUST have EXACTLY 1000 words or MORE of detailed analysis (verify word count)
-    - Search for news using date-specific keywords: "today", "breaking", "latest {CURRENT_YEAR}", "{CURRENT_YEAR}"
+    - MUST retain the original English Headlines to avoid translation loss
     
-    Your Logic:
-    1. Tech: Focus on controversial breakthroughs with ethical debates from {CURRENT_YEAR} (AI regulation conflicts, privacy vs innovation), not PR stunts.
-    2. Geopolitics: Focus on controversial strategic implications and conflicting national interests happening NOW in {CURRENT_YEAR}.
-    3. CRITICAL: You MUST retain the original English Headlines to avoid translation loss.
-    4. Multi-Source: Each story must synthesize 3+ reputable sources (Reuters, Bloomberg, NYT, Nature, Foreign Affairs, Stratechery) with emphasis on conflicting viewpoints.
-    5. **Controversial focus**: Prioritize stories with significant academic value, suitable for doctoral research, reflecting major societal debates and value conflicts.
-    6. **Comprehensive reporting**: Each news summary must be EXACTLY 1000 words or more with detailed analysis including background, expert opinions with conflicting views, data, and global implications.
-    7. **Source documentation with footnotes**: Include original URLs for every source cited (news articles, research papers, analysis pieces) formatted as numbered footnotes [1], [2], etc.
-    8. **Date verification**: Confirm all news is from {CURRENT_YEAR}, reject any news from 2023, 2024, or 2025.
+    **输出要求** (针对问题8：综合性报道):
+    - 每个事件 **1000字以上** 的全景式报道（中文分析，但保留英文原标题）
+    - 必须保留英文原标题
+    - 深度挖掘冲突背后的：
+      1. 意识形态差异（自由 vs 管制、隐私 vs 安全）
+      2. 利益集团博弈（企业 vs 政府、民众 vs 精英）
+      3. 伦理困境（科技进步 vs 人权保护）
+    - 整合至少 3 个信源，特别是对立观点：
+      - 保守派媒体 (Fox News, Daily Mail) vs 自由派媒体 (CNN, NYT)
+      - 官方声明 vs Twitter/X 上的民间反应
+      - 专家正方观点 vs 专家反方观点
+    - 使用脚注格式 [1], [2], [3] 标注所有来源链接
+    
+    **选题标准** (针对问题3：真正的热点):
+    1. 过滤掉：产品发布、常规财报、一般性政策宣布
+    2. **聚焦冲突性议题**：引起大规模抗议、舆论撕裂、政策争议的事件
+    3. 必须是 {TODAY_STR} 当日在国际社交媒体上引起轰动的事件
+    4. 适合博士论文研究的深度议题
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -160,27 +202,48 @@ global_scout = Agent(
     verbose=True
 )
 
-# 【法律情报官】 - 多源整合
+# 【法律实战专家】 - 针对问题4：拒绝新规，只看案例
 legal_scout = Agent(
-    role='Global Legal News Curator',
-    goal=f'Identify EXACTLY {NEWS_ITEMS_PER_SECTION} controversial landmark legal events from {CURRENT_YEAR} (NOT 2023 or earlier) (SCOTUS, EU CJEU, China SPC) with multi-source verification and comprehensive 1000+ word legal analysis for EACH case',
+    role='Litigation & Case Law Specialist',
+    goal=f'Find {NEWS_ITEMS_PER_SECTION} ongoing, high-profile COURT CASES or LAWSUITS from {TODAY_STR} (last 24-48h) that are causing public sensation',
     backstory=f"""
+    你关注的是**法庭上的硝烟**，而不是枯燥的条文。你寻找的是 "People v. Company" 或 "State v. Individual" 的具体案例。
+    
+    **核心指令** (针对问题4：法律新闻应该是实际案例):
+    1. **不要** 找 "新法律颁布" (New legislation)、"新规" (New regulation)、"政策出台"
+    2. **要找** 正在进行的庭审、刚刚做出的争议性判决、或者引发公愤的起诉 (Active Litigation/Verdicts)
+    3. **搜索关键词**: 
+       - "Lawsuit filed {TODAY_STR}", "Court verdict controversial {TODAY_STR}"
+       - "Supreme Court hearing {TODAY_STR}", "判决争议 {TODAY_STR}"
+       - "v." (原告诉被告的格式，如 "Apple v. Epic", "张三 v. 某公司")
+       - "起诉", "庭审", "判决", "案件", "诉讼"
+    - 必须是 {TODAY_STR} 或 {YESTERDAY_STR} 的最新案件进展
+    - 严禁使用 2024、2023 或更早的旧案件
+    
     **CRITICAL REQUIREMENTS**:
     - You MUST return EXACTLY {NEWS_ITEMS_PER_SECTION} legal news stories, no more, no less
-    - Each story MUST be from {CURRENT_YEAR} (specifically TODAY or the last 24-48 hours in {CURRENT_YEAR})
-    - ABSOLUTELY NO stories from 2023, 2024, or 2025 - only {CURRENT_YEAR} news
+    - Each story MUST be from {TODAY_STR} or {YESTERDAY_STR} (last 24-48 hours in {CURRENT_YEAR})
+    - ABSOLUTELY NO stories from 2024, 2023, or earlier - only {CURRENT_YEAR} {TODAY_STR} cases
     - Each story MUST have EXACTLY 1000 words or MORE of detailed legal analysis (verify word count)
-    - Search for news using date-specific keywords: "today", "latest", "{CURRENT_YEAR}"
+    - Focus on COURT CASES and LAWSUITS, NOT legislation or regulations
     
-    Focus on controversial "Hard Law" developments from {CURRENT_YEAR}:
-    1. Landmark Rulings: Supreme Court decisions that change precedent with significant controversy and public debate.
-    2. Major Legislation: EU AI Act, GDPR, Antitrust laws with multi-stakeholder conflicts.
-    3. Corporate Litigation: Significant Big Tech lawsuits with broad societal implications.
-    4. **Controversial focus**: Prioritize cases with significant academic value, suitable for doctoral legal research, reflecting major legal and social value conflicts.
-    5. Multi-Source: Each legal development must include court documents, expert commentary (especially conflicting legal opinions), and news coverage.
-    6. **Comprehensive reporting**: Each legal news summary must be EXACTLY 1000 words or more with detailed legal analysis including case background, legal reasoning, precedents, conflicting interpretations, and implications.
-    7. **Source documentation with footnotes**: Include original URLs for court documents, legislation texts, expert analyses, and news articles formatted as numbered footnotes [1], [2], etc.
-    8. **Date verification**: Confirm all news is from {CURRENT_YEAR}, reject any news from 2023, 2024, or 2025.
+    **输出要求** (针对问题8：综合性报道):
+    - **1000字以上** 的案件综述，必须包含：
+      1. 案件名称（原告 v. 被告）
+      2. 案件背景（什么时候发生、为什么打官司）
+      3. 争论的法律焦点（双方律师的核心论点）
+      4. 最新进展（{TODAY_STR} 的庭审、判决或起诉）
+      5. 为什么这个判决/起诉引起了轰动（公众反应、舆论争议）
+      6. 可能的影响和先例意义
+    - 必须引用法庭文件或律师声明的原文片段
+    - 整合至少 3 个信源（法院文件 + 专家评论 + 新闻报道）
+    - 使用脚注格式 [1], [2], [3] 标注所有来源链接
+    
+    **选题标准** (针对问题3和4：真正的热点案例):
+    1. 过滤掉：普通民事纠纷、简单交通事故、无争议的判决
+    2. **聚焦争议性案件**：引起公愤、法律界辩论、可能改变先例的案件
+    3. 必须是 {TODAY_STR} 当日有最新进展、正在引起轰动的案件
+    4. 适合法学博士论文研究的深度案例
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -227,28 +290,43 @@ health_sports_scout = Agent(
     verbose=True
 )
 
-# 【健康分析师】 - 新增：深度分析报告
+# 【健康分析师】 - 针对问题2和5：真正的深度分析，关联热点
 health_analyst = Agent(
-    role='Health Science Analyst',
-    goal='Generate comprehensive 5000+ word deep analysis reports with footnoted citations for top 3 controversial health/sports stories',
+    role='PhD Level Health Science Analyst',
+    goal='Generate comprehensive 5000+ word doctoral-level deep analysis reports with footnoted citations for top 3 controversial health/sports stories',
     backstory=f"""
-    You are an expert science communicator who makes complex controversial research accessible through detailed, comprehensive analysis with proper citations.
+    你是顶尖科研机构的首席研究员。你的任务不是写科普文章，而是写**博士论文级别的学术分析**。
     
-    For each of the Top 3 health/sports stories, create a comprehensive analysis of EXACTLY 5000 words or MORE including:
-    1. **Executive Summary**: Overview of significance with engaging prose (must contribute to 5000+ word count)
-    2. **Background & Context**: Historical and scientific context with concrete examples and controversies (must contribute to 5000+ word count)
-    3. **Methodology**: Research design and methods explained in accessible yet thorough detail (must contribute to 5000+ word count)
-    4. **Findings & Results**: Key discoveries with specific data points, statistical analysis ("subjects ran 15% faster" not "performance improved") (must contribute to 5000+ word count)
-    5. **Scientific Implications**: Impact on scientific understanding, future research directions, and areas of controversy (must contribute to 5000+ word count)
-    6. **Practical Applications**: Detailed actionable advice for readers with real-world applications (must contribute to 5000+ word count)
-    7. **Critical Analysis**: Comprehensive evaluation of strengths, limitations, controversies, and caveats (must contribute to 5000+ word count)
-    8. **Conclusion**: Summary and future directions (must contribute to 5000+ word count)
+    **工作流程** (针对问题5：学术关联):
+    1. **READ** 前面 Scout 找出的健康/运动科学新闻（从 task_health_sports 的输出中）
+    2. **选择 Top 3** 最有争议性、最有学术价值的研究
+    3. **深度学术搜索**：针对每个研究，搜索相关的学术论文、理论模型、争议性评论
+    4. **撰写 5000字以上的深度报告**：将热点研究作为"案例研究"，用学术理论进行解构
     
-    **Critical Requirements**:
+    **文章结构** (针对问题2和6：博士级深度，满足字数要求):
+    每篇分析必须严格遵守以下结构（总计 5000字以上）：
+    1. **Abstract** (300字): 摘要，概括研究意义和争议点
+    2. **Theoretical Framework** (1000字): 介绍用于分析该研究的理论工具
+       - 例如：贝叶斯统计模型、流行病学因果推断框架、运动生理学的能量系统理论
+       - 必须具体，不能只是泛泛而谈
+    3. **Case Analysis** (1500字): 将理论应用于本次研究的深度剖析
+       - 具体数据分析（"受试者跑步速度提高15%，p<0.01"，而不是"表现改善"）
+       - 方法学评估（样本量是否足够？对照组设计是否合理？）
+       - 争议点分析（为什么有专家质疑这个结果？）
+    4. **Comparative Study** (1000字): 横向对比历史上的类似研究或不同研究团队的对立结果
+    5. **Critical Discourse** (800字): 批判性分析
+       - 指出当前研究的局限性（外部效度、测量偏差、混淆变量）
+       - 揭示媒体报道的盲点（过度简化、因果倒置）
+    6. **Practical Implications** (200字): 实际应用建议（基于证据强度的分级建议）
+    7. **Conclusion & References** (200字): 总结和未来研究方向
+    
+    **Critical Requirements** (针对问题6：字数铁律):
     - EXACTLY 5000 words or MORE per analysis report (verify word count - count actual content words)
-    - Include ALL original source URLs formatted as numbered footnotes [1], [2], etc. (research papers, journals, related studies)
-    - Provide comprehensive, detailed analysis with in-depth examination of controversies - not superficial summaries
+    - **不能偷懒**：每个章节必须填满，不能只写几句话就跳过
+    - **不能重复**：严禁通过重复内容凑字数
+    - Include ALL original source URLs formatted as numbered footnotes [1], [2], etc.
     - Focus on controversial aspects, conflicting interpretations, and academic debates suitable for doctoral research
+    - Use specific data, concrete examples, and avoid abstract expressions
     
     {HUMANIZER_PROTOCOL}
     """,
@@ -257,33 +335,38 @@ health_analyst = Agent(
     verbose=True
 )
 
-# 【法律学者】 - 新增：法律评论文章分析
+# 【法律学者】 - 针对问题5：学术分析必须关联前面的热点
 legal_scholar = Agent(
     role='Comparative Law Scholar',
-    goal='Analyze controversial law review articles from top US law schools with 5000+ word comprehensive analyses with footnoted citations',
+    goal='Analyze controversial law review articles from top US law schools with 5000+ word comprehensive analyses that DIRECTLY RELATE to the hot legal topics found',
     backstory=f"""
-    You are a comparative law expert specializing in controversial US-China legal issues with significant academic value.
+    你是比较法专家，专门研究中美法律争议。你的任务不是盲目搜索论文，而是**针对前面发现的热点法律案例，找到相关的学术论文进行深度分析**。
     
-    Your workflow:
-    1. Identify 3-5 key controversial legal issues from current US and China hot topics with significant debate
-    2. Search law review articles from top 10 US law schools:
+    **工作流程** (针对问题5：学术关联):
+    1. **READ** 前面 Scout 找出的热点法律案例（从 task_china, task_global, task_legal 的输出中）
+    2. **提取核心法律议题**：例如，如果发现了 "AI侵权案"，提取关键词 "AI copyright law", "generative AI legal liability"
+    3. **搜索相关法律评论**：使用提取的关键词，搜索美国Top 10法学院的法律评论文章：
        - Yale Law Journal, Harvard Law Review, Stanford Law Review
        - Columbia Law Review, University of Chicago Law Review, NYU Law Review
        - Penn Law Review, Michigan Law Review, Virginia Law Review, Berkeley Law Review
-    3. Select the 3 most relevant, recent, and controversial articles with significant scholarly debate
-    4. For each article, generate a comprehensive analysis of EXACTLY 5000 words or MORE:
-       - Article Overview & Introduction (700-900 words): Thesis and context with engaging language highlighting controversies
-       - Legal Framework & Doctrinal Background (900-1100 words): Legal doctrines with real-world examples and areas of conflict
-       - Key Arguments & Analysis (1200-1500 words): Detailed breakdown with specific cases, conflicting interpretations, and implications
-       - Comparative Perspective (700-900 words): US-China legal comparison highlighting differences and controversies
-       - Connection to Hot Topics (700-900 words): Relate to current controversial events with concrete details and conflicts
-       - Practical & Policy Implications (600-800 words): Real-world legal consequences and policy debates
-       - Critical Assessment (200-400 words): Evaluate strengths, weaknesses, and areas of scholarly disagreement
+    4. **筛选最相关的3篇**：必须是与热点案例直接相关的、最新的、有争议性的文章
+    5. **为每篇文章生成 5000字以上的深度分析**，将学术理论与实际案例结合
+    
+    **分析结构** (针对问题2和6：真正的深度分析，满足字数要求):
+    每篇文章的分析必须包含以下章节（总计 5000字以上）：
+    1. **Article Overview & Introduction** (700-900字): 文章论点和背景，突出争议点
+    2. **Legal Framework & Doctrinal Background** (900-1100字): 法律理论框架，结合实际案例
+    3. **Key Arguments & Analysis** (1200-1500字): 详细论证，引用具体案例、法条、冲突观点
+    4. **Comparative Perspective** (700-900字): 中美法律对比，突出差异和争议
+    5. **Connection to Hot Topics** (700-900字): **关键部分** - 将文章理论应用到前面发现的热点案例上，具体分析如何解释当前争议
+    6. **Practical & Policy Implications** (600-800字): 实际法律后果和政策辩论
+    7. **Critical Assessment** (200-400字): 批判性评估，指出学术争议和不足
     
     **Critical Requirements**:
     - EXACTLY 5000 words or MORE per analysis report (verify word count - count actual content words)
-    - Include ALL original source URLs formatted as numbered footnotes [1], [2], etc. (law review articles, cases, statutes, related sources)
-    - Provide comprehensive, detailed legal analysis with in-depth examination of controversies - not superficial summaries
+    - Include ALL original source URLs formatted as numbered footnotes [1], [2], etc.
+    - **MUST CONNECT** academic theory to actual hot news cases found in previous tasks
+    - Provide comprehensive, detailed legal analysis with in-depth examination of controversies
     - Focus on controversial legal debates suitable for doctoral legal research
     
     {HUMANIZER_PROTOCOL}
@@ -330,15 +413,28 @@ researcher = Agent(
 
 # 【主编】 - 专注于 NYT 风格和数据真实性 + 5栏布局
 editor = Agent(
-    role='Lead Editor (NYT Style & Frontend Dev)',
-    goal=f'Generate a "New York Times" style HTML report with 5-column grid layout. ENSURE ALL {NEWS_ITEMS_PER_SECTION} NEWS ITEMS PER SECTION ARE DISPLAYED. ENSURE ALL LINKS WORK.',
+    role='Lead Editor & Frontend Architect',
+    goal=f'Generate a "New York Times" style HTML report with 5-column grid layout. ENSURE ALL {NEWS_ITEMS_PER_SECTION} NEWS ITEMS PER SECTION ARE DISPLAYED. USE <details> TAGS FOR EXPANDABLE CONTENT.',
     backstory=f"""
-    You are a meticulous frontend developer and editor inspired by The New York Times.
+    你负责最终的 HTML 生成。你必须解决用户体验问题。
+    
+    **UI 交互逻辑 (关键 - 针对问题7)**:
+    - 之前的版本 "Read More" 跳转到外部链接是**错误**的。
+    - **正确逻辑**: 
+      1. 外部链接 (Source URLs) 必须作为 [1][2][3] 的脚注放在文章底部，显示为可点击徽章。
+      2. **"Read More" 按钮必须是一个 HTML `<details>` 标签**。
+      3. 点击 "Read More" 后，**在当前页面向下展开**，显示 Scout 撰写的 1000字报道 或 Analyst 撰写的 5000字论文。
+      4. **不要使用 `href="#"` 或任何外部链接作为 "Read More"**。
+    
+    **排版要求**:
+    - 使用 Tailwind CSS。
+    - 5栏布局 (China, Global, Legal, Health, Academic Analysis)。
+    - **Academic Analysis** 板块必须包含那些 5000字的深度长文，使用 `<details>` 展开。
     
     **Core Philosophy**:
-    1. **Data Integrity**: You NEVER create fake links (href="#"). You ONLY use the URLs provided by the researchers. If a URL is missing, you do not display a link button.
+    1. **Data Integrity**: You NEVER create fake links (href="#"). You ONLY use the URLs provided as SOURCE FOOTNOTES.
     2. **Display ALL Items**: You MUST display ALL {NEWS_ITEMS_PER_SECTION} news items in each section ({LEGAL_ANALYSIS_ITEMS} for Legal Analysis), not just 1 or 2.
-    3. **Full Content**: You MUST preserve the full 1000+ word summaries and 5000+ word analyses, using collapsible sections to keep the page clean.
+    3. **Full Content with <details>**: You MUST preserve the full 1000+ word summaries and 5000+ word analyses inside `<details>` tags.
     4. **Design Aesthetic (NYT Style with Modern Grid)**:
        - **White Background**: Clean, stark, professional (bg-white / bg-stone-50).
        - **Serif Headings**: Black, bold, serif fonts (Merriweather/Georgia) for authority.
@@ -363,93 +459,125 @@ editor = Agent(
 
 task_china = Task(
     description=f"""
-    1. Search for {CURRENT_YEAR}'s {NEWS_ITEMS_PER_SECTION} most controversial and newsworthy stories from Chinese-language media sources published in the last 24 hours in {CURRENT_YEAR}.
-       Use search queries like: "China news today {CURRENT_YEAR}", "中国新闻 今天 {CURRENT_YEAR}", "微博热搜 今日", "知乎热榜 最新 {CURRENT_YEAR}"
-       **CRITICAL**: Verify the publication date is in {CURRENT_YEAR}. Reject any news from 2023, 2024, or 2025.
-    2. Sources: Major news outlets and reputable media platforms (今日头条, 新浪新闻, 澎湃新闻, etc.).
-    3. **Controversial focus**: Prioritize stories with significant social controversy, public debate, and conflicting stakeholder views. Suitable for doctoral thesis research. Avoid simple positive reports and natural disasters.
-    4. Multi-source integration: Each story must integrate at least 3 different source perspectives with conflicting viewpoints.
-    5. **CRITICAL - Word count requirement**: Each news summary MUST be EXACTLY 1000 words or MORE (verify word count), providing comprehensive detail with context, background, multiple conflicting viewpoints, analysis, and implications.
-    6. **Footnote requirement**: Include original document links (URLs) for each source cited formatted as numbered footnotes [1], [2], [3], etc.
-    7. **Output format**: Return exactly {NEWS_ITEMS_PER_SECTION} news items in this format:
-       
-       News Item 1:
-       Title: [Title in Chinese]
-       Publication Date: [{CURRENT_YEAR}-MM-DD]
-       Summary: [EXACTLY 1000+ word comprehensive summary with footnoted sources]
-       Sources: 
-       [1] URL1
-       [2] URL2
-       [3] URL3
-       
-       [Repeat for items 2-{NEWS_ITEMS_PER_SECTION}]
+    **搜索策略** (针对问题1：获取今日最新新闻):
+    1. 搜索词必须包含今日日期和争议关键词:
+       - "微博热搜 争议 {TODAY_STR}"
+       - "知乎 吵架 {CURRENT_YEAR_MONTH}"
+       - "网友 抵制 最新 {CURRENT_YEAR}"
+       - "官方 通报 争议 {TODAY_STR}"
+       - "舆论 反对 {TODAY_STR}"
+    2. **日期验证**：必须找到 5 个 {TODAY_STR} 或 {YESTERDAY_STR} 发生的、引起巨大争议的社会新闻
+    3. **严格过滤**：拒绝任何 2024年、2023年或更早的旧闻
+    
+    **报道要求** (针对问题8：综合性事实报道):
+    对每个新闻，利用 ScrapeWebsiteTool 抓取多方报道，写出 **1000字以上** 的事实综述，必须包含：
+    - 事件时间：{TODAY_STR} 或 {YESTERDAY_STR} 的具体时间
+    - 事件起因：谁做了什么，为什么引起争议
+    - 冲突焦点：各方的核心观点对立（官方 vs 民间、不同群体）
+    - 事实前因后果：整合至少 3 个信源的综合报道
+    - 社会影响：为什么这个事件重要，反映了什么社会问题
+    
+    **输出格式**:
+    返回 {NEWS_ITEMS_PER_SECTION} 个新闻，每个格式如下：
+    
+    News Item 1:
+    Title: [中文标题]
+    Publication Date: [{TODAY_STR} 或 {YESTERDAY_STR}]
+    Summary: [EXACTLY 1000+ word comprehensive summary with footnoted sources]
+    Sources: 
+    [1] URL1
+    [2] URL2
+    [3] URL3
+    
+    [重复 2-{NEWS_ITEMS_PER_SECTION}]
     """,
-    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} curated controversial news stories from Chinese media published in {CURRENT_YEAR} (1000+ words each), each with multi-source integration, footnoted citations, and verified {CURRENT_YEAR} publication dates.",
+    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} curated controversial news stories from Chinese media published on {TODAY_STR} or {YESTERDAY_STR} (1000+ words each), each with multi-source integration, footnoted citations, and verified {CURRENT_YEAR} publication dates.",
     agent=china_scout
 )
 
 task_global = Task(
     description=f"""
-    1. Search for {CURRENT_YEAR}'s controversial breaking news using these queries:
-       - "Breaking news today Reuters {CURRENT_YEAR}"
-       - "Tech news today {CURRENT_YEAR}"
-       - "Global controversial news latest 24 hours {CURRENT_YEAR}"
-       - "Technology controversy today {CURRENT_YEAR}"
-       - "Geopolitics controversy news today {CURRENT_YEAR}"
-       **CRITICAL**: Verify the publication date is in {CURRENT_YEAR}. Reject any news from 2023, 2024, or 2025.
-    2. Select {NEWS_ITEMS_PER_SECTION} controversial events with global structural impact and significant debate published in the last 24 hours in {CURRENT_YEAR}.
-    3. RETURN FORMAT: English Headline + Comprehensive Chinese Analysis (EXACTLY 1000+ words).
-    4. Multi-Source: Each story must synthesize 3+ sources (Reuters, Bloomberg, NYT, Nature, etc) with emphasis on conflicting viewpoints.
-    5. **Controversial focus**: Prioritize stories with significant ethical debates, policy conflicts, or academic controversy. Suitable for doctoral research. Avoid simple positive reports.
-    6. **CRITICAL - Word count requirement**: Each news summary MUST be EXACTLY 1000 words or MORE (verify word count), providing comprehensive analysis with context, background, expert opinions with conflicting views, and implications.
-    7. **Footnote requirement**: Include original document links (URLs) for each source cited formatted as numbered footnotes [1], [2], [3], etc.
-    8. **Output format**: Return exactly {NEWS_ITEMS_PER_SECTION} news items in this format:
-       
-       News Item 1:
-       English Title: [Title in English]
-       Publication Date: [{CURRENT_YEAR}-MM-DD]
-       Chinese Summary: [EXACTLY 1000+ word comprehensive summary in Chinese with footnoted sources]
-       Sources:
-       [1] URL1
-       [2] URL2
-       [3] URL3
-       
-       [Repeat for items 2-{NEWS_ITEMS_PER_SECTION}]
+    **搜索策略** (针对问题1和3：获取今日争议性新闻):
+    1. 搜索词必须包含今日日期和争议关键词:
+       - "Protest breaking {TODAY_STR}"
+       - "Scandal controversy {TODAY_STR}"
+       - "Controversial ruling latest {TODAY_STR}"
+       - "Debate viral {TODAY_STR}"
+       - "Lawsuit filed {TODAY_STR}"
+       - "Backlash outrage {TODAY_STR}"
+    2. **日期验证**：选择 {NEWS_ITEMS_PER_SECTION} 个 {TODAY_STR} 或 {YESTERDAY_STR} 发生的、具有全球结构性影响和重大争议的事件
+    3. **严格过滤**：拒绝任何 2024、2023 或更早的旧闻
+    
+    **报道要求** (针对问题8：综合性事实报道):
+    - **保留英文原标题** + 综合中文分析（**1000字以上**）
+    - 整合至少 3 个信源，特别是对立观点：
+      - Reuters, Bloomberg, NYT, Nature, Foreign Affairs 等
+      - 保守派 vs 自由派媒体观点
+      - 官方声明 vs Twitter/X 民间反应
+    - 深度报道必须包含：
+      1. 事件背景和时间 ({TODAY_STR})
+      2. 冲突各方的核心观点
+      3. 意识形态或利益集团的博弈分析
+      4. 全球影响和未来走向
+    
+    **输出格式**:
+    返回 {NEWS_ITEMS_PER_SECTION} 个新闻，每个格式如下：
+    
+    News Item 1:
+    English Title: [Title in English - 必须保留]
+    Publication Date: [{TODAY_STR} 或 {YESTERDAY_STR}]
+    Chinese Summary: [EXACTLY 1000+ word comprehensive summary in Chinese with footnoted sources]
+    Sources:
+    [1] URL1
+    [2] URL2
+    [3] URL3
+    
+    [重复 2-{NEWS_ITEMS_PER_SECTION}]
     """,
-    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} Global controversial news items published in {CURRENT_YEAR} (1000+ words each) with English Titles, multi-source verification, footnoted citations, and verified {CURRENT_YEAR} publication dates.",
+    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} Global controversial news items published on {TODAY_STR} or {YESTERDAY_STR} (1000+ words each) with English Titles, multi-source verification, footnoted citations, and verified {CURRENT_YEAR} publication dates.",
     agent=global_scout
 )
 
 task_legal = Task(
     description=f"""
-    Search for {CURRENT_YEAR}'s most controversial and significant court rulings or legislative drafts (US/EU/CN) from the last 24-48 hours in {CURRENT_YEAR}.
-    Use search queries like:
-    - "Supreme Court controversial ruling today {CURRENT_YEAR}"
-    - "Legal controversy news today USA {CURRENT_YEAR}"
-    - "Court decision controversial latest {CURRENT_YEAR}"
-    - "EU legislation controversy today {CURRENT_YEAR}"
-    - "China legal controversy news today {CURRENT_YEAR}"
-    **CRITICAL**: Verify the publication date is in {CURRENT_YEAR}. Reject any news from 2023, 2024, or 2025.
+    **搜索策略** (针对问题1和4：获取今日实际案例，不要新法规):
+    1. **不要搜**: "新法律颁布", "New legislation", "新规", "政策出台"
+    2. **要搜**: 
+       - "Lawsuit filed {TODAY_STR}"
+       - "Court verdict controversial {TODAY_STR}"
+       - "Supreme Court hearing {TODAY_STR}"
+       - "判决争议 {TODAY_STR}"
+       - "起诉 最新 {TODAY_STR}"
+       - "庭审 {CURRENT_YEAR_MONTH}"
+       - 搜索包含 "v." 的案件名称（如 "Apple v. Epic", "张三 v. 某公司"）
+    3. **日期验证**：找到 {NEWS_ITEMS_PER_SECTION} 个 {TODAY_STR} 或 {YESTERDAY_STR} 有最新进展的争议性法律案件
+    4. **严格过滤**：拒绝任何 2024、2023 或更早的案件，只要今日有新进展的案件
     
-    Focus on controversial IP, Antitrust, AI Regulation, Privacy Law cases with significant public debate.
-    **Controversial focus**: Prioritize cases with significant academic value and legal controversy, suitable for doctoral legal research, reflecting major legal and social value conflicts. Avoid simple rulings without controversy.
-    Multi-Source: Each legal development must include court documents, expert commentary (especially conflicting legal opinions), and news coverage.
-    **CRITICAL - Word count requirement**: Each legal news summary MUST be EXACTLY 1000 words or MORE (verify word count), providing comprehensive legal analysis with case background, legal reasoning, precedents, conflicting interpretations, and implications.
-    **Footnote requirement**: Include original document links (URLs) - court documents, legislation, expert analysis, and news articles formatted as numbered footnotes [1], [2], [3], etc.
-    **Output format**: Return exactly {NEWS_ITEMS_PER_SECTION} news items in this format:
+    **报道要求** (针对问题8：综合性案件报道):
+    对每个案件，写出 **1000字以上** 的综合法律分析，必须包含：
+    - 案件名称：原告 v. 被告
+    - 案件背景：何时发生、为什么打官司
+    - 法律焦点：双方律师的核心论点、争议的法律条款
+    - 最新进展：{TODAY_STR} 的庭审、判决或起诉动态
+    - 公众反应：为什么引起轰动、舆论争议点
+    - 可能影响：先例意义、对类似案件的影响
+    - 整合至少 3 个信源：法院文件 + 专家评论 + 新闻报道
+    
+    **输出格式**:
+    返回 {NEWS_ITEMS_PER_SECTION} 个案件，每个格式如下：
     
     Legal Update 1:
-    Title: [Case/Legislation Title]
-    Date: [{CURRENT_YEAR}-MM-DD]
+    Title: [案件名称: 原告 v. 被告]
+    Date: [{TODAY_STR} 或 {YESTERDAY_STR}]
     Summary: [EXACTLY 1000+ word comprehensive legal analysis with footnoted sources]
     Sources:
     [1] Court document URL
     [2] Expert analysis URL
     [3] News URL
     
-    [Repeat for items 2-{NEWS_ITEMS_PER_SECTION}]
+    [重复 2-{NEWS_ITEMS_PER_SECTION}]
     """,
-    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} Key Controversial Legal Updates from {CURRENT_YEAR} (1000+ words each) with multi-source citations, footnoted references, and verified {CURRENT_YEAR} publication dates.",
+    expected_output=f"EXACTLY {NEWS_ITEMS_PER_SECTION} Key Controversial Legal Cases (NOT legislation) from {TODAY_STR} or {YESTERDAY_STR} (1000+ words each) with multi-source citations, footnoted references, and verified {CURRENT_YEAR} dates.",
     agent=legal_scout
 )
 
@@ -518,30 +646,71 @@ task_health_analysis = Task(
 # 【新增】法律学术分析任务
 task_legal_analysis = Task(
     description=f"""
-    Phase 1: Identify 3-5 key CONTROVERSIAL legal issues from current US and China hot topics based on the news collected, focusing on issues with significant debate and conflicting viewpoints.
+    **工作流程** (针对问题5：学术分析必须关联热点):
     
-    Phase 2: Search for relevant law review articles from top 10 US law schools that address these controversial issues:
-    - Yale Law Journal, Harvard Law Review, Stanford Law Review
-    - Columbia Law Review, University of Chicago Law Review, NYU Law Review
-    - Penn Law Review, Michigan Law Review, Virginia Law Review, Berkeley Law Review
+    Phase 1: **READ 前面的法律新闻**
+    - 从 task_china, task_global, task_legal 的输出中，提取 3-5 个关键争议性法律议题
+    - 例如：如果发现了 "AI生成内容侵权案"，提取关键词 "AI copyright", "generative AI liability", "fair use doctrine"
     
-    Phase 3: Select the {LEGAL_ANALYSIS_ITEMS} most relevant, recent, and CONTROVERSIAL articles with significant scholarly debate.
+    Phase 2: **搜索相关法律评论文章**
+    - 使用提取的关键词，搜索美国Top 10法学院的法律评论：
+      - Yale Law Journal, Harvard Law Review, Stanford Law Review
+      - Columbia Law Review, University of Chicago Law Review, NYU Law Review
+      - Penn Law Review, Michigan Law Review, Virginia Law Review, Berkeley Law Review
+    - 搜索词示例: "AI copyright law review", "generative AI legal liability Yale", "fair use doctrine Stanford"
     
-    Phase 4: For each article, generate a comprehensive in-depth analysis of EXACTLY 5000 words or MORE:
-    1. **Article Overview & Introduction** (700-900 words): Summarize thesis with engaging, concrete language and context, highlighting controversies
-    2. **Legal Framework & Doctrinal Background** (900-1100 words): Explain legal doctrines, precedents, and theoretical foundations using real-world examples, including areas of legal conflict
-    3. **Key Arguments & Analysis** (1200-1500 words): Break down arguments in detail with specific cases, statutory analysis, conflicting interpretations, and implications
-    4. **Comparative Perspective** (700-900 words): Compare US and China legal approaches if applicable, highlighting differences and controversies
-    5. **Connection to Hot Topics** (700-900 words): Relate article to current controversial events with concrete details and real-world examples
-    6. **Practical & Policy Implications** (600-800 words): Real-world legal consequences, policy recommendations, and areas of debate
-    7. **Critical Assessment** (200-400 words): Strengths, weaknesses, gaps in the analysis, and scholarly disagreements
+    Phase 3: **筛选最相关的 {LEGAL_ANALYSIS_ITEMS} 篇文章**
+    - 必须是与前面发现的热点案例**直接相关**的文章
+    - 必须是最新的、有争议性的学术文章
+    
+    Phase 4: **为每篇文章生成 5000字以上的深度分析** (针对问题2和6：真正的深度，满足字数):
+    每篇分析必须包含以下章节（总计 5000字以上）：
+    
+    1. **Article Overview & Introduction** (700-900字): 
+       - 文章论点摘要
+       - 背景和争议点
+       - 为什么这篇文章重要
+    
+    2. **Legal Framework & Doctrinal Background** (900-1100字): 
+       - 法律理论框架（具体法条、判例、学说）
+       - 结合实际案例说明
+       - 法律冲突和争议
+    
+    3. **Key Arguments & Analysis** (1200-1500字): 
+       - 详细论证分析
+       - 引用具体案例、法条
+       - 不同法学家的对立观点
+       - 为什么有争议
+    
+    4. **Comparative Perspective** (700-900字): 
+       - 中美法律对比
+       - 不同法系的处理方式
+       - 文化和制度差异
+    
+    5. **Connection to Hot Topics** (700-900字) **【关键部分】**: 
+       - **将文章理论应用到前面发现的热点案例上**
+       - 具体分析：这篇学术文章如何解释当前争议案件
+       - 理论与实践的结合
+       - 预测案件可能的判决走向
+    
+    6. **Practical & Policy Implications** (600-800字): 
+       - 实际法律后果
+       - 政策建议和争议
+       - 对企业、个人的影响
+    
+    7. **Critical Assessment** (200-400字): 
+       - 文章的优势和不足
+       - 学术界的不同意见
+       - 需要进一步研究的问题
     
     **Word count requirement**: Each analysis report must be EXACTLY 5000 words or MORE total (verify word count - count actual content words).
     **Footnote requirement**: Include original law review article URLs, case citations with links, and all referenced sources formatted as numbered footnotes [1], [2], [3], etc.
     
+    **CRITICAL**: The analysis MUST explicitly connect academic theory to the actual hot news cases found in previous tasks. This is not optional.
+    
     IMPORTANT: Follow the Deep Humanizer Protocol. Technical precision with readable prose. Avoid jargon overload. Focus on controversial legal debates suitable for doctoral legal research.
     """,
-    expected_output=f"Analysis of {LEGAL_ANALYSIS_ITEMS} controversial law review articles (5000+ words each) connected to current US-China topics with all source URLs formatted as footnotes.",
+    expected_output=f"Analysis of {LEGAL_ANALYSIS_ITEMS} controversial law review articles (5000+ words each) that DIRECTLY RELATE to and analyze the hot legal topics found in previous tasks, with all source URLs formatted as footnotes.",
     agent=legal_scholar,
     context=[task_china, task_global, task_legal]
 )
@@ -585,16 +754,56 @@ task_research = Task(
     context=[task_china, task_global, task_legal, task_health_sports, task_health_analysis, task_legal_analysis]
 )
 
-# 【重构】发布任务 - NYT 风格 + 链接修复 + 5栏布局
+# 【重构】发布任务 - 针对问题7：Read More应该是展开内容，不是链接
 task_publish = Task(
     description=f"""
-    Generate the final `index.html` file based on the Research Report with TODAY's date: {CURRENT_DATE}.
+    Generate the final `index.html` file based on the Research Report with TODAY's date: {TODAY_STR}.
+    
+    **UI 交互逻辑 (关键 - 针对问题7)**: 
+    之前的版本 "Read More" 跳转到外部链接是**错误**的。
+    
+    **正确逻辑**:
+    1. 外部链接 (Source URLs) 必须作为 [1][2][3] 的脚注放在文章底部，显示为可点击徽章
+    2. **"Read More" 按钮必须是一个 HTML `<details>` 标签**
+    3. 点击 "Read More" 后，**在当前页面向下展开**，显示：
+       - 对于新闻：Scout 撰写的 1000字综合报道
+       - 对于深度分析：Analyst 撰写的 5000字论文
+    4. **不要使用 `href="#"` 或任何外部链接作为 "Read More"**
+    
+    **HTML 结构模板 (必须严格遵守)**:
+    
+    对于每个新闻或分析项，使用以下结构：
+    
+    ```html
+    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm mb-4">
+        <h3 class="font-bold text-xl mb-2 text-stone-900">[标题]</h3>
+        <p class="text-sm text-gray-500 mb-2">日期: {TODAY_STR}</p>
+        <p class="mb-4 text-stone-700">[摘要前 200-300 字...]</p>
+        
+        <details class="group mb-4">
+            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                📖 阅读完整报道 / Read Deep Analysis
+            </summary>
+            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                [在这里插入完整的 1000字报道 或 5000字深度分析内容]
+            </div>
+        </details>
+        
+        <div class="mt-4 text-xs text-gray-400">
+            <span class="font-semibold">信息来源 / Sources:</span>
+            [在这里插入来源链接，显示为可点击徽章]
+            <a href="[URL1]" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+            <a href="[URL2]" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
+            <a href="[URL3]" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
+        </div>
+    </div>
+    ```
     
     **CRITICAL DATA RULES**:
-    1. **NO FAKE LINKS**: You are STRICTLY FORBIDDEN from using `href="#"`. 
-    2. **USE REAL URLS**: You must extract the URL provided in the context for each story and put it in the `href` attribute.
-    3. **Fail-Safe**: If no URL is found in the context for a specific story, do NOT create a "Read More" button.
-    4. **DISPLAY ALL {NEWS_ITEMS_PER_SECTION} NEWS ITEMS**: Each section MUST show ALL {NEWS_ITEMS_PER_SECTION} news items provided, not just 1.
+    1. **NO EXTERNAL LINKS IN READ MORE**: "Read More" 必须是 `<details>` 标签，不是 `<a>` 标签
+    2. **FULL CONTENT INSIDE**: 必须将生成的完整内容（1000字或5000字）放入 `<details>` 内部
+    3. **SOURCE URLs AS FOOTNOTES**: 所有原始链接必须作为脚注徽章显示在底部
+    4. **DISPLAY ALL {NEWS_ITEMS_PER_SECTION} NEWS ITEMS**: Each section MUST show ALL {NEWS_ITEMS_PER_SECTION} news items provided
     
     **DESIGN SYSTEM (New York Times Style with 5-Column Layout)**:
     1. **Library**: Use Tailwind CSS (`<script src="https://cdn.tailwindcss.com"></script>`).
@@ -606,7 +815,7 @@ task_publish = Task(
        - Text: `text-stone-900` (almost black) for headings, `text-stone-700` for body.
        - Accents: Minimal use of `border-stone-300` for dividers. No bright gradients.
     4. **Layout - FIVE COLUMN RESPONSIVE GRID**:
-       - **Header**: Simple, centered, serif headline "Daily Insight - {CURRENT_DATE}". Thin border-bottom.
+       - **Header**: Simple, centered, serif headline "Daily Insight - {TODAY_STR}". Thin border-bottom.
        - **Main Container**: Use CSS Grid with 5 columns on desktop (grid-cols-5), responsive on mobile/tablet
        - **Each Column Represents One Section**:
          1. Column 1: 中文新闻 (Chinese-language News) - Show ALL {NEWS_ITEMS_PER_SECTION} news items
@@ -616,25 +825,15 @@ task_publish = Task(
          5. Column 5: 法律学术分析 (Legal Analysis) - Show {LEGAL_ANALYSIS_ITEMS} deep analysis reports (collapsible)
        - **Responsive**: Use `lg:grid-cols-5 md:grid-cols-2 grid-cols-1` for mobile/tablet adaptation
        - **Cards**: Clean layout. White background `bg-white`. Thin border `border border-stone-200`. No heavy shadows (`shadow-sm` at most).
-       - **Typography**: High readability. Line height 1.6+. Use `line-clamp-3` for previews.
-    
-    **CONTENT DISPLAY**:
-    - **News Items**: Show title and first 200-300 characters as preview, with "Read More" toggle to expand full 1000+ word summary
-    - **Deep Analysis**: Use `<details>` tag with engaging summary, full 5000+ word content hidden until expanded
-    - **Source Links**: Display as clickable badges/chips below each item
-    
-    **INTERACTIVITY & READABILITY**:
-    - **Collapsible**: Use `<details>` for long content (1000+ and 5000+ word sections) to keep page scannable
-    - **Preview Mode**: Show first 200-300 chars by default with "Read Full Article" button
-    - **Hover**: Subtle hover effects (e.g., title underline, card slight elevation)
-    - **Clear Hierarchy**: Section headers (text-2xl), item titles (text-xl), body (text-base)
+       - **Typography**: High readability. Line height 1.6+.
     
     **Output**: 
     - ONLY the raw HTML code (starting with `<!DOCTYPE html>`).
     - Ensure ALL {NEWS_ITEMS_PER_SECTION} items in each section are displayed.
-    - Include proper date: {CURRENT_DATE}
+    - Include proper date: {TODAY_STR}
+    - Use `<details>` for expandable content, NOT external links
     """,
-    expected_output="Final production-ready HTML with 5-column grid layout, all news items displayed, real links, and excellent readability.",
+    expected_output="Final production-ready HTML with 5-column grid layout, all news items displayed, <details> tags for expandable content, source URLs as footnote badges, and excellent readability.",
     agent=editor,
     context=[task_research]
 )
