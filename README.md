@@ -21,8 +21,19 @@ HomeNews is a system designed to aggregate news feeds and integrate with home au
 
 ### For the AI News Agent (快速安装)
 1. Install minimal dependencies: `pip install -r requirements-agent.txt`
-2. Configure environment variables (NVIDIA_API_KEY, SERPER_API_KEY)
+2. Configure environment variables:
+   - Required: `SERPER_API_KEY` (for web search)
+   - Choose one of the following model providers:
+     - **Option A - DeepSeek (推荐，降低幻觉)**: Set `DEEPSEEK_API_KEY` and `USE_DEEPSEEK=true`
+     - **Option B - NVIDIA**: Set `NVIDIA_API_KEY` (default when `USE_DEEPSEEK` is not set or is false)
+   - Optional fallback: Set both API keys for automatic failover
 3. Run the news agent: `python agent_main.py`
+
+### Environment Variables
+- `USE_DEEPSEEK`: Set to `true` to use DeepSeek as the primary model (降低幻觉，提高准确性)
+- `DEEPSEEK_API_KEY`: Your DeepSeek API key (required when `USE_DEEPSEEK=true`)
+- `NVIDIA_API_KEY`: Your NVIDIA API key (required when `USE_DEEPSEEK=false` or not set)
+- `SERPER_API_KEY`: Your Serper API key for web search (always required)
 
 ### For the Full Backend API
 1. Install all dependencies: `pip install -r requirements.txt`
