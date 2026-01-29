@@ -5,7 +5,7 @@
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                         HomeNews AI Agent System                    │
-│                    (Powered by DeepSeek V3 + CrewAI)               │
+│          (Powered by NVIDIA meta/llama-3.1-405b-instruct)          │
 └─────────────────────────────────────────────────────────────────────┘
 
                               ┌─────────────┐
@@ -173,11 +173,13 @@
 - **Runtime**: ~15-30 minutes (depending on search/analysis)
 - **Output**: index.html deployed to GitHub Pages
 - **Required Secrets**:
-  - DEEPSEEK_API_KEY
+  - NVIDIA_API_KEY
   - SERPER_API_KEY
 
 ### Environment
 - Python 3.11
 - CrewAI framework
-- DeepSeek V3 LLM
+- NVIDIA meta/llama-3.1-405b-instruct LLM (primary)
+- DeepSeek-chat API (secondary backup - skips China news)
+- NVIDIA llama-3.3-nemotron-super-49b-v1.5 (tertiary backup)
 - SerperDev search API

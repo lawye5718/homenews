@@ -21,8 +21,19 @@ HomeNews is a system designed to aggregate news feeds and integrate with home au
 
 ### For the AI News Agent (快速安装)
 1. Install minimal dependencies: `pip install -r requirements-agent.txt`
-2. Configure environment variables (DEEPSEEK_API_KEY, SERPER_API_KEY)
+2. Configure environment variables:
+   - Required: `SERPER_API_KEY` (for web search)
+   - Choose one of the following model providers:
+     - **Option A - DeepSeek (推荐，降低幻觉)**: Set `DEEPSEEK_API_KEY` and `USE_DEEPSEEK=true`
+     - **Option B - NVIDIA**: Set `NVIDIA_API_KEY` (default when `USE_DEEPSEEK` is not set or is false)
+   - Optional fallback: Set both API keys for automatic failover
 3. Run the news agent: `python agent_main.py`
+
+### Environment Variables
+- `USE_DEEPSEEK`: Set to `true` to use DeepSeek as the primary model (降低幻觉，提高准确性)
+- `DEEPSEEK_API_KEY`: Your DeepSeek API key (required when `USE_DEEPSEEK=true`)
+- `NVIDIA_API_KEY`: Your NVIDIA API key (required when `USE_DEEPSEEK=false` or not set)
+- `SERPER_API_KEY`: Your Serper API key for web search (always required)
 
 ### For the Full Backend API
 1. Install all dependencies: `pip install -r requirements.txt`
@@ -36,7 +47,7 @@ TBD
 
 ## 新增功能：AI自动化新闻简报系统
 
-本项目集成了一个使用DeepSeek V3和CrewAI的自动化新闻简报系统。
+本项目集成了一个使用NVIDIA meta/llama-3.1-405b-instruct和CrewAI的自动化新闻简报系统。
 
 ### 功能特点
 
@@ -63,14 +74,26 @@ TBD
   - **法律学术分析**（美国顶尖法学院期刊文章深度解读）
 
 - **深度分析报告**（采用Deep Humanizer Protocol）：
-  - 运动健康新闻：自动选择Top 3重要新闻进行深入分析（300-500字/篇）
+  - 运动健康新闻：自动选择Top 3重要新闻进行深入分析（5000+字/篇）
+    - 全面的科学背景、方法论、研究结果和批判性分析
     - 使用具体数据和实例，避免抽象表述
     - 混合短句与长句，增强可读性
   - 法律学术研究：
     - AI识别美中热点关键法律问题
     - 检索美国Top 10法学院法律评论文章
     - 筛选3篇最相关文章
-    - 每篇文章提供800-1000字深度解读报告（采用人性化写作风格）
+    - 每篇文章提供5000+字深度解读报告（采用人性化写作风格）
+    - 包括法律框架、关键论点、比较视角、政策含义等
+    
+- **详细新闻摘要**：
+  - 每篇新闻总结不少于1000字
+  - 提供全面的历史背景、多角度分析和详细解释
+  - 深入而非表面的内容呈现
+  
+- **原文献链接**：
+  - 尽量提供所有引用来源的原始URL
+  - 包括新闻文章、研究论文、法院文件、法律评论文章等
+  - 在UI中显示为可点击的徽章/芯片
     
 - **事实核查**：对新闻进行验证和背景分析
   - 法律新闻特别增强：中国热点自动关联美欧经典判例和法律文献
@@ -78,17 +101,19 @@ TBD
   
 - **自动化生成**：每日自动生成新闻简报页面
 
-- **精美界面**：五栏响应式布局，现代化UI设计
-  - 渐变背景和卡片阴影效果
+- **精美界面**：五栏响应式布局，现代化卡片式UI设计
+  - 卡片式布局，每个新闻和分析都在独立卡片中
+  - 渐变背景和卡片阴影效果，悬停动画
   - 移动端自动适配
-  - 折叠面板展示详细内容
-  - 深度分析报告单独展示
+  - 折叠面板展示详细内容，带平滑展开/收起动画
+  - 深度分析报告（5000+字）可折叠，带"阅读更多"功能
   - 内容采用人性化、吸引人的写作风格
+  - 原文献链接显示为可点击徽章
 
 ### 技术栈
 
 - **AI框架**: CrewAI
-- **语言模型**: DeepSeek V3
+- **语言模型**: NVIDIA meta/llama-3.1-405b-instruct (主模型), nvidia/llama-3.3-nemotron-super-49b-v1.5 (备用)
 - **搜索工具**: SerperDevTool
 - **部署**: GitHub Actions + GitHub Pages
 
@@ -96,8 +121,16 @@ TBD
 
 要启用自动化新闻简报功能，需要配置以下环境变量：
 
-1. **DEEPSEEK_API_KEY**: DeepSeek API密钥
+1. **NVIDIA_API_KEY**: NVIDIA API密钥 (从 build.nvidia.com 获取)
 2. **SERPER_API_KEY**: Serper.dev API密钥
+3. **DEEPSEEK_API_KEY**: DeepSeek API密钥 (可选，用于第三备用模型)
+
+**模型故障转移机制**：
+- 主模型: `meta/llama-3.1-405b-instruct` (NVIDIA API) - 高性能稳定模型，包含全部5个板块
+- 第二备用: `deepseek-chat` (DeepSeek 官方 API) - **仅包含4个板块（跳过中文新闻以避免内容审查问题）**
+- 第三备用: `nvidia/llama-3.3-nemotron-super-49b-v1.5` (NVIDIA API) - 包含全部5个板块
+
+系统会在主模型失败时自动切换到备用模型，确保服务稳定性。使用第二备用模型（DeepSeek官方API）时，会自动跳过可能触发内容审查的中文新闻板块。
 
 ### 部署指南
 

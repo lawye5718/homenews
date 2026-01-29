@@ -5,6 +5,52 @@ This document describes the new features added to the HomeNews AI Agent system.
 
 ## Latest Updates (2026-01)
 
+### Enhanced Content Requirements (January 2026)
+
+#### Comprehensive News Summaries
+All news items now require detailed, comprehensive summaries:
+- **Minimum 1000 words per news summary** across all sections (China, Global, Legal, Health/Sports)
+- In-depth analysis with historical context, multiple perspectives, and detailed explanations
+- Rich detail rather than brief summaries
+- Word count is measured by actual content words (excluding markdown formatting, source links, and HTML tags)
+- Quality over quantity: Content should be substantive and informative, not artificially padded
+
+#### Deep Analysis Reports
+Analysis reports now provide extensive, scholarly-level depth:
+- **Minimum 5000 words per deep analysis report** for Health/Sports and Legal Analysis sections
+- Comprehensive breakdown including:
+  - Executive summaries and introductions
+  - Detailed methodological explanations
+  - Extensive findings and implications
+  - Critical assessments and comparative perspectives
+  - Practical applications and policy recommendations
+- Word count is measured by actual content words (excluding markdown formatting, source links, and HTML tags)
+- Focus on substantive analysis with concrete examples, data, and real-world applications
+- Quality matters: Content should be thorough and insightful, not artificially lengthened
+
+#### Enhanced Model Configuration
+- **Increased max_tokens from 8192 to 32000** for all LLM configurations
+- Supports generation of much longer, more detailed content
+- Applies to nvidia_llm, deepseek_llm, and backup_llm
+
+#### Source Link Requirements
+All content must include original source URLs:
+- **Original document links** for every source cited
+- Displayed as clickable badges/chips in the UI
+- Different colors for different source types (official, news, academic)
+- Court documents, research papers, news articles, law review articles, etc.
+
+#### Card-Based UI with Animations
+Restored and enhanced the card-style interface:
+- **Card-based layout**: Each news item and analysis in its own card
+- **Smooth animations**: fadeIn, slideDown, hover effects
+- **Collapsible groups**: Related news stories grouped with expand/collapse
+- **Expandable analysis**: Long analysis reports (5000+ words) with "Read More" functionality
+- **Responsive design**: Beautiful on desktop, tablet, and mobile
+- **Modern styling**: Shadows, rounded corners, gradient backgrounds
+
+---
+
 ### 1. Multi-Source News Reporting
 
 #### Description
@@ -98,14 +144,16 @@ A new section dedicated to health and sports news with a focus on scientific sou
 - **task_health_sports**: Task that fetches news from scientific sources
 
 #### Deep Analysis Feature
-The system automatically selects the TOP 3 most impactful health/sports stories and generates in-depth analysis reports (300-500 words each) using the **Deep Humanizer Protocol** for engaging, human-like writing:
+The system automatically selects the TOP 3 most impactful health/sports stories and generates comprehensive in-depth analysis reports (5000+ words each) using the **Deep Humanizer Protocol** for engaging, human-like writing:
 
-1. **Background**: Scientific context (with concrete examples, not abstractions)
-2. **Methods**: Research methodology (if applicable) - explained in accessible language
-3. **Findings**: Key discoveries with specific data points ("subjects ran 15% faster" not "performance improved")
-4. **Implications**: Impact on public health, sports, or fitness with real-world applications
-5. **Practical Applications**: How people can use this information (actionable advice)
-6. **Limitations**: Caveats or areas for further research
+1. **Executive Summary** (500-700 words): Overview of the research and its significance
+2. **Background & Context** (800-1000 words): Scientific context with concrete examples, historical perspective
+3. **Methodology** (600-800 words): Research methodology explained in detail yet accessibly
+4. **Findings & Results** (1200-1500 words): Key discoveries with specific data points, statistics, and analysis
+5. **Scientific Implications** (600-800 words): Impact on scientific understanding and future research
+6. **Practical Applications** (700-900 words): How people can use this information, actionable advice for readers
+7. **Critical Analysis** (400-600 words): Strengths, limitations, caveats and areas for further research
+8. **Conclusion** (200-300 words): Summary of key takeaways and future directions
 
 #### Key Components
 - **health_analyst**: Agent specialized in explaining complex research with human-like, engaging prose
@@ -144,13 +192,15 @@ An enhanced legal analysis section that combines AI-powered identification of le
 - Provides full citations and links
 
 **Phase 4: Deep Analysis**
-For each of the 3 selected articles, generates a comprehensive 800-1000 word report using the **Deep Humanizer Protocol**:
+For each of the 3 selected articles, generates a comprehensive 5000+ word report using the **Deep Humanizer Protocol**:
 
-1. **Article Overview** (200 words): Summarizes thesis with engaging, concrete language
-2. **Legal Framework** (150 words): Explains legal doctrines using real-world examples, avoiding jargon overload
-3. **Key Arguments** (200 words): Breaks down arguments with specific cases and implications ("This ruling means companies can't..." not "This has implications for...")
-4. **Connection to Hot Topics** (150 words): Relates article to current events with concrete details
-5. **Practical Implications** (100 words): Real-world legal consequences
+1. **Article Overview & Introduction** (700-900 words): Summarizes thesis with engaging, concrete language and context
+2. **Legal Framework & Doctrinal Background** (900-1100 words): Explains legal doctrines, precedents, and theoretical foundations using real-world examples
+3. **Key Arguments & Analysis** (1200-1500 words): Breaks down arguments in detail with specific cases, statutory analysis, and implications
+4. **Comparative Perspective** (700-900 words): Compares US and China legal approaches if applicable
+5. **Connection to Hot Topics** (700-900 words): Relates article to current events with concrete details and real-world examples
+6. **Practical & Policy Implications** (600-800 words): Real-world legal consequences, policy recommendations
+7. **Critical Assessment** (200-400 words): Strengths, weaknesses, gaps in the analysis
 
 #### Key Components
 - **legal_scholar**: Agent with expertise in comparative law using human-like writing
@@ -265,7 +315,7 @@ Analysis agents use Deep Humanizer Protocol:
 ## Configuration
 
 No additional configuration is required beyond the existing setup:
-- `DEEPSEEK_API_KEY`: DeepSeek API key
+- `NVIDIA_API_KEY`: NVIDIA API key (from build.nvidia.com)
 - `SERPER_API_KEY`: Serper.dev API key
 
 The system will automatically execute all new features when run.
