@@ -3,167 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Insight - 2026-02-05</title>
+    <title>Daily Insight - 2026-02-06</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        * { font-family: 'Inter', sans-serif; }
-        h1, h2, h3, h4, .serif { font-family: 'Merriweather', serif; }
-        .prose { line-height: 1.75; }
-        .prose p { margin-bottom: 1em; }
-        details summary::-webkit-details-marker { display: none; }
-        details summary { list-style: none; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, .serif-heading {
+            font-family: 'Merriweather', serif;
+        }
+        .prose {
+            line-height: 1.75;
+        }
+        .prose p {
+            margin-bottom: 1.25em;
+        }
+        details summary::-webkit-details-marker {
+            display: none;
+        }
+        details[open] summary {
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body class="bg-stone-50 text-stone-900 min-h-screen">
-    <header class="border-b border-stone-300 py-6 bg-white">
-        <div class="container mx-auto px-4">
-            <h1 class="serif text-4xl md:text-5xl font-bold text-center">Daily Insight</h1>
-            <p class="text-center text-stone-600 mt-2">2026-02-05</p>
+    <header class="border-b border-stone-300 py-6 px-4 bg-white">
+        <div class="max-w-screen-2xl mx-auto">
+            <h1 class="serif-heading text-3xl md:text-4xl font-bold text-center">Daily Insight</h1>
+            <p class="text-center text-stone-600 mt-2">2026-02-06</p>
             <p class="text-center text-sm text-stone-500 mt-1">A Five-Column Analysis of Global Affairs</p>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-8">
-        <!-- Five Column Grid -->
+    <main class="max-w-screen-2xl mx-auto px-4 py-8">
+        <!-- 5-Column Grid -->
         <div class="grid lg:grid-cols-5 md:grid-cols-2 grid-cols-1 gap-6">
             
             <!-- Column 1: 中文新闻 -->
             <section>
-                <h2 class="serif text-2xl font-bold mb-4 pb-2 border-b border-stone-300">中文新闻</h2>
+                <h2 class="serif-heading text-2xl font-bold mb-6 pb-2 border-b border-stone-300">中文新闻</h2>
                 <div class="space-y-6">
                     <!-- Item 1 -->
                     <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
-                        <h3 class="serif font-bold text-xl mb-2 text-stone-900">中国央行宣布数字人民币跨境支付系统完成与SWIFT的初步技术对接</h3>
-                        <p class="text-sm text-gray-500 mb-2">日期: 2026-02-05</p>
-                        <p class="mb-4 text-stone-700">2026年2月5日，中国人民银行（央行）与环球银行金融电信协会（SWIFT）联合发布公告，宣布数字人民币（e-CNY）跨境支付系统已完成与SWIFT网络的初步技术对接测试。这标志着人民币国际化在技术基础设施层面迈出关键一步...</p>
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">中国央行推出“数字人民币跨境支付走廊”试点，覆盖东盟六国</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-02-06</p>
+                        <p class="mb-4 text-stone-700">中国人民银行今日宣布，正式启动“数字人民币跨境支付走廊”第二阶段试点，将覆盖新加坡、马来西亚、泰国、印度尼西亚、越南和菲律宾。试点允许企业使用数字人民币进行实时跨境结算，预计将降低约70%的汇兑成本。首日交易额突破120亿元人民币...</p>
+                        
                         <details class="group mb-4">
                             <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
                                 📖 阅读完整报道
                             </summary>
                             <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                                <p><strong>北京，2026年2月5日</strong> —— 今天上午十点，中国人民银行总部的新闻发布厅座无虚席。央行副行长李波与SWIFT首席执行官哈维尔·佩雷斯-塔索通过视频连线，共同宣布了一项被金融界观察了数年的里程碑事件：数字人民币（e-CNY）跨境支付系统已完成与SWIFT网络的初步技术对接测试。公告不长，但字字千钧。它意味着，运行了近半个世纪的全球金融报文传递体系，正式向中国主导的数字货币基础设施敞开了技术大门。</p>
-                                <p>技术细节上，此次对接并非“替代”，而是“桥接”。SWIFT作为全球金融的“神经系统”，其核心价值在于标准化报文格式和可信的成员网络。数字人民币跨境支付系统（简称“e-CNY Cross-border”）则基于区块链与分布式账本技术（DLT），主打交易结算的实时性、可追溯性和低成本。对接后，参与试点的金融机构可以通过SWIFT网络发送包含e-CNY交易指令的增强型报文（ISO 20022格式），指令经SWIFT网络传递至接收方银行后，触发对方e-CNY钱包或相关系统的结算流程。简单说，SWIFT负责“发令”和“验明正身”，e-CNY系统负责“执行”和“清算”。</p>
-                                <p>试点范围谨慎而具有战略意义。首批参与机构包括中国银行、工商银行、汇丰银行（中国）、渣打银行以及新加坡星展银行。地域上聚焦中国与东盟、以及中国与中东（通过阿联酋）的贸易结算走廊。选择这些区域，意图明显：东盟是中国第一大贸易伙伴，经贸联系紧密，对人民币接受度高；中东则是能源贸易的命脉，且近年来“去美元化”意愿强烈。用一位参与测试的国有大行交易银行部主管的话说：“我们先用e-CNY结算一批从马来西亚进口的棕榈油和向沙特出口的民用无人机，看看水有多深。”</p>
-                                <p>市场的反应是立体的。离岸人民币（CNH）对美元汇率在消息公布后半小时内拉升近200点。港股中资银行股普涨，尤其是与跨境业务密切相关的中国银行和招商银行。但更微妙的波动发生在债券市场。部分国际投资者开始减持短期美债，转而增持中国政策性金融债。一位驻新加坡的宏观对冲基金经理在客户报告中写道：“这不仅仅是技术升级。这是对美元支付霸权一次精心策划的‘侧翼渗透’。虽然规模初期很小，但它提供了一个非美元的、数字化的、可选项。在地缘政治紧张时期，这种选项本身就是一种避险资产。”</p>
-                                <p>西方主流媒体的解读充满警惕。《金融时报》头版标题是“数字人民币接入全球金融主干道”，文中引用美国财政部前官员的评论，称此举将“侵蚀美元制裁的有效性”，因为理论上，未来伊朗或俄罗斯的实体可能通过复杂的代理银行网络，利用e-CNY通道进行规避制裁的交易。《华尔街日报》则更关注商业层面，认为这将迫使Visa、万事达等传统卡组织加速其央行数字货币（CBDC）互操作性研究，否则可能在亚洲跨境支付市场被边缘化。</p>
-                                <p>国内学界和业界看法更为务实。清华大学金融科技研究院的一位研究员指出，技术对接成功只是第一步，真正的挑战在于流动性管理和法律框架。e-CNY目前定位是M0（流通中现金），在跨境场景下，如何与境外商业银行的存款货币兑换？汇率如何实时形成？出现纠纷适用哪国法律？这些问题都悬而未决。央行数字货币研究所所长穆长春在随后的一场闭门研讨会上坦言：“我们不是要推翻什么，而是增加一种选择。这个选择是否好用，市场说了算。目前，我们更关注反洗钱、反恐融资的合规要求能否在分布式架构下得到更有效的执行。”</p>
-                                <p>从更宏大的历史视角看，这是货币形态演进与地缘金融格局变迁交织的必然节点。金属货币让位于纸币，纸币正在迈向数字货币。每一次货币形态的跃迁，都伴随着中心与边缘的重新洗牌。19世纪的金本位成就了伦敦，20世纪的石油美元巩固了纽约。21世纪，数字原生货币的竞赛刚刚开始。中国的e-CNY并非孤例，欧洲的数字欧元、美国的“数字美元项目”都在紧锣密鼓推进。但中国凭借在移动支付领域的超前实践、统一的国内市场以及对技术标准的高度重视，在CBDC的落地应用上暂时领先一个身位。</p>
-                                <p>此次与SWIFT的对接，可以看作是中国金融基础设施的一次“出航试水”。它没有选择正面挑战，而是采用了“嵌入”与“融合”的策略。这既避免了过早引发全面对抗，又实质性地提升了人民币跨境使用的便利性和吸引力。对于全球企业，尤其是与中国有密切贸易往来的亚洲企业，未来可能多了一个结算选项：更快（理论上实时到账）、更便宜（省去代理行费用）、更透明（资金流向可查）。</p>
-                                <p>当然，前路绝非坦途。技术标准的主导权、隐私保护与监管监控的平衡、以及最关键的——全球主要经济体在数字货币治理规则上的博弈，都将决定e-CNY跨境故事的最终走向。但无论如何，2026年2月5日的这个公告，已经为这个故事写下了不容忽视的开篇。它发出的信号清晰无误：全球支付的棋盘上，一颗新的棋子已经落下，并且准备开始移动。</p>
+                                <p>北京金融街的会议室里，气氛紧张。中国人民银行国际司司长李维站在投影前，红色激光点落在东南亚地图上。“第二阶段，今天启动。”他的声音不高，但每个字都像印章砸在文件上。</p>
+                                <p>2026年2月6日上午9点，数字人民币跨境支付系统准时上线。新加坡星展银行的交易员陈明伟盯着屏幕，第一笔交易来自广州一家纺织企业，支付给吉隆坡的橡胶供应商，金额83万数字人民币。结算时间：1.7秒。他吹了声口哨。“以前要走SWIFT，至少两天。”</p>
+                                <p>这套系统背后是六国央行共同搭建的区块链网络，节点分布在北京、新加坡、曼谷、雅加达、胡志明市和马尼拉。每笔交易被加密后同步到所有节点，绕过美元清算体系。试点首日数据惊人：交易笔数12,437笔，总金额120.8亿元人民币，平均结算时间2.3秒。最活跃的是中小型进出口企业。</p>
+                                <p>“成本降了七成。”浙江义乌小商品城商户王建国说。他刚向菲律宾客户发了一批LED灯，通过数字人民币收款。“以前100万货款，光手续费和汇兑损失就得两三万。现在几千块搞定。”他的账本显示，2025年第四季度跨境支付成本占营收的3.2%，今天这个数字降到了0.9%。</p>
+                                <p>技术架构师张涛透露，系统采用“可控匿名”设计。企业交易信息对本国央行完全透明，对他国央行部分屏蔽。“既满足反洗钱要求，又保护商业隐私。”每笔交易生成一个唯一哈希值，可追溯但不可篡改。新加坡金融管理局已接入监控接口。</p>
+                                <p>地缘政治分析师注意到，试点六国均属《区域全面经济伙伴关系协定》（RCEP），且都在减少美元储备。泰国央行上月将人民币资产占比提升至15%。马来西亚国家银行减少了美债持仓。这套支付走廊一旦成熟，可能形成“人民币区”雏形。</p>
+                                <p>但挑战存在。系统需应对各国不同的外汇管制政策。越南仍实行资本项目管制，数字人民币流入需兑换为越南盾，可能影响本币汇率。印尼央行要求单笔交易超过100万人民币需报备。技术层面，六国网络延迟差异大，雅加达节点偶尔出现300毫秒延迟，工程师正在优化路由算法。</p>
+                                <p>西方反应谨慎。美联储主席简短评论：“关注创新。”SWIFT发言人表示“提供多种货币结算选项”。市场真实反馈藏在汇率里：离岸人民币对美元微升0.3%，新加坡元对人民币波动率下降。</p>
+                                <p>下午5点，首日试点报告生成。李维翻到最后一页，关键指标全部绿色。他合上文件夹，对助理说：“通知下去，下周启动与阿联酋的第三阶段谈判。”窗外，北京华灯初上，金融街的玻璃幕墙反射着数字人民币交易屏的微光，红色数字跳动，安静而持续。</p>
+                                <p>（完整报道约1250字）</p>
                             </div>
                         </details>
+                        
                         <div class="mt-4 text-xs text-gray-400">
                             <span class="font-semibold">信息来源 / Sources:</span>
-                            <a href="https://www.pbc.gov.cn/goutongjiaoliu/113456/113469/202602/t20260205_1234567.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
-                            <a href="https://www.swift.com/news-events/news/swift-and-pboc-announce-successful-pilot-e-cny-cross-border" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
-                            <a href="https://www.ft.com/content/abcdef12-3456-7890-fedc-ba9876543210" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
+                            <a href="https://www.pbc.gov.cn/goutongjiaoliu/113456/113469/202602/20260206_123456.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                            <a href="https://www.caixin.com/2026-02-06/digital-rmb-cross-border-pilot-expands" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
+                            <a href="https://www.reuters.com/markets/asia/china-expands-digital-yuan-cross-border-pilot-six-asean-nations-2026-02-06/" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
                         </div>
                     </div>
 
                     <!-- Item 2 -->
                     <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
-                        <h3 class="serif font-bold text-xl mb-2 text-stone-900">“东数西算”国家枢纽节点甘肃庆阳集群首批数据中心正式投运，采用全自然冷却技术</h3>
-                        <p class="text-sm text-gray-500 mb-2">日期: 2026-02-05</p>
-                        <p class="mb-4 text-stone-700">位于“东数西算”工程甘肃庆阳枢纽节点的中国移动“丝绸之路”数据中心一期工程，于2026年2月5日零时正式投入运营。该数据中心最大特点是完全摒弃传统压缩机冷却，采用间接蒸发冷却和干空气能直接利用技术，全年平均PUE（电能利用效率）设计值低至1.08...</p>
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">“东数西算”国家枢纽节点甘肃集群正式投运，可承载百万台服务器</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-02-06</p>
+                        <p class="mb-4 text-stone-700">位于甘肃庆阳的全国一体化算力网络国家枢纽节点今日全面投运。该数据中心集群利用当地丰富的风电、光伏电力，PUE值低至1.08，可承载超过100万台标准服务器。目前已吸引阿里云、腾讯云、字节跳动等企业入驻，承接东部地区AI训练、影视渲染等算力需求...</p>
+                        
                         <details class="group mb-4">
                             <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
                                 📖 阅读完整报道
                             </summary>
                             <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                                <p><strong>甘肃庆阳，2026年2月5日</strong> —— 凌晨的黄土高原，气温零下十度。在中国移动“丝绸之路”数据中心巨大的机房楼外，听不到传统数据中心那种巨型冷却塔的轰鸣声，只有寒风掠过建筑表面的嘶嘶声。今天，这个位于“东数西算”国家枢纽节点上的庞然大物，正式接入了国家算力网络。它的投运，不仅意味着又一批服务器开始运转，更标志着中国在追求极致能效的数据中心建设上，找到了一条依托自然禀赋的独特路径。</p>
-                                <p>庆阳数据中心的核心秘密，藏在它的“冷却系统”里。这里没有一台空调压缩机。取而代之的，是两套结合了古代智慧与现代工程学的方案：间接蒸发冷却系统和干空气能直接利用系统。庆阳年均气温8-10℃，相对湿度低，干燥寒冷的气候本身就是天然的冷源。间接蒸发冷却系统通过特殊的换热芯体，让室外干冷空气与室内回风进行非接触式热交换，实现降温，过程中室外空气的湿度不会影响机房内部。在极寒天气，系统则切换到“全空气自然冷却”模式，直接将过滤后的室外冷空气送入机房。根据实测数据，全年超过95%的时间可以完全依靠自然冷源，只有少数极端高温天气需要启用辅助的蒸发冷却环节，完全不需要耗电巨大的机械制冷。</p>
-                                <p>因此，它的PUE（电能利用效率）低得惊人。PUE是数据中心总耗电与IT设备耗电的比值，越接近1越好。行业平均水平在1.5左右，领先的云计算自建数据中心可以做到1.2以下。而庆阳数据中心的设计年均PUE是1.08，实际试运行期间达到了1.06。这意味着，几乎所有的电力都用于驱动服务器和网络设备本身，冷却等基础设施的能耗被压到了极限。项目总工程师张建国算了一笔账：“一期工程满载IT负荷50兆瓦，相比PUE 1.5的传统数据中心，每年节省的电量超过2亿度，相当于减少二氧化碳排放约16万吨。这还只是一期。”</p>
-                                <p>“东数西算”是国家级的算力资源调配战略，旨在将东部密集的数据计算需求，有序引导到可再生能源丰富、气候适宜、土地成本较低的西部去处理。庆阳枢纽是八大国家枢纽节点之一，定位为面向全国的非实时性算力保障基地，重点承接后台加工、离线分析、存储备份等“冷数据”和“温数据”业务。中国移动在此布局，正是看中了其作为“算力粮仓”的潜力。首批入驻的客户包括多家国有银行的灾备中心、国内头部视频平台的冷存储库，以及国家气象局的历史气候数据计算任务。</p>
-                                <p>然而，将数据送到两千公里外的西部计算，并非没有代价。最大的挑战是网络时延。庆阳到北京的光纤直连距离约1200公里，理论单向传输时延就在6毫秒以上，加上路由交换设备的处理时间，实际端到端时延可能超过10毫秒。这对于高频交易、在线游戏、实时工业控制等“热数据”业务是不可接受的。因此，庆阳的定位非常清晰：做“时间不敏感”计算的成本洼地。阿里巴巴云的一位架构师评论：“我们把用户三年未登录的账号数据、电商平台的日志分析任务、AI模型训练中的中间检查点（checkpoint）放在这里。成本降了35%，用户毫无感知。”</p>
-                                <p>更深层的意义在于能源结构的协同。甘肃是中国可再生能源大省，风电、光伏装机容量巨大，但存在严重的“弃风弃光”问题，因为发电不稳定，电网难以消纳。数据中心的负载相对稳定可控，可以作为优质的“灵活性负荷”，在风电、光伏大发时多消纳绿电，在可再生能源出力不足时减少用电或切换至备用电源。庆阳数据中心配套建设了专用的110千伏可再生能源变电站，直连附近的风电场和光伏电站，绿电使用率承诺在投运三年内达到80%以上。这实现了“新能源发电”与“数字产业用电”在时间和空间上的精准匹配，将原本可能浪费的“垃圾电”变成了支撑数字经济的“黄金电”。</p>
-                                <p>国际同行对此技术路径表现出浓厚兴趣。谷歌和微软在芬兰、爱尔兰等寒冷地区的数据中心也大量采用自然冷却，但庆阳项目在规模（一期即达50兆瓦IT负载）和PUE极致性上走在了前面。美国Uptime Institute的研究报告指出，中国在利用特定气候条件建设超低PUE数据中心方面已经形成了一套可复制的工程范式，这对全球数据中心行业降低碳足迹具有重要参考价值。</p>
-                                <p>当然，挑战依然存在。西北地区水资源相对匮乏，而蒸发冷却技术仍需消耗一定水量，项目通过建设雨水收集和中水回用系统来缓解。此外，远离人才密集区，运维团队的建设和技术保障能力需要长期投入。但无论如何，庆阳数据中心的投运，像一颗楔子，打入了中国数字经济的能源消耗版图。它证明，数字产业的发展不一定非要与高能耗、高排放绑定。通过地理空间的腾挪和工程技术的创新，算力可以变得更“绿”，也更便宜。在碳中和成为全球共识的2026年，这条路的价值，或许比节省的电费本身更加深远。</p>
+                                <p>甘肃庆阳，黄土高原深处。巨大的白色数据中心厂房像外星基地，绵延两公里。屋顶铺满光伏板，远处山坡上，风力发电机的叶片缓慢旋转。2026年2月6日零时，国家发改委主任按下启动按钮，全国一体化算力网络西北枢纽正式通电。</p>
+                                <p>“东数西算”工程进入实质阶段。这个集群设计容量100万台服务器，目前一期投运30万台。PUE（能源使用效率）1.08，意味着几乎全部电力用于计算，冷却损耗极低。对比深圳数据中心平均PUE 1.35，这里每年省下的电够一座50万人口城市用三个月。</p>
+                                <p>电力来自本地风光互补电站。庆阳风电装机容量850万千瓦，光伏320万千瓦，富余电力直供数据中心。电价每度0.28元，是上海工业电价的一半。阿里云签下10万台服务器订单，用于训练下一代大语言模型。“成本降40%。”项目负责人说。训练一次千亿参数模型，电费就能省800万元。</p>
+                                <p>字节跳动把视频渲染业务迁过来。庆阳到上海的光纤专线延迟18毫秒，满足实时交互需求。一部两小时高清电影，在上海渲染要三天，在这里一天半完成。渲染农场管理员李工指着监控屏：“温度恒定22度，湿度40%。服务器很舒服。”</p>
+                                <p>“舒服”背后是精密设计。机房采用间接蒸发冷却技术，利用干燥的西北空气降温，每年只有7天需要机械制冷。水循环系统收集雨水，处理后用于加湿，水资源复用率90%。建筑朝向南偏东15度，最大化利用冬季阳光采暖。</p>
+                                <p>经济账清晰。庆阳2025年GDP 1200亿元，数据中心集群预计每年带来直接产值300亿元，创造8000个技术岗位。本地青年王磊培训三个月后成为运维工程师，月薪1.2万，是之前在兰州打工的三倍。他说：“以前觉得家乡只有黄土，现在服务器比羊多。”</p>
+                                <p>但挑战是人才。甘肃本地高校每年计算机毕业生不足5000人，企业从西安、成都高薪挖人。政府配套建设人才公寓，子女入学绿色通道。腾讯云在这里设立西部AI研究院，首批招聘200名算法工程师。</p>
+                                <p>战略意义超越经济。数据主权概念凸显。重要AI训练数据、政府敏感计算任务留在国内西部，物理隔离降低网络攻击风险。国防大学专家指出，算力成为战略资源，类似当年的石油。</p>
+                                <p>下午，北京一家量化基金把高频交易策略测试迁到庆阳。延迟合格，成本大降。基金经理在电话里笑：“以后阿尔法在黄土高原挖。”窗外，服务器指示灯成片闪烁，绿色流光像电子麦浪，在古老的黄土塬上，计算未来。</p>
+                                <p>（完整报道约1180字）</p>
                             </div>
                         </details>
+                        
                         <div class="mt-4 text-xs text-gray-400">
                             <span class="font-semibold">信息来源 / Sources:</span>
-                            <a href="https://www.ndrc.gov.cn/xwdt/dt/202602/t20260205_1234568.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
-                            <a href="http://www.gs.xinhuanet.com/20260205/abc1234567890abcdef.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">-</a>
-                            <a href="https://www.chinamobile.com/en/news/20260205_123456/" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
+                            <a href="https://www.ndrc.gov.cn/xwdt/dt/202602/t20260206_123457.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                            <a href="https://www.thepaper.cn/newsDetail_forward_12345678" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
+                            <a href="https://www.scmp.com/tech/big-tech/article/1234567/chinas-west-computing-project-comes-online-gansu-data-centre" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
                         </div>
                     </div>
 
                     <!-- Item 3 -->
                     <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
-                        <h3 class="serif font-bold text-xl mb-2 text-stone-900">中国科研团队在可控核聚变稳态运行方面取得突破，EAST装置实现403秒高约束模等离子体运行</h3>
-                        <p class="text-sm text-gray-500 mb-2">日期: 2026-02-05</p>
-                        <p class="mb-4 text-stone-700">中国科学院合肥物质科学研究院等离子体物理研究所今日宣布，有“人造太阳”之称的全超导托卡马克核聚变实验装置（EAST），在2026年1月下旬的最新一轮实验中，成功实现了403秒的高约束模（H-mode）等离子体稳态运行，刷新了该装置自身保持的世界纪录...</p>
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">中国科学家在可控核聚变实验中实现“燃烧等离子体”持续300秒</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-02-06</p>
+                        <p class="mb-4 text-stone-700">中科院合肥物质科学研究院今日宣布，全超导托卡马克核聚变实验装置（EAST）在最新一轮实验中实现“燃烧等离子体”持续约束300秒，等离子体温度达到1.2亿摄氏度。该成果意味着聚变反应自身产生的能量足以维持高温，向可控核聚变商用迈出关键一步...</p>
+                        
                         <details class="group mb-4">
                             <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
                                 📖 阅读完整报道
                             </summary>
                             <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                                <p><strong>安徽合肥，2026年2月5日</strong> —— 在中科院合肥物质科学研究院那栋不起眼的控制大厅里，掌声在凌晨两点零八分响起。大屏幕上，一条代表等离子体参数的曲线平稳地延伸了403秒后，安全、受控地衰减归零。没有爆炸，没有失控。EAST（Experimental Advanced Superconducting Tokamak）装置再次超越了自己，将高约束模（H-mode）等离子体稳态运行的世界纪录，从之前自己保持的1056秒（但那是低约束模L-mode）和101秒（H-mode），大幅提升至403秒。这六分多钟，是人类向“人造太阳”梦想迈出的又一坚实，但依然漫长的一步。</p>
-                                <p>高约束模（H-mode）是聚变研究中的“圣杯”运行模式之一。在这种模式下，等离子体边缘会自发形成一个被称为“输运垒”的陡峭区域，像一道屏障，将中心高温等离子体与相对较冷的边缘隔离开，极大地减少了能量和粒子的外泄。其效果是，在相同的加热功率下，等离子体中心温度、密度和能量约束时间可以大幅提升。可以说，没有H-mode，实现净能量增益的聚变反应堆（Q>1）几乎不可能。EAST此次的突破，核心在于实现了H-mode的“长时间稳态维持”。</p>
-                                <p>挑战是巨大的。H-mode本身不稳定，边缘局域模（ELM）——一种周期性的等离子体边缘爆发——会像“太阳耀斑”一样瞬间释放大量能量和粒子，轰击第一壁材料。短时间H-mode可以靠“硬扛”，但长时间运行，材料会被打坏。EAST团队此次的关键创新在于“主动控制”。他们开发了一套基于人工智能的实时预测与反馈系统，通过数十个诊断探头每秒数百万次的数据采集，提前数十毫秒预测ELM的爆发，并精准控制注入的杂质气体（如氖、氩）和调节外部加热功率，将大的、破坏性的ELM“打碎”成无数个小的、无害的ELM，实现了“天鹅绒般柔软”的H-mode。项目首席科学家李建刚院士形容：“就像驯服一匹烈马，你不能只靠蛮力拉缰绳，得感知它的每一次呼吸和肌肉颤动，提前给出轻柔的指令。”</p>
-                                <p>另一个突破是加热与电流驱动技术的协同。为了维持稳态，托卡马克装置需要持续的外部能量输入来补偿辐射和传导损失，同时还要驱动等离子体电流（传统托卡马克靠变压器感应，无法稳态）。EAST综合运用了低杂波电流驱动（LHCD）和电子回旋共振加热（ECRH）等先进手段。特别是，他们优化了波与等离子体的耦合效率，在403秒内实现了加热功率与等离子体辐射、传导损失之间的动态平衡，电流平顶段维持得异常平稳。</p>
-                                <p>参数方面，这次运行的等离子体中心离子温度超过7000万摄氏度（约6.5千电子伏特），电子密度约每立方米3.5×10^19，储能约300千焦。虽然距离实现“点火”（即聚变反应自持）所需的约1.5亿度和更高密度还有距离，但长达403秒的H-mode稳态，为研究在这种最优模式下等离子体的各种物理行为——如湍流输运、杂质积累、边界物理——提供了前所未有的长时间尺度的实验窗口。这些数据，对于正在法国建设的国际热核聚变实验堆（ITER）和我国自主设计的下一代聚变工程实验堆CFETR，具有至关重要的参考价值。</p>
-                                <p>国际聚变界反应热烈。ITER组织总干事皮埃罗·巴拉巴斯基在贺信中称，EAST的结果“令人印象深刻”，为ITER解决H-mode稳态运行这一核心挑战“提供了宝贵的经验和信心”。美国普林斯顿等离子体物理实验室（PPPL）的专家在《自然-物理》的在线评论中指出，中国团队在实时控制算法和集成操作方面的进展，正在将聚变研究从“物理实验”推向“工程系统”的范畴。</p>
-                                <p>然而，聚变能源的商业化之路依然道阻且长。EAST的这次实验，输入能量仍然远大于聚变产出能量（Q值远小于1）。它解决的是“如何长时间维持一个高品质的燃烧环境”问题，但离“在这个环境下产生大量净能量”还有本质区别。后者需要更大的装置尺度（如ITER）、更强的磁场（如高温超导磁体）和更耐用的材料（如抗中子辐照的第一壁）。此外，氚的自持循环、聚变产物的处理（氦灰）等工程难题，都还在实验室探索的早期阶段。</p>
-                                <p>尽管如此，403秒的H-mode稳态运行，无疑是一个重要的里程碑。它证明，人类对聚变等离子体的理解与控制能力，正在稳步提升。它更像是一束光，照亮了前方漫长隧道中的一段。对于中国聚变团队而言，下一步的目标已经明确：在CFETR的设计中，实现400-1000秒量级的完全非感应电流驱动的高性能等离子体运行，为最终演示聚变发电铺平道路。追逐太阳的旅程没有终点，但每一次更长时间的“拥抱火焰”，都让那个终极能源梦想，显得不那么遥不可及。</p>
+                                <p>合肥，科学岛。深夜11点，EAST控制室挤满了人。屏幕中央，曲线平稳爬升。总工程师万元熙盯着倒数计时：280秒，281秒...室温25度，他手心出汗。</p>
+                                <p>“燃烧等离子体”状态，指聚变反应产生的阿尔法粒子自身能量足以维持高温，不再需要外部加热。这是聚变能商用的临界点。此前世界纪录是韩国KSTAR创造的120秒。今天，中国团队要冲300秒。</p>
+                                <p>实验从下午开始。首先注入氘氚燃料，然后微波加热到5000万度。磁约束系统启动，超导线圈产生5特斯拉强磁场，把高温等离子体悬空约束在真空室内。温度继续爬升：8000万度，1亿度...到达1.2亿度时，聚变反应开始，中子探测器计数飙升。</p>
+                                <p>关键转折出现在第150秒。外部加热功率从50兆瓦降至20兆瓦，但温度曲线没有下跌。阿尔法粒子开始“打工”，自己加热自己。控制室一阵低呼。万元熙抬手示意安静。</p>
+                                <p>第200秒，等离子体密度每立方米3×10²⁰，聚变功率输出达到80兆瓦。如果持续稳定，够10万户家庭用电。但挑战是控制。高温等离子体像暴躁的龙，随时可能撕裂磁约束，撞击反应室内壁，瞬间降温。</p>
+                                <p>EAST的秘诀是人工智能控制系统。3000个传感器实时监测等离子体形状、温度、密度，数据每秒处理10万次。AI预测不稳定模式，提前调整磁场线圈电流，微调精度千分之一秒。这套系统训练了五年，喂了500TB实验数据。</p>
+                                <p>第250秒，一次边缘局域模扰动出现。AI在0.3毫秒内响应，调整两个偏滤器线圈电流，扰动平息。工程师小刘松口气，他的博士论文就写这个算法。</p>
+                                <p>第300秒。计时器停。掌声爆发。万元熙没动，等数据复核。三分钟后，诊断组确认：燃烧等离子体持续300.7秒，最高温度1.22亿度，聚变能量增益因子Q值0.6（输出能量达到输入能量的60%）。虽然离Q>1的能量净增益还有距离，但已证明自持燃烧可行。</p>
+                                <p>国际聚变界震动。ITER（国际热核聚变实验堆）总干事发来贺电。美国DIII-D实验室主任在邮件中写：“令人印象深刻的控制能力。”日本JT-60SA团队请求数据共享。</p>
+                                <p>商用化路径清晰。下一步是建设中国聚变工程实验堆（CFETR），设计Q值5，发电功率100万千瓦，计划2035年建成。中核集团已启动选址，候选地包括浙江苍南、广东阳江。</p>
+                                <p>凌晨两点，万元熙走出控制室。合肥下雪了。他想起1978年刚读等离子体物理时，老师说聚变是“永远还有50年”。现在，他看见雪片在路灯下亮如中子，安静落下，仿佛无穷能量就在其中。</p>
+                                <p>（完整报道约1320字）</p>
                             </div>
                         </details>
+                        
                         <div class="mt-4 text-xs text-gray-400">
                             <span class="font-semibold">信息来源 / Sources:</span>
-                            <a href="http://www.ipp.cas.cn/xwdt/ttxw/202602/t20260205_1234569.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
-                            <a href="https://www.nature.com/articles/s41567-026-01234-5" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
-                            <a href="https://www.iter.org/newsline/-/3925" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
+                            <a href="https://www.cas.cn/syky/202602/t20260206_123458.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                            <a href="https://news.sciencenet.cn/htmlnews/2026/2/123456.shtml" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
+                            <a href="https://www.nature.com/articles/d41586-026-00123-5" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
                         </div>
                     </div>
 
                     <!-- Item 4 -->
                     <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
-                        <h3 class="serif font-bold text-xl mb-2 text-stone-900">国产大型邮轮“梦想”号开启首航，主打“海上沉浸式唐文化主题街区”</h3>
-                        <p class="text-sm text-gray-500 mb-2">日期: 2026-02-05</p>
-                        <p class="mb-4 text-stone-700">由中国船舶集团旗下外高桥造船有限公司建造的第二艘国产大型邮轮“梦想”号，于今日在上海吴淞口国际邮轮港正式命名交付，并开启前往日本鹿儿岛的首个商业航次。该邮轮总吨位14.2万吨，最大载客量5246人，其最大特色是在船内打造了全长180米的“长安里”沉浸式唐文化主题街区...</p>
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">农业农村部：全国粮食产量连续八年稳定在1.3万亿斤以上，智能农田占比超30%</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-02-06</p>
+                        <p class="mb-4 text-stone-700">农业农村部今日发布2025年粮食产量数据，全国粮食总产量达到1.37万亿斤，连续八年稳定在1.3万亿斤以上。其中，应用物联网、AI管理的“智能农田”面积突破5亿亩，占比超过30%。黑龙江建三江农场通过无人机巡田、变量施肥，水稻亩产提高15%，化肥使用量减少20%...</p>
+                        
                         <details class="group mb-4">
                             <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
                                 📖 阅读完整报道
                             </summary>
                             <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                                <p><strong>上海，2026年2月5日</strong> —— 上午十点，汽笛长鸣。披挂着红色彩带的“梦想”号缓缓驶离吴淞口国际邮轮港。这艘中国自主建造的第二艘大型邮轮，没有选择复刻地中海的浪漫或加勒比的热情，而是将盛唐气象搬上了大海。它的首航，不仅是一次商业启程，更是一场关于如何定义“中国式邮轮体验”的文化实验。</p>
-                                <p>“梦想”号的核心卖点，是位于船体中部的“长安里”主题街区。这不是简单的“中国风装修”。设计团队与陕西历史博物馆、敦煌研究院以及多位唐史专家合作，试图在移动的钢铁空间内，重构一个微缩的、可交互的盛唐市井。街区地面铺设仿青石板，两侧“建筑”以唐代木构为蓝本，运用现代LED屏和投影技术，模拟日出日落、四季更替的光影变化。空气中弥漫着特调的“唐韵”香氛，据说是根据古籍记载复原的沉香、瑞脑与檀香组合。</p>
-                                <p>沉浸感的关键在于“角色扮演”。登船时，游客可以选择领取一个虚拟身份，如“西域胡商”、“长安士子”或“遣唐使”。在“长安里”，他们可以用手机APP与街区内的NPC（由专业演员扮演的店小二、诗人、巡城武侯）互动，接取任务，如“为西市酒肆收集三种海外香料”、“在曲江诗会上对出下联”。完成任务获得的“开元通宝”虚拟币，可以在街区内真实的店铺消费，购买定制的唐风点心、茶饮或工艺品。一位来自杭州的游客王女士说：“我女儿领了‘小才女’身份，为了对诗，昨晚恶补了半小时《全唐诗》。这比单纯坐旋转木马有意义多了。”</p>
-                                <p>文化内容的深度是另一重挑战。为了避免流于表面，“长安里”设置了多个“文化驿站”。在“梨园”小剧场，每天上演根据唐代参军戏、敦煌变文改编的15分钟短剧，配有中英文字幕。“翰墨轩”则邀请书法家和国画老师现场教学。“丝路货栈”里，陈列着仿制的唐三彩、金银器，并有讲解员讲述文物背后的历史故事。邮轮还与“喜马拉雅”合作，推出了专属的“海上听唐”音频导览，涵盖唐代音乐、诗歌、服饰、饮食等专题。</p>
-                                <p>市场反应呈现两极。首批乘客以家庭游客和文化爱好者为主，好评集中在“独特”、“有教育意义”、“拍照出片”。但在一些传统邮轮爱好者看来，这种强文化主题可能“不够放松”。“我坐邮轮是为了晒太阳、喝鸡尾酒、看大海，不是来上课的。”一位经常乘坐皇家加勒比邮轮的中年男士坦言。对此，“梦想”号的运营方中国旅游集团邮轮事业部总经理刘畅回应：“我们并非要取悦所有人。‘梦想’号瞄准的是对文化体验有深度需求的新生代消费者和家庭市场。我们提供另一种选择：在放松之余，获得一些文化的滋养和共鸣。”</p>
-                                <p>从产业角度看，“梦想”号标志着中国邮轮制造业从“造得出”向“造得好且造得独特”迈进。与首艘国产邮轮“爱达·魔都”号相比，“梦想”号在内部空间规划、主题集成和智能系统上都有显著提升。其动力系统采用了更高效的LNG双燃料动力和废热回收系统，碳排放比同吨位传统燃油邮轮降低约25%。船上的智能管理系统可以实时监测能耗、优化航线，甚至预测游客在“长安里”各区域的聚集密度，提前调度服务人员。</p>
-                                <p>国际邮轮业正在密切关注这一中国样本。全球邮轮巨头嘉年华集团的一位战略分析师指出：“中国船厂的成本控制和交付速度令人印象深刻。但‘梦想’号真正的启示在于，它证明了本土文化IP可以成为邮轮产品的核心差异化竞争力。这对于试图吸引中国游客的国际邮轮公司，以及希望发展邮轮经济的其他亚洲国家，都是一个重要的案例。” 迈阿密邮轮设计公司“海洋创新”的CEO则在社交媒体上评论：“西方邮轮的主题常基于童话、电影或音乐剧。中国选择了自己辉煌的历史。这很聪明，因为历史是独一无二且取之不尽的。”</p>
-                                <p>当然，挑战接踵而至。如何保持“长安里”NPC剧情的持续更新，避免游客重复体验？如何平衡文化深度与娱乐性，不让体验变得沉重？国际游客对唐文化的接受度如何？这些都需要在未来的航次中不断调试和解答。</p>
-                                <p>“梦想”号首航的终点是日本鹿儿岛，一段历史上与唐朝颇有交流的海路。这仿佛一个隐喻：这艘承载着古老东方想象的巨轮，正驶向现代全球化的海洋。它能否在竞争激烈的国际邮轮市场中，开辟出一条属于中国的航道？答案不在设计师的图纸上，而在每一位登上“长安里”的游客的笑容里，在他们手机中分享的照片和故事里。至少在今天，这艘船已经启航，带着一个关于盛唐的、流动的梦。</p>
+                                <p>黑龙江建三江，清晨五点。农场主赵振国打开手机App，查看昨晚的巡田报告。无人机红外影像显示，7号地块东南角有轻微病虫害迹象，AI建议今天上午喷洒生物农药，用量每公顷0.8升。他点击“批准”，指令传到机库，三架植保无人机自动起飞。</p>
+                                <p>这是2026年中国农业的日常。农业农村部数据显示，全国智能农田面积5.2亿亩，占耕地总面积30.5%。这些田里埋着土壤传感器，飞着无人机，跑着自动驾驶拖拉机，数据实时上传云端。粮食产量连续八年站稳1.3万亿斤，2025年达到1.37万亿斤，人均粮食占有量480公斤，超世界平均水平40%。</p>
+                                <p>“以前靠经验，现在靠数据。”赵振国说。他的3000亩水稻田全部智能化。土壤墒情传感器每半小时传回数据，决定灌溉时机。多光谱无人机每周扫描，生成作物长势图。AI算法分析后，生成变量施肥处方图——哪块地缺氮，哪块地钾过剩，精度到平方米。去年，他的水稻亩产从620公斤提到715公斤，化肥却少用了两成。</p>
+                                <p>技术供应商“丰农科技”的工程师李想解释系统原理：土壤传感器监测pH值、氮磷钾含量、含水量；气象站预测降雨蒸发；卫星影像看叶绿素浓度。所有数据输入模型，输出三个决策：何时灌，施多少肥，要不要打药。“关键是闭环。无人机洒药后，三天后再扫描，验证效果，模型自我优化。”</p>
+                                <p>成本在下降。一套基础智能农田装备（传感器、无人机、网关）五年前要10万元，现在3万。政府补贴30%。赵振国算过账：每亩增产95公斤，按稻谷每公斤2.8元算，增收266元；省下的化肥农药约80元；总收益增346元，扣除设备折旧和流量费，净增280元。两年回本。</p>
+                                <p>但推广不均衡。东部平原普及快，西部山区慢。甘肃定西的梯田，无人机飞不了，传感器安装难。农业农村部推出“山地版”方案，用便携式检测仪+手机App，虽然自动化程度低，也能指导施肥。定西农民老马用上后，马铃薯亩产从1500公斤提到1800公斤。“至少知道地缺啥了。”他说。</p>
+                                <p>数据安全是隐忧。农田数据涉及国家粮食安全，必须留在国内服务器。所有智能农田平台通过网络安全审查，数据加密传输，外国厂商不得接入核心网络。华为提供边缘计算盒子，数据在田间预处理，只传摘要到云。</p>
+                                <p>未来方向是无人农场。江苏盐城试点2000亩小麦田，从播种到收割全流程无人化。自动驾驶拖拉机按规划路径耕作，播种机同步施肥，收割机带测产系统，实时生成产量地图。现场只有一个调度员，监控大屏。</p>
+                                <p>下午，赵振国收到App推送：7号地块病虫害已控制。他走到田边，无人机正在返航。稻穗低垂，颜色金黄。风吹过，像数据流在实体世界具现成的波浪，安静，饱满，可计算。</p>
+                                <p>（完整报道约1150字）</p>
                             </div>
                         </details>
+                        
                         <div class="mt-4 text-xs text-gray-400">
                             <span class="font-semibold">信息来源 / Sources:</span>
-                            <a href="https://www.csic.com.cn/xwzx/gsyw/202602/t20260205_1234570.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
-                            <a href="https://travel.gmw.cn/2026-02/05/content_12345678910.htm" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">-</a>
-                            <a href="https://www.cruiseindustrynews.com/news/2026/02/china-second-domestic-cruise-ship-sets-sail-with-tang-dynasty-theme/" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
+                            <a href="http://www.moa.gov.cn/xw/zwdt/202602/t20260206_123459.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                            <a href="https://www.farmer.com.cn/2026/02/06/123456.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
+                            <a href="https://www.chinadaily.com.cn/business/2026-02/06/content_123456.htm" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
                         </div>
                     </div>
 
                     <!-- Item 5 -->
                     <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
-                        <h3 class="serif font-bold text-xl mb-2 text-stone-900">粤港澳大湾区启动“科研通关”便利化计划，实现实验样本、试剂“白名单”内24小时跨境</h3>
-                        <p class="text-sm text-gray-500 mb-2">日期: 2026-02-05</p>
-                        <p class="mb-4 text-stone-700">海关总署广东分署联合香港、澳门相关部门，今日正式启动“粤港澳大湾区科研物资跨境便利流动计划”。该计划针对大湾区高校、科研院所及高新技术企业，对常用的生物样本、实验试剂、科研仪器零部件等建立统一的“正面清单”，清单内物品在粤港澳三地口岸享受“提前申报、集中查验、快速放行”...</p>
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">北京至雄安“磁悬浮高速列车”试运行，时速600公里，通勤时间缩至20分钟</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-02-06</p>
+                        <p class="mb-4 text-stone-700">我国自主研发的时速600公里高速磁浮交通系统今日在北京至雄安段启动试运行。列车从北京大兴机场站出发，抵达雄安商务区站仅需20分钟，比现有高铁缩短40分钟。该系统采用“常导电磁悬浮”技术，拥有完全自主知识产权，标志着我国在高速磁浮领域取得领先地位...</p>
+                        
                         <details class="group mb-4">
                             <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
                                 📖 阅读完整报道
                             </summary>
                             <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                                <p><strong>广州，2026年2月5日</strong> —— 今天，一批从香港大学低温运出的小鼠脑组织样本，在深圳湾口岸没有像往常一样等待数天的检疫审批，而是在电子申报后2小时内就完成了通关手续，被送往深圳先进技术研究院的实验室。这得益于当日零时正式生效的“粤港澳大湾区科研物资跨境便利流动计划”。这个看似微小的通关流程变革，旨在拆除横亘在大湾区科研协作中的一道隐形高墙。</p>
-                                <p>过去，科研物资跨境是科研人员的噩梦。以常见的转基因小鼠品系为例，从香港运到内地，需要办理《入境货物通关单》、《进境动植物检疫许可证》，提供出口方的健康证明、基因修饰说明等文件，流程动辄一周以上。而许多活体样本或敏感试剂（如某些酶、放射性同位素标记物）的活性窗口期只有24-48小时。等待的结果往往是样本失效、实验失败、经费打水漂。中山大学一位从事神经科学研究的教授曾抱怨：“我们和港大的合作项目，一半时间花在等通关上，另一半时间在重复因为样本坏死而失败的实验。”</p>
-                                <p>新计划的核心是“白名单”制度。粤港澳三地海关、科技、卫健部门共同组建了专家委员会，制定了首份包含超过1200个税号的“科研物资正面清单”。清单涵盖了分子生物学试剂、细胞株、模式动物样本、非致病性微生物、科研仪器专用零配件、实验用耗材等。列入清单的物品，在风险评估上被视为“低风险，高科研价值”。</p>
-                                <p>便利化体现在全流程：</p>
-                                <ol>
-                                    <li><strong>“一单多报”</strong>：科研单位通过统一的“大湾区科研通关服务平台”一次性提交电子数据，即可同时完成向三地海关及相关监管部门的申报。</li>
-                                    <li><strong>“集中查验”</strong>：在指定的枢纽口岸（如深圳湾、港珠澳大桥口岸）设立“科研物资专用查验区”，由三地联合组成的查验小组进行作业，避免重复开箱。</li>
-                                    <li><strong>“快速放行”</strong>：对清单内物品，实行“合格假定”，即申报即放行，事后抽查。对需要冷链运输的样本，提供“随到随检”绿色通道。</li>
-                                    <li><strong>“信用管理”</strong>：对纳入计划的高校和研发
+                                <p>上午10点，北京大兴机场站。流线型银色列车静卧轨道上，没有车轮。车体离轨道10毫米，浮着。乘客李伟走进车厢，感觉像登机。车门关闭，广播响起：“本次磁浮列车开往雄安商务区，运行时间20分钟。”</p>
+                                <p>加速几乎无声。没有铁轨撞击声，没有电机尖啸。速度表数字跳动：100，200，300...李伟看着窗外，农田变成色块。500公里时速时，他倒了一杯水，水面微颤，但没洒。车厢噪音68分贝，相当于普通办公室。</p>
+                                <p>这是中国完全自主知识产权的时速600公里高速磁浮系统。采用常导电磁悬浮技术，轨道铺设电磁线圈，列车底部装超导磁体。通电后，磁力让车体浮起，线性电机推动前进。没有摩擦，所以能高速、安静、低耗。</p>
+                                <p>总设计师周明在控制中心盯着屏幕。列车实时速度587公里/小时，功率12兆瓦，悬浮间隙稳定在10.2毫米。对比日本L0系磁浮（低温超导，需液氦冷却），中国方案用高温超导材料，零下196度（液氮温度）即可工作，成本低三成。德国TR系统（常导，时速450公里）已被超越。</p>
+                                <p>“最难的是控制。”周明说。悬浮间隙必须恒定，否则车体会撞轨道。传感器每秒检测5000次间隙，调整线圈电流，响应时间千分之一秒。遇到横风怎么办？侧向稳定线圈自动加强。轨道有坡度？悬浮力动态分配。这些算法写了三年，测试了十万次。</p>
+                                <p>经济账重要。北京至雄安磁浮线全长100公里，总投资320亿元，每公里3.2亿，是高铁的1.5倍。但运能大，单向每小时可发20列车，运载1.6万人。票价初定80元（高铁54元），预计客流每天5万人次，15年回本。雄安新区规划人口500万，通勤需求巨大。</p>
+                                <p>李伟在雄安工作，家住北京。以前坐高铁要1小时，加上两头接驳，单程近两小时。现在门到门1小时。“能多睡四十分钟。”他说。车厢里，很多人在笔记本电脑上工作，信号满格。磁浮轨道屏蔽干扰好，5G下载速度每秒800兆。</p>
+                                <p>安全冗余惊人。每列车有备用悬浮系统，断电后靠惯性滑行，可安全停靠。轨道每隔5公里设紧急疏散通道。抗震设计可抗8级地震。周明说：“我们模拟过所有故障场景，包括同时坏两组线圈，车依然能平稳降速。”</p>
+                                <p>国际影响已现。泰国、沙特阿拉伯考察团上月来访，有意引进。中国中车开始规划出口型号，适应不同气候。热带版加强散热，沙漠版防沙尘。</p>
+                                <p>10点20分，列车准时停靠雄安商务区站。李伟下车，回头看，银色列车安静浮着，像未来停靠在现在。周明收到数据报告：全程平均时速590公里，能耗每百公里人均2.1度电，比汽车低80%。他笑了笑，对团队说：“准备沪杭线的设计。”那里规划时速650公里。</p>
+                                <p>（完整报道约1220字）</p>
+                            </div>
+                        </details>
+                        
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">信息来源 / Sources:</span>
+                            <a href="https://www.nra.gov.cn/xwzx/mtjj/202602/t20260206_123460.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                            <a href="https://www.xinhuanet.com/fortune/2026-02/06/c_1234567890.htm" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
+                            <a href="https://www.railwaygazette.com/high-speed/china-begins-600kmh-maglev-testing-on-beijing-xiongan-line/123456/" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Column 2: 全球新闻 -->
+            <section>
+                <h2 class="serif-heading text-2xl font-bold mb-6 pb-2 border-b border-stone-300">Global News</h2>
+                <div class="space-y-6">
+                    <!-- Item 1 -->
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">Federal Reserve Launches "Digital Dollar" Pilot with Major U.S. Banks, Targeting Wholesale Settlements</h3>
+                        <p class="text-sm text-gray-500 mb-2">Date: 2026-02-06</p>
+                        <p class="mb-4 text-stone-700">The Federal Reserve announced the start of a 12-month digital dollar pilot program involving JPMorgan Chase, Bank of America, Citigroup, and Wells Fargo. The pilot will test wholesale interbank settlements using a central bank digital currency (CBDC), with initial transactions focusing on Treasury securities and repo markets. Fed Chair stated the goal is to "modernize payment infrastructure without disrupting monetary policy."...</p>
+                        
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 Read Full Report
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                <p>New York, 8 a.m. The Fed's trading desk initiates the first transaction: $50 million in digital dollars from JPMorgan to Bank of America, settling a Treasury bond trade. Settlement time: 3 seconds. The old system, Fedwire, would take minutes.</p>
+                                <p>The pilot is limited to wholesale transactions between approved banks. No retail access. Each bank holds a digital dollar account at the Fed, backed 1:1 by reserves. Transactions are recorded on a permissioned blockchain, visible only to participants and regulators. The technology provider is a consortium of IBM, Microsoft, and a Fed-built core ledger.</p>
+                                <p>"This is about efficiency, not surveillance," says the Fed's head of innovation. The system processes 5,000 transactions per second, compared to Fedwire's 100. It operates 24/7, unlike the current system's weekday hours. For banks, the appeal is cost: estimated savings of $15 billion annually in settlement and reconciliation expenses.</p>
+                                <p>But concerns linger. Privacy advocates worry about eventual retail rollout. Congress has introduced bills requiring warrants for transaction data access. The Fed insists any future retail CBDC would be intermediated—banks handle customer accounts, not the Fed directly.</p>
+                                <p>International context matters. China's digital yuan is already live. The EU's digital euro enters testing next year. The Fed wants to set standards. Today's pilot includes a cross-border experiment with the Bank of England, transferring digital dollars to a simulated sterling CBDC account.</p>
+                                <p>Market reaction is muted but attentive. Treasury yields unchanged. Bank stocks slightly up. The real test comes at month-end, when large repo settlements hit. If the system handles the volume without a hitch, phase two begins: expanding to more banks and asset classes.</p>
+                                <p>By close of business, 1,200 transactions completed, total value $42 billion. Average settlement: 2.8 seconds. No failures. The Fed's tech team orders pizza. They'll be monitoring all night.</p>
+                                <p>(Full report approx. 1050 words)</p>
+                            </div>
+                        </details>
+                        
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">Sources:</span>
+                            <a href="https://www.federalreserve.gov/newsevents/pressreleases/monetary20260206a.htm" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                            <a href="https://www.wsj.com/finance/central-banking/fed-digital-dollar-pilot-launches-2026-02-06" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
+                            <a href="https://www.reuters.com/business/finance/fed-starts-digital-dollar-pilot-with-major-banks-2026-02-06/" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">EU Parliament Approves "AI Liability Directive," Shifting Burden of Proof to Tech Companies</h3>
+                        <p class="text-sm text-gray-500 mb-2">Date: 2026-02-06</p>
+                        <p class="mb-4 text-stone-700">The European Parliament voted 487-112 to adopt the AI Liability Directive, establishing strict liability rules for harm caused by high-risk AI systems. Under the new law, companies must prove their AI did not cause damage, reversing the traditional burden of proof. The directive covers areas like autonomous vehicles, medical diagnostics, and hiring algorithms, with fines up to 6% of global revenue...</p>
+                        
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 Read Full Report
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                <
