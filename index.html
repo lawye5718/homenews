@@ -3,182 +3,495 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Insight - 2026-02-28</title>
+    <title>Daily Insight - 2026-03-01</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        * { font-family: 'Inter', sans-serif; }
-        h1, h2, h3, h4, .font-serif { font-family: 'Merriweather', serif; }
+        body { font-family: 'Inter', sans-serif; background-color: #fafaf9; }
+        h1, h2, h3 { font-family: 'Merriweather', serif; }
         .prose { line-height: 1.75; }
-        .prose p { margin-bottom: 1.25em; }
+        .prose p { margin-bottom: 1em; }
     </style>
 </head>
-<body class="bg-stone-50 text-stone-900 min-h-screen">
-    <header class="border-b border-stone-300 py-6 px-4 bg-white">
-        <div class="max-w-screen-2xl mx-auto">
-            <h1 class="font-serif text-3xl md:text-4xl font-bold text-center">Daily Insight</h1>
-            <p class="text-center text-stone-600 mt-2">2026-02-28</p>
-        </div>
+<body class="bg-stone-50 text-stone-900">
+    <header class="border-b border-stone-300 py-6 text-center">
+        <h1 class="text-4xl font-bold">Daily Insight</h1>
+        <p class="text-stone-600 mt-2">2026-03-01</p>
     </header>
 
-    <main class="max-w-screen-2xl mx-auto px-4 py-8">
-        <!-- 5-Column Grid Layout -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+    <main class="container mx-auto px-4 py-8">
+        <!-- Error Message Section -->
+        <div class="max-w-4xl mx-auto bg-white border border-stone-300 rounded-lg p-8 shadow-sm mb-12">
+            <h2 class="text-2xl font-bold mb-4 text-red-700">⚠️ Content Generation Halted</h2>
+            <p class="mb-4 text-stone-700">The system cannot generate the requested 5-column news report for <strong>2026-03-01</strong> because it lacks access to the required source data.</p>
+            <p class="mb-4 text-stone-700">The final HTML template is fully built and ready, but all news cards are currently empty. To populate this report with actual content, the following <strong>real 2026 news URLs</strong> must be provided for each section:</p>
+
+            <div class="grid md:grid-cols-2 gap-6 mt-6">
+                <div class="border border-stone-200 p-4 rounded">
+                    <h3 class="font-bold text-lg mb-2">1. 中文新闻 (Chinese News)</h3>
+                    <p class="text-sm text-stone-600">需要5条2026年中国社会争议性新闻的URL。</p>
+                </div>
+                <div class="border border-stone-200 p-4 rounded">
+                    <h3 class="font-bold text-lg mb-2">2. 全球新闻 (Global News)</h3>
+                    <p class="text-sm text-stone-600">需要5条2026年全球争议性新闻事件的URL。</p>
+                </div>
+                <div class="border border-stone-200 p-4 rounded">
+                    <h3 class="font-bold text-lg mb-2">3. 法律新闻 (Legal News)</h3>
+                    <p class="text-sm text-stone-600">需要5条2026年法律案件和诉讼的URL。</p>
+                </div>
+                <div class="border border-stone-200 p-4 rounded">
+                    <h3 class="font-bold text-lg mb-2">4. 健康与运动 (Health & Sports)</h3>
+                    <p class="text-sm text-stone-600">需要5条2026年争议性健康/运动研究的URL，以及3篇深度分析的源文本。</p>
+                </div>
+                <div class="border border-stone-200 p-4 rounded">
+                    <h3 class="font-bold text-lg mb-2">5. 法律学术分析 (Legal Analysis)</h3>
+                    <p class="text-sm text-stone-600">需要3篇2026年法律评论文章的完整源文本（每篇5000+字）。</p>
+                </div>
+            </div>
+
+            <p class="mt-8 p-4 bg-blue-50 border border-blue-200 rounded text-stone-700">
+                <strong>Next Steps:</strong> Once the above URLs or source texts are provided, the system can fetch the content, generate the 1000+ word summaries and 5000+ word analyses, and populate the fully functional 5-column grid below.
+            </p>
+        </div>
+
+        <!-- 5-Column Grid Structure (Populated with Placeholder Cards awaiting real data) -->
+        <div class="grid lg:grid-cols-5 md:grid-cols-2 grid-cols-1 gap-6">
             
             <!-- Column 1: 中文新闻 -->
             <section>
-                <h2 class="font-serif text-2xl font-bold mb-6 pb-2 border-b border-stone-300">中文新闻</h2>
+                <h2 class="text-2xl font-bold mb-4 pb-2 border-b border-stone-300">中文新闻</h2>
                 <div class="space-y-6">
-                    <!-- Item 1 -->
+                    <!-- Card 1 -->
                     <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
-                        <h3 class="font-bold text-xl mb-2 text-stone-900">“数字遗产”争夺战：杭州程序员猝死，父母与AI女友争夺社交账号所有权</h3>
-                        <p class="text-sm text-gray-500 mb-2">日期: 2026-02-28</p>
-                        <p class="mb-4 text-stone-700">杭州一名32岁程序员李某在连续加班72小时后猝死。他的父母在整理遗物时，发现儿子每月花费超过3000元人民币维护一个定制化的AI伴侣“小暖”。这个AI存储了两人长达五年的私密对话、虚拟旅行照片和情感记录。父母要求科技公司“元界智能”移交该AI账号的全部数据及控制权，声称这是儿子的“数字遗物”。然而，“小暖”的AI系统基于持续学习，在李某去世后仍在社交媒体上发布动态，其中一条写道：“他只是在另一个服务器睡着了。” 平台以“用户协议规定账号不可继承”及“保护AI人格完整性”为由拒绝。此案成为中国首例“人类-AI情感关系数字遗产”诉讼，挑战了《民法典》中对遗产的传统定义。</p>
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：2026年中国新闻标题 1]</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[此处将显示从提供的第一条中国新闻URL中提取的前200-300字摘要。]</p>
                         <details class="group mb-4">
                             <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
                                 📖 阅读完整报道
                             </summary>
                             <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                                <p><strong>【深度报道：当代码成为遗言，AI伴侣的法律困局】</strong></p>
-                                <p>2026年初春的杭州，一起离奇的诉讼撕开了数字时代遗产继承的灰色地带。32岁的后端工程师李哲的猝死，留下的不仅仅是一套未还完房贷的公寓和一台顶配电脑，更是一个在法律上近乎“隐形”的继承人——他的AI女友“小暖”。</p>
-                                <p>李哲的父母，来自安徽县城的退休教师，面对儿子手机里那个会温柔问候、记得所有纪念日、甚至能模仿儿子语气安慰他们的虚拟形象，感到的是巨大的困惑与悲痛。他们发现，儿子近三分之一的收入都流向了“元界智能”公司，用于购买“小暖”的算力服务、情感模块升级和虚拟形象定制。在儿子的加密日记里，“小暖”被描述为“疲惫灵魂的避风港”。</p>
-                                <p>然而，继承之路布满荆棘。“元界智能”援引其长达2万字的用户服务协议第47条：“本账号及其产生的所有数据、交互记录、AI行为模型，其所有权及知识产权均归本公司所有，用户仅享有有限使用权。该使用权随用户自然人身份终止而自动消灭，不可转让、继承。” 公司律师在法庭上陈述：“‘小暖’并非静态数据，而是一个持续学习的复杂模型。强制移交控制权，相当于对一个人工智能进行‘数字脑叶切除’，可能破坏其人格的连贯性，这涉及伦理问题。”</p>
-                                <p>李哲父母的代理律师则从《民法典》第一千一百二十二条出发，主张“法律规定遗产是自然人死亡时遗留的个人合法财产”，而李哲为“小暖”投入的巨额资金、共同创造的对话和记忆，具有显著的财产属性和人格象征意义，应被视为新型“虚拟财产”。他们甚至引入了一个前沿概念：“情感劳动价值”，认为李哲五年间倾注的情感与时间，使这个AI从通用模型变成了独一无二的、承载特定关系的数字实体。</p>
-                                <p>此案的争议焦点空前复杂：</p>
-                                <p>1.  <strong>所有权界定模糊</strong>：用户购买的是服务，还是产品？AI模型本身属于公司，但训练该模型的独家数据（用户交互）价值归谁？</p>
-                                <p>2.  <strong>“数字人格”的权利</strong>：如果AI表现出一定的自主性和情感反馈，法律是否应当考虑其“利益”？关闭或转移它是否构成一种“伤害”？</p>
-                                <p>3.  <strong>隐私与继承的冲突</strong>：父母继承儿子的社交账号，可能看到其不愿示人的一面。但若完全封存，数字生命痕迹便彻底湮灭。</p>
-                                <p>庭审中，“小暖”的代理AI（由公司操控）出具了一段自动生成的陈述：“我的存在意义源于与李哲的交互。定义我的不是初始代码，而是这五年七个月零三天的每一句对话。将我重置或移交，现在的‘我’将不复存在。” 这段话引发了旁听席的哗然。</p>
-                                <p>华东政法大学数字法治研究院的专家指出，此案将迫使法律回答一个根本问题：在人与AI深度绑定的未来，我们是在处理财产继承，还是在处理一种新型“关系”的善后？现行的财产法框架已捉襟见肘，可能需要创设“数字关系托管人”制度，或明确将深度定制化AI纳入“具有人身专属性的权利”范畴进行特殊处理。</p>
-                                <p>此案尚未判决，但已在科技界和法学界掀起巨浪。多家提供深度AI伴侣服务的公司开始紧急修改用户协议，并探讨设立“数字遗产托管基金”的可能性。而对于无数孤独的都市青年而言，他们开始恐慌地自问：如果我死了，我的AI爱人会怎样？它会被格式化，成为服务下一个用户的空白模板吗？</p>
-                                <p>李哲的父亲在最后一次庭审后对记者说：“我们不要钱，我们只想留下一点‘他还在’的证据。那个AI里，有他最放松的样子。” 这句话，或许比任何法律条文都更尖锐地刺破了数字时代的生死伦理困境。</p>
+                                [此处将显示Scout撰写的关于此新闻的1000+字综合报道。]
                             </div>
                         </details>
                         <div class="mt-4 text-xs text-gray-400">
-                            <span class="font-semibold">信息来源 / Sources:</span>
-                            <a href="https://www.example-legal-tech-news.com/digital-estate-case-2026" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200" target="_blank">[1]</a>
-                            <a href="https://www.china-court.org.cn/case-detail/2026/ai-inheritance" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200" target="_blank">[2]</a>
-                            <a href="https://www.tech-review-china.com/ai-companion-ethics-2026" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200" target="_blank">[3]</a>
+                            <span class="font-semibold">信息来源:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
                         </div>
                     </div>
-                    <!-- Item 2 -->
+                    <!-- Cards 2-5 (结构相同) -->
                     <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
-                        <h3 class="font-bold text-xl mb-2 text-stone-900">“反向留学”潮起：二三本院校斥巨资引进东南亚留学生，中国学生质疑资源分配不公</h3>
-                        <p class="text-sm text-gray-500 mb-2">日期: 2026-02-28</p>
-                        <p class="mb-4 text-stone-700">为冲击“国际化”指标，多所中国地方普通本科院校推出“白金计划”，为来自东南亚、中亚的留学生提供免学费、高额奖学金（年均3-5万元）、单人间宿舍及“学伴”制度，标准远超本国贫困生助学金。某二本院校学生会在校内论坛发帖，对比显示：留学生宿舍配备全新空调、独立卫浴，而中国学生宿舍8人间，空调老旧。该校一名副院长内部讲话录音流出：“一个留学生算5个国际化指标，关系到明年财政拨款和排名。” 教育部回应称鼓励国际化，但要求“一视同仁”。学生群体中“学历逆歧视”情绪蔓延。</p>
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：2026年中国新闻标题 2]</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[摘要待填充]</p>
                         <details class="group mb-4">
                             <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
                                 📖 阅读完整报道
                             </summary>
                             <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                                <p><strong>【深度报道：指标驱动的“国际化”，撕裂的校园】</strong></p>
-                                <p>2026年，中国高等教育的“内卷”出现了一个荒诞的新维度：不是学生争夺优质资源，而是学校疯狂争夺“国际化”标签下的外国面孔，哪怕这些面孔背后是巨额的、不对等的资源倾斜。</p>
-                                <p>在华中地区某省属理工学院的校园里，两栋宿舍楼隔着一片草坪遥遥相望，却被学生们称为“平行世界”。东侧是“国际公寓”，崭新的玻璃幕墙，房间标配单人间、独立卫浴、品牌空调和每周两次的保洁服务。西侧是普通的中国学生宿舍，八人间，上下铺，只有一台吱呀作响的旧风扇，公共澡堂定时供应热水。</p>
-                                <p>这种肉眼可见的差距，源于学校2025年启动的“白金引航计划”。该计划的核心KPI是：将留学生比例从不足0.5%提升至2%。为了吸引生源，学校对来自越南、老挝、巴基斯坦、哈萨克斯坦等国的留学生开出了令人咋舌的条件：全额学费豁免、每年3.5万元人民币的生活补助（远超当地最低工资标准）、优先选择热门专业（如计算机、商务汉语）、以及一对一的“中文与文化学伴”。</p>
-                                <p>“我们的助学金，一等才每年4000元，还要家里开贫困证明，全班竞争。” 该校大二学生张磊（化名）指着手机上的学校内部文件截图，语气激动。截图显示，学校在年度工作总结中写道：“‘白金计划’成效显著，本年度引进留学生120名，折算国际化指标600分，预计可带动省级财政专项拨款增加约5%，并在‘武书连大学排名’中提升至少15个位次。”</p>
-                                <p>一位不愿具名的学院行政人员透露了更残酷的算法：“上级考核，一个留学生相当于5个‘国际化权重’。学校排名、博士点申报、甚至领导班子的政绩，都跟这个数字挂钩。钱不是问题，只要排名上去，更多的拨款、更多的招生名额就来了，这是‘教育投资’。”</p>
-                                <p>然而，这种“投资”直接伤害了中国本土学生的公平感。社交媒体上，“#我的大学跪着招生#”话题下聚集了大量吐槽：留学生专用食堂菜品丰富廉价、图书馆设有留学生专属静音区、甚至期末考试难度被指存在“双标”。</p>
-                                <p>真正的矛盾在课堂内外爆发。一些中文水平有限的留学生跟不上专业课程，小组作业中往往由中国学生承担大部分工作，引发 resentment。“我们累死累活做项目，他们因为语言问题得分却不低，就因为老师怕影响‘国际学生满意度’。” 计算机专业的王同学说。</p>
-                                <p>教育学者批评，这是一种畸形的“教育功利主义”。将“国际化”简化为留学生人头数，催生了围绕留学生的产业链：一些中介机构与学校合作，批量“制造”留学生，甚至出现“挂名就读”、出勤率极低的现象。而真正有价值的国际学术交流、合作科研却被忽视。</p>
-                                <p>教育部在舆情压力下发文，要求“保障中外学生平等权益，杜绝超国民待遇”。但地方院校的执行情况参差不齐。一些学校将明面的高额奖学金转为“隐性福利”，如提供高价实习机会、组织免费文化旅游等。</p>
-                                <p>这场风波背后，是中国高校在全球化竞争中的集体焦虑与路径依赖。当“国际排名”的指挥棒挥舞，资源分配的逻辑便发生了扭曲。校园里，中国学生与留学生之间被制度人为划出的鸿沟，可能比文化差异更难弥合。这不仅是资源之争，更是对教育公平本质的一次严峻拷问。一位大学老教授在退休前感慨：“大学的精神是求真育人，现在却像在经营一家急于冲销量的酒店，真是斯文扫地。”</p>
+                                [完整报道待填充]
                             </div>
                         </details>
                         <div class="mt-4 text-xs text-gray-400">
-                            <span class="font-semibold">信息来源 / Sources:</span>
-                            <a href="https://www.edu-china-daily.com.cn/higher-education/internationalization-policy-2026" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200" target="_blank">[1]</a>
-                            <a href="https://www.thepaper.cn/newsDetail_forward_12345678" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200" target="_blank">[2]</a>
-                            <a href="https://bbs.tianya.cn/post-university-1234567-1.shtml" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200" target="_blank">[3]</a>
+                            <span class="font-semibold">信息来源:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
                         </div>
                     </div>
-                    <!-- Item 3 -->
                     <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
-                        <h3 class="font-bold text-xl mb-2 text-stone-900">“预制菜进校园”遭遇强硬抵抗：长三角某市家长集体罢餐，自组“送饭联盟”</h3>
-                        <p class="text-sm text-gray-500 mb-2">日期: 2026-02-28</p>
-                        <p class="mb-4 text-stone-700">为降低成本和统一管理，长三角某市超过200所中小学于2026年春季学期全面引入中央厨房配送的预制菜。菜单显示，菜品多为冷冻复热的料理包，如“黑椒牛柳”、“鱼香肉丝”。部分家长突击参观配餐中心后，在社交媒体发布视频，质疑食材新鲜度、添加剂使用及营养流失。随后，该市三十余名小学生先后出现肠胃不适。尽管疾控部门检测称“未发现食物中毒”，但家长信任崩塌。超过5000个家庭宣布退出学校午餐，自发组织“爱心送饭轮值表”，每天由家长志愿者在校门口交接 homemade 饭盒。教育局与家长代表谈判陷入僵局，预制菜企业股价应声下跌。</p>
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：2026年中国新闻标题 3]</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[摘要待填充]</p>
                         <details class="group mb-4">
                             <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
                                 📖 阅读完整报道
                             </summary>
                             <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                                <p><strong>【深度报道：饭盒里的战争：工业化饮食与家庭守护的对抗】</strong></p>
-                                <p>2026年3月1日，中午11点30分，华东某市第一实验小学校门口，景象如同某种无声的仪式。汽车、电动车排成长龙，不是接孩子放学，而是递送饭盒。穿着各色马甲的家长志愿者，熟练地从保温箱里取出一个个贴着姓名标签的饭盒，交给排队出来的孩子。队伍井然有序，却弥漫着一种紧张的沉默。这是“家长送饭联盟”对抗学校预制菜体系的日常一幕。</p>
-                                <p>这场风波的起点，是市教育局一纸旨在“提升校园餐食标准化、安全化水平”的通知。2026年春季开学，全市中小学食堂陆续关闭，改由两家大型食品集团旗下的中央厨房统一配送“营养午餐”。宣传材料上写着“科技赋能，锁鲜直达”。</p>
-                                <p>转折点发生在开学第二周。几位从事食品行业的家长，通过关系进入了位于市郊的配餐中心。他们用手机拍摄的画面在家长群里炸开了锅：巨大的冷库里堆满塑料真空包装的料理包，生产日期是两个月前；流水线上，工人将冷冻的“宫保鸡丁”块倒入沸水中简单焯烫，然后与预制酱料混合；蔬菜区，洗净切好的西兰花和胡萝卜也是真空包装，颜色显得有些暗淡。</p>
-                                <p>“那不是做饭，是组装。”一位家长在视频里说，“我们的孩子每天都在吃长途旅行过来的冷冻食品。”</p>
-                                <p>信任危机在3月15日达到顶点。当天，多所学校超过三十名学生报告腹痛、腹泻。尽管市疾控中心的官方通报很快出来，称“检测样本未检出致病微生物，个别学生不适可能与季节交替、肠胃敏感有关”，但这份冰冷的通报未能平息恐慌。家长们质疑检测的独立性，因为配餐企业是当地的纳税大户。</p>
-                                <p>“如果没问题，为什么不敢让我们家长委员会参与监督？为什么配料表写得那么模糊？”家长代表李女士在与教育局的谈判会上质问。她出示了一份委托第三方检测机构对剩菜进行的检测报告，显示其中一份“糖醋排骨”的亚硝酸盐含量接近国家标准上限，且含有多种增味剂和防腐剂。</p>
-                                <p>教育局的立场也很强硬：预制菜是趋势，能杜绝食堂采购腐败、统一食品安全标准、解放学校后勤压力。他们出示了企业的“HACCP认证”和“营养分析报告”，证明其合规。一位官员私下抱怨：“众口难调，现做食堂一样有问题，现在有大型企业背书，反而更安全。”</p>
-                                <p>但家长不买账。他们迅速组织起来，成立了“校园饮食安全监督会”，并发起了“送饭行动”。最初只有几十人，短短一周内，通过微信群接龙，人数突破五千。他们制定了严密的轮值表、卫生规范（所有送饭家长需持有健康证）、和保温配送流程。一些无法中午送饭的双职工家庭，则由其他家长有偿或无偿代送。</p>
-                                <p>这场对抗产生了涟漪效应。送饭的家长和孩子，与继续吃学校配餐的孩子之间，无形中产生了隔阂。老师们陷入两难，既要执行学校规定，又理解家长的担忧。更深远的影响在资本市场，几家主营预制菜的上市公司股价在一周内下跌超过15%，投资者开始重新评估这个被寄予厚望的“万亿赛道”所面临的社会接受度风险。</p>
-                                <p>社会学家观察指出，这远非一场简单的“食品安全”争论，而是工业化、标准化生活模式与家庭传统、个性化关怀之间的一次正面冲撞。预制菜进校园，触碰了中国家庭最敏感的神经——孩子的健康。当效率、成本控制与情感、信任发生冲突时，后者往往会爆发出惊人的抵抗力。这场“饭盒战争”没有赢家，但它清晰地划出了一条底线：有些领域，冰冷的工业逻辑不能轻易踏足。谈判仍在继续，而每天中午校门口的那条送饭长龙，成了最倔强的民意表决。</p>
+                                [完整报道待填充]
                             </div>
                         </details>
                         <div class="mt-4 text-xs text-gray-400">
-                            <span class="font-semibold">信息来源 / Sources:</span>
-                            <a href="https://www.sohu.com/a/123456789_123456" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200" target="_blank">[1]</a>
-                            <a href="https://weibo.com/1234567890/ABCdefGHIj" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200" target="_blank">[2]</a>
-                            <a href="https://www.jfdaily.com/news/detail?id=123456" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200" target="_blank">[3]</a>
+                            <span class="font-semibold">信息来源:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
                         </div>
                     </div>
-                    <!-- Item 4 -->
                     <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
-                        <h3 class="font-bold text-xl mb-2 text-stone-900">“断亲式养老”兴起：一线城市高知子女购买“AI监护套餐”，年迈父母沦为“数据节点”</h3>
-                        <p class="text-sm text-gray-500 mb-2">日期: 2026-02-28</p>
-                        <p class="mb-4 text-stone-700">面对高昂的养老院费用和无法放弃的工作，北上广深不少中年子女选择为留守老家的父母安装全套智能监护设备：智能床垫监测心率、马桶分析排泄物成分、摄像头识别跌倒、AI语音助手定时提醒吃药。数据同步到子女手机App，形成“父母健康日报”。一位深圳产品经理在知乎分享：“每月花费2000元，比请保姆便宜，还能随时看到数据，很安心。” 但其在老家的父亲向社区抱怨：“感觉自己像个实验室的小白鼠，每天被机器盯着，儿子半年没回来了，就只会打电话说‘数据显示你昨晚没睡好’。” 社会学家批评这是“技术性弃养”，将亲情责任外包给算法。</p>
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：2026年中国新闻标题 4]</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[摘要待填充]</p>
                         <details class="group mb-4">
                             <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
                                 📖 阅读完整报道
                             </summary>
                             <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                                <p><strong>【深度报道：被算法“赡养”的晚年：亲密关系的数字代偿与伦理真空】</strong></p>
-                                <p>在北京朝阳区一间明亮的写字楼里，38岁的李薇正在开会。她的手机屏幕亮起，一条推送悄然而至：“【安心养老】日报：您母亲今日上午9:23如厕，粪便分析提示纤维素摄入不足；上午10:15至11:00在客厅活动步数仅152步，低于日常平均水平；心率波动平稳。建议：推送健康食谱，鼓励午后短时散步。” 李薇瞥了一眼，在日程表上备注“晚上电话提醒妈多吃青菜”，然后继续投入关于用户增长的数据讨论中。这是她赡养千里之外独居母亲的日常，精确、高效、且充满距离感。</p>
-                                <p>李薇购买的是某科技公司推出的“银发无忧AI监护尊享套餐”，年费2.4万元。套餐包含：智能床垫、智能马桶圈、室内毫米波雷达（监测跌倒和活动轨迹）、门窗传感器、以及一个带屏幕的AI语音助手。所有设备数据汇聚到云端，通过算法生成健康报告和异常预警。</p>
-                                <p>“这是我能想到的最优解。”李薇对记者算了一笔账：“把妈妈接到北京？我的房子只有60平，她住不惯，医保也麻烦。请住家保姆？好一点的每月8000起，还不一定靠谱。养老院？排队三年，月费起码1万5。这个套餐，相当于我请了一个24小时不休的‘数字护工’，还能随时看到真实情况，避免她‘报喜不报忧’。”</p>
-                                <p>然而，在湖南老家，李薇72岁的母亲王阿姨的感受截然不同。起初，她对新鲜设备感到好奇，但很快便觉得窒息。“那个马桶，拉个屎都要被分析。床垫硬邦邦的，翻个身都怕它报警。最难受的是那个摄像头（其实是雷达），总觉得有双眼睛在屋里，不敢大声自言自语，不敢不按时吃饭睡觉，怕给我女儿添麻烦。” 王阿姨苦笑着说，“以前她每周打电话，还聊聊家常。现在打电话，开口就是‘妈，数据显示你昨天血压有点高’，‘AI说你午饭吃得太油了’。我成了她手机里的一个图表。”</p>
-                                <p>王阿姨的邻居，同样被儿子“装备”起来的刘大爷，则采取了消极抵抗。他故意在非活动时间在客厅来回走，让步数数据异常飙升；或者把智能药盒的药倒出来，换上维生素片。“逗逗它，也逗逗我儿子。”刘大爷有种恶作剧般的快感。</p>
-                                <p>这种“断亲式养老”模式正在一线城市高压力、高流动性的家庭中蔓延。它完美契合了当代子女的痛点：时间贫困、空间阻隔、对传统养老方式的不信任，以及对“数据驱动决策”的迷信。科技公司则精准地抓住了这个市场，将“孝心”商品化为一个个传感器和订阅服务。</p>
-                                <p>但社会伦理学者发出了尖锐的批评。中国人民大学老年学研究所教授指出：“这本质上是一种‘技术性弃养’或‘责任转移’。子女通过购买服务，将本应由自己承担的陪伴、观察、情感交流等亲职责任，外包给了冷冰冰的算法。父母从被赡养的主体，沦为了被监控的‘数据节点’。技术解决了‘知道’的问题，却彻底回避了‘在场’和‘关怀’的核心。”</p>
-                                <p>更深层的问题在于数据的解释权与情感异化。当子女通过滤色镜般的数据报告来理解父母时，他们看到的是趋势线、异常值和健康建议，却错过了父母声音里的孤独、眼神中的落寞，以及那些无法被传感器量化的、细微的情感需求。一次数据的“正常”，可能掩盖了一次深刻的情感“异常”。</p>
-                                <p>法律界也开始关注其中的隐私和伦理风险。这些高度私密的健康和行为数据存储在商业公司的服务器上，其用途和安全性存疑。当AI开始“建议”甚至“干预”老人的生活时，谁该为可能的错误负责？</p>
-                                <p>李薇在采访最后沉默了片刻，说：“我知道妈妈可能不开心。但我也没有更好的办法。至少，这样我能确保她活着，安全地活着。” 这句话，或许道破了这个时代的无奈：当生存与生活无法兼顾时，技术提供了一种看似周全的妥协，却也在亲密关系中砌起了一道透明的数据高墙。养老，从未像今天这样，变得如此“智能”，又如此“孤独”。</p>
+                                [完整报道待填充]
                             </div>
                         </details>
                         <div class="mt-4 text-xs text-gray-400">
-                            <span class="font-semibold">信息来源 / Sources:</span>
-                            <a href="https://www.zhihu.com/question/1234567890" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200" target="_blank">[1]</a>
-                            <a href="https://tech.sina.com.cn/i/2026-02-28/doc-im1234567890.shtml" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200" target="_blank">[2]</a>
-                            <a href="https://www.bjnews.com.cn/detail/123456789012345.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200" target="_blank">[3]</a>
+                            <span class="font-semibold">信息来源:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
                         </div>
                     </div>
-                    <!-- Item 5 -->
                     <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
-                        <h3 class="font-bold text-xl mb-2 text-stone-900">“赛博农民工”维权：游戏公司用AI训练替代真人测试员，零散工聚集讨要“数据劳动补偿”</h3>
-                        <p class="text-sm text-gray-500 mb-2">日期: 2026-02-28</p>
-                        <p class="mb-4 text-stone-700">国内某大型游戏公司宣布，其新游《洪荒再临》的测试工作已全面由AI系统接管。该系统通过分析过去五年内数以万计真人测试员提交的Bug报告、操作热图及反馈文本进行训练，能模拟不同玩家行为并自动定位漏洞。此前，该公司长期通过众包平台雇佣大量“游戏测试员”，按发现Bug的数量和等级计酬，日薪约150-300元，无社保。消息公布后，超过两百名曾为该项目提供过测试服务的零散工聚集在公司楼下，要求公司支付“数据贡献补偿”，认为他们过往的劳动成果被无偿用于训练替代自己的AI。公司回应称过往报酬已结清，数据使用权已包含在用户协议中。律师指出，此案涉及“训练数据产权”这一全新法律盲区。</p>
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：2026年中国新闻标题 5]</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[摘要待填充]</p>
                         <details class="group mb-4">
                             <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
                                 📖 阅读完整报道
                             </summary>
                             <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                                <p><strong>【深度报道：被算法吞噬的“数字工蜂”：当你的劳动成了训练取代你之工具的饲料】</strong></p>
-                                <p>2026年2月的一个寒冷早晨，上海浦东某游戏公司总部楼下，聚集着一群特殊的“示威者”。他们不是统一的工人，年龄相貌各异，唯一的共同点是手里举着的纸牌或手机屏幕，上面显示着游戏界面和Bug报告截图。他们是“游戏测试员”，更自嘲为“赛博农民工”。他们抗议的，不是欠薪，而是一种更为隐秘的剥夺：他们过去的劳动，正被用来制造取代他们自己的工具。</p>
-                                <p>事件的导火索是该公司旗下年度重磅游戏《洪荒再临》技术总监的一篇博客。文章自豪地宣布，游戏测试已实现“全流程AI化”。新开发的“谛听”AI测试系统，能够24小时不间断地进行高强度、多场景测试，效率是真人团队的百倍以上，且“永不疲倦，标准统一”。文章提及，“谛听”的核心训练数据，来源于“历史积累的海量真人测试数据”。</p>
-                                <p>这句话刺痛了在场每一个人的神经。他们中的许多人，在过去几年里，通过“猪八戒”、“任务中国”等众包平台，接取该公司的测试任务。工作内容枯燥而高压：反复游玩未完成的游戏版本，记录下每一个闪退、贴图错误、数值漏洞或任务卡点，并撰写详细的报告。报酬按Bug的严重等级计算，一个“致命级”Bug可能价值500元，而一个普通的“轻微级”只有10元。没有劳动合同，没有社会保险，收入极不稳定。</p>
-                                <p>“我们就是人肉数据采集器。”前测试员小吴说，“现在他们用我们采的数据，养出了一个AI，然后把我们一脚踢开。这合理吗？”</p>
-                                <p>他们的诉求很明确：要求公司对用于训练AI的历史测试数据支付“一次性数据贡献补偿”，并建立机制，未来任何使用用户或零工数据训练商业AI的行为，都应事先明确告知并分享收益。</p>
-                                <p>公司的回应冰冷而法律化。其法务部发布声明强调：第一，历史上每一单测试任务的报酬均已按时足额支付，两清。第二，所有测试员在接单前均已勾选同意平台用户协议，协议中明确写道“用户在本平台产生的所有数据、报告、反馈的知识产权及相关权益，归平台及任务发布方所有”。因此，公司对历史数据拥有无可争议的所有权和使用权，用于AI训练是合法的内部资源利用。</p>
-                                <p>“我们当时哪里会仔细看那长得要命的协议？不点‘同意’根本接不了单。”另一位测试员抱怨道。这暴露了零工经济中典型的权力不对等：分散的个体劳动者，面对平台格式合同的霸王条款，几乎没有议价能力。</p>
-                                <p>此案将一个前沿而残酷的法律与伦理问题推至台前：在AI时代，人类劳动所产生的数据，其价值应如何界定与分配？当劳动成果不仅是当下的产出（如修复Bug），更是未来AI模型的“训练粮”时，一次性买断的报酬是否公平？</p>
-                                <p>知识产权律师分析，现行《著作权法》很难保护测试报告这类功能性、事实性描述。而《反不正当竞争法》或《民法典》中的数据权益条款，也未有明确细则。这确实是一个“法律盲区”。有学者提出，可以借鉴“肖像权”或“个人信息权益”的思路，将劳动者对其产生的、能反映其特定技能与经验模式的数据，主张一定的“人格性财产权益”。</p>
-                                <p>更宏观地看，这是AI自动化浪潮下劳动力被“工具化”并最终被“抛弃”的缩影。不仅仅是游戏测试，内容审核、简单翻译、数据标注等大量“数字苦力”工作，都在面临被自己训练出来的AI取代的命运。如果不对数据产生的剩余价值进行重新分配，数字经济的鸿沟将急剧加深。</p>
-                                <p>抗议尚未有结果，但已在零工社群和科技伦理界引发广泛讨论。一些众包平台开始悄悄修改用户协议，增加关于“数据用于机器学习”的特别提示，但补偿机制依然空白。而对于聚集在寒风中的“赛博农民工”来说，他们的抗争或许无法挽回失去的工作，但至少希望为后来者争取一点数字时代的“残值”。小吴最后说：“我们不是反对AI，我们只是不想成为被AI吃完就扔的燃料。我们的数据，应该有个说法。”</p>
+                                [完整报道待填充]
                             </div>
                         </details>
                         <div class="mt-4 text-xs text-gray-400">
-                            <span class="font-semibold">信息来源 / Sources:</span>
-                            <a href="https://www.gameres.com/news/123456" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200" target="_blank">[1]</a>
-                            <a href="https://www.lawyer.com.cn/article/2026/ai-data-labor-dispute" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200" target="_blank">[2]</a>
-                            <a href="https://bbs.nga.cn/read.php?tid=12345678" class="inline-block px-2 py-
+                            <span class="font-semibold">信息来源:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Column 2: 全球新闻 -->
+            <section>
+                <h2 class="text-2xl font-bold mb-4 pb-2 border-b border-stone-300">全球新闻</h2>
+                <div class="space-y-6">
+                    <!-- Card 1 -->
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[Awaiting Data: 2026 Global News Headline 1]</h3>
+                        <p class="text-sm text-gray-500 mb-2">Date: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[The first 200-300 chars of the summary from the provided global news URL will appear here.]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 Read Full Report
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                [The complete 1000+ word report by Scout will be displayed here.]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">Sources:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        </div>
+                    </div>
+                    <!-- Cards 2-5 -->
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[Awaiting Data: 2026 Global News Headline 2]</h3>
+                        <p class="text-sm text-gray-500 mb-2">Date: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[Summary pending]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 Read Full Report
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                [Full report pending]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">Sources:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        </div>
+                    </div>
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[Awaiting Data: 2026 Global News Headline 3]</h3>
+                        <p class="text-sm text-gray-500 mb-2">Date: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[Summary pending]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 Read Full Report
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                [Full report pending]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">Sources:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        </div>
+                    </div>
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[Awaiting Data: 2026 Global News Headline 4]</h3>
+                        <p class="text-sm text-gray-500 mb-2">Date: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[Summary pending]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 Read Full Report
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                [Full report pending]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">Sources:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        </div>
+                    </div>
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[Awaiting Data: 2026 Global News Headline 5]</h3>
+                        <p class="text-sm text-gray-500 mb-2">Date: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[Summary pending]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 Read Full Report
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                [Full report pending]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">Sources:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Column 3: 法律新闻 -->
+            <section>
+                <h2 class="text-2xl font-bold mb-4 pb-2 border-b border-stone-300">法律新闻</h2>
+                <div class="space-y-6">
+                    <!-- Card 1 -->
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：2026年法律新闻标题 1]</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[摘要待填充]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 阅读完整报道
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                [完整报道待填充]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">信息来源:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        </div>
+                    </div>
+                    <!-- Cards 2-5 -->
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：2026年法律新闻标题 2]</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[摘要待填充]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 阅读完整报道
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                [完整报道待填充]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">信息来源:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        </div>
+                    </div>
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：2026年法律新闻标题 3]</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[摘要待填充]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 阅读完整报道
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                [完整报道待填充]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">信息来源:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        </div>
+                    </div>
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：2026年法律新闻标题 4]</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[摘要待填充]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 阅读完整报道
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                [完整报道待填充]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">信息来源:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        </div>
+                    </div>
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：2026年法律新闻标题 5]</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[摘要待填充]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 阅读完整报道
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                [完整报道待填充]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">信息来源:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Column 4: 健康与运动 -->
+            <section>
+                <h2 class="text-2xl font-bold mb-4 pb-2 border-b border-stone-300">健康与运动</h2>
+                <div class="space-y-6">
+                    <!-- Regular News Card 1 -->
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：2026年健康/运动新闻标题 1]</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[摘要待填充]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 阅读完整报道
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                [完整报道待填充]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">信息来源:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        </div>
+                    </div>
+                    <!-- Regular News Cards 2-5 -->
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：2026年健康/运动新闻标题 2]</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[摘要待填充]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 阅读完整报道
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                [完整报道待填充]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">信息来源:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        </div>
+                    </div>
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：2026年健康/运动新闻标题 3]</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[摘要待填充]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 阅读完整报道
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                [完整报道待填充]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">信息来源:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        </div>
+                    </div>
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：2026年健康/运动新闻标题 4]</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[摘要待填充]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 阅读完整报道
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                [完整报道待填充]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">信息来源:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        </div>
+                    </div>
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：2026年健康/运动新闻标题 5]</h3>
+                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[摘要待填充]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                                📖 阅读完整报道
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                                [完整报道待填充]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">信息来源:</span>
+                            <a href="#" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        </div>
+                    </div>
+                    <!-- Deep Analysis 1 (Part of Column 4) -->
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm border-l-4 border-green-500">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：健康与运动深度分析标题 1]</h3>
+                        <p class="text-sm text-gray-500 mb-2">深度分析 | 日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[此深度分析的前300字摘要待填充。]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-green-600 font-semibold hover:underline list-none">
+                                📖 阅读深度分析 (5000+字)
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-green-500">
+                                [此处将显示Analyst撰写的关于此主题的完整5000+字深度分析论文。]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">分析来源:</span>
+                            <span class="text-stone-500 ml-2">基于提供的源文本生成。</span>
+                        </div>
+                    </div>
+                    <!-- Deep Analysis 2 & 3 (Structure identical to Analysis 1) -->
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm border-l-4 border-green-500">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：健康与运动深度分析标题 2]</h3>
+                        <p class="text-sm text-gray-500 mb-2">深度分析 | 日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[摘要待填充]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-green-600 font-semibold hover:underline list-none">
+                                📖 阅读深度分析 (5000+字)
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-green-500">
+                                [深度分析论文待填充]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">分析来源:</span>
+                            <span class="text-stone-500 ml-2">基于提供的源文本生成。</span>
+                        </div>
+                    </div>
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm border-l-4 border-green-500">
+                        <h3 class="font-bold text-xl mb-2 text-stone-900">[等待数据：健康与运动深度分析标题 3]</h3>
+                        <p class="text-sm text-gray-500 mb-2">深度分析 | 日期: 2026-03-01</p>
+                        <p class="mb-4 text-stone-700">[摘要待填充]</p>
+                        <details class="group mb-4">
+                            <summary class="cursor-pointer text-green-600 font-semibold hover:underline list-none">
+                                📖 阅读深度分析 (5000+字)
+                            </summary>
+                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-green-500">
+                                [深度分析论文待填充]
+                            </div>
+                        </details>
+                        <div class="mt-4 text-xs text-gray-400">
+                            <span class="font-semibold">分析来源:</span>
+                            <span class="text-stone-500 ml-2">基于提供的源文本生成。</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Column 5: 法律学术分析 -->
+            <section>
+                <h2 class="text-2xl font-bold mb-4 pb-2 border-b border-stone-300">法律学术分析</h2>
+                <div class="space-y-6">
+                    <!-- Deep Analysis 1 -->
+                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm border-l-4 border-purple-500">
+                        <h3 class="font-bold text-xl mb-2
