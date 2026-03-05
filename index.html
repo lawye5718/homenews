@@ -3,21 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Insight - 2026-03-04</title>
+    <title>Daily Insight - 2026-03-05</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { font-family: 'Inter', sans-serif; }
-        h1, h2, h3, .font-serif { font-family: 'Merriweather', serif; }
+        body { font-family: 'Inter', sans-serif; background-color: #fafaf9; }
+        h1, h2, h3, h4 { font-family: 'Merriweather', serif; }
+        .prose { line-height: 1.75; }
+        .prose p { margin-bottom: 1em; }
     </style>
 </head>
 <body class="bg-stone-50 text-stone-900">
-    <header class="border-b border-stone-300 py-6 bg-white">
+    <header class="border-b border-stone-300 bg-white py-6">
         <div class="container mx-auto px-4">
-            <h1 class="text-3xl md:text-4xl font-bold text-center font-serif">Daily Insight</h1>
-            <p class="text-center text-stone-500 mt-2">2026-03-04</p>
+            <h1 class="text-3xl md:text-4xl font-bold text-center">Daily Insight</h1>
+            <p class="text-center text-stone-600 mt-2">2026-03-05</p>
         </div>
     </header>
 
@@ -27,280 +29,179 @@
             
             <!-- Column 1: 中文新闻 -->
             <section>
-                <h2 class="text-2xl font-bold mb-4 pb-2 border-b border-stone-300 font-serif">中文新闻</h2>
-                <div class="space-y-6">
-                    <!-- News 1 -->
-                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
-                        <h3 class="font-bold text-xl mb-2 text-stone-900">美团AI浏览器Tabbit发布不到一天陷代码抄袭争议，开源协议合规性成焦点</h3>
-                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-04</p>
-                        <p class="mb-4 text-stone-700">2026年3月3日下午，美团旗下光年之外团队正式发布Tabbit AI浏览器公测版。这款被寄予厚望的AI浏览器产品在发布不到24小时内，就陷入了严重的代码抄袭争议。事件的核心争议点在于Tabbit的翻译功能模块被指控使用了开源项目"陪读蛙"（read-frog）的代码，但未遵守GPL开源协议要求。</p>
-                        
-                        <details class="group mb-4">
-                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
-                                📖 阅读完整报道
-                            </summary>
-                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                                2026年3月3日下午，美团旗下光年之外团队正式发布Tabbit AI浏览器公测版。这款被寄予厚望的AI浏览器产品在发布不到24小时内，就陷入了严重的代码抄袭争议。事件的核心争议点在于Tabbit的翻译功能模块被指控使用了开源项目"陪读蛙"（read-frog）的代码，但未遵守GPL开源协议要求。
-
-冲突在3月3日晚间爆发。字节跳动前SDE、开源沉浸式翻译插件作者"@梦溪睡了吗"在社交媒体平台发帖，指控美团AI浏览器Tabbit抄袭其个人产品"陪读蛙"的代码，并晒出详细的界面对比图和代码相似度分析。根据GPL协议规定，任何使用GPL授权代码的产品都必须开源其相关代码，但美团Tabbit浏览器并未遵守这一规定。
-
-官方层面的介入迅速而直接。美团光年之外团队在3月4日凌晨发布官方通报，承认团队在2025年12月30日fork了read-frog仓库，但当时并未意识到需要遵守GPL协议。通报称："团队在开发过程中确实参考了开源项目read-frog的部分代码实现，但由于对开源协议理解不足，未能及时履行开源义务。"美团表示已与原作者达成共识，将在新版中移除相关翻译项目，并对涉事模块进行开源处理。
-
-然而，这一回应并未平息争议。技术社区出现了两极分化的观点。支持美团的一方认为，在AI浏览器开发初期参考开源项目是常见做法，美团及时承认错误并承诺整改的态度值得肯定。反对者则指出，作为美团这样的大型科技公司，对开源协议的无知是不可接受的，这反映了中国科技企业在知识产权合规性方面的系统性缺陷。
-
-更深入的争议在于开源文化的本质冲突。中国开源社区长期存在"拿来主义"与"共建共享"的价值观对立。有开发者指出，美团事件只是冰山一角，许多中国科技企业在使用开源代码时都存在选择性遵守协议的问题——只享受开源带来的便利，却不愿承担开源义务。
-
-法律专家对此事件的分析更为严峻。根据《中华人民共和国著作权法》和《计算机软件保护条例》，未经许可使用他人代码可能构成侵权。虽然GPL协议允许代码使用，但前提是遵守其开源要求。美团的行为可能面临双重法律风险：一是违反开源协议，二是可能构成软件著作权侵权。
-
-社会影响层面，这一事件引发了关于中国科技企业创新能力的广泛讨论。批评者认为，美团作为市值数千亿的科技巨头，在AI浏览器这样的核心产品上仍需依赖抄袭开源项目，暴露了中国科技企业在基础创新方面的不足。支持者则反驳说，在AI技术快速迭代的背景下，合理借鉴开源成果是加速创新的必要手段。
-
-从行业监管角度看，这一事件可能推动中国开源软件管理规范的完善。目前中国在开源协议法律效力认定方面仍存在模糊地带，美团事件可能成为推动相关立法的重要案例。有消息称，工信部已开始关注此类开源协议合规问题，未来可能出台更明确的管理规定。
-
-未来走向方面，美团Tabbit浏览器的命运仍不确定。虽然团队承诺整改，但用户信任已经受损。更重要的是，这一事件可能影响美团在AI领域的整体战略布局。在AI竞争日益激烈的背景下，技术伦理和合规性正成为企业竞争力的重要组成部分。
-                            </div>
-                        </details>
-                        
-                        <div class="mt-4 text-xs text-gray-400">
-                            <span class="font-semibold">信息来源 / Sources:</span>
-                            <a href="https://finance.sina.com.cn/roll/2026-03-03/doc-inhpteik7503154.shtml" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
-                            <a href="https://www.163.com/dy/article/KN615IV50511CTRI.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
-                            <a href="https://www.pingwest.com/w/311753" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
+                <h2 class="text-2xl font-bold mb-6 pb-2 border-b border-stone-300">中文新闻</h2>
+                <!-- News Item 1 -->
+                <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm mb-4">
+                    <h3 class="font-bold text-xl mb-2 text-stone-900">寿司郎吃出金枪鱼寄生虫卵？官方通报：证据已保存开展立案调查</h3>
+                    <p class="text-sm text-gray-500 mb-2">日期: 2026-03-05</p>
+                    <p class="mb-4 text-stone-700">2026年3月5日上午，北京市门头沟区市场监督管理局通过官方账号“门头沟市场监管”发布情况通报，正式对一起引爆社交媒体的食品安全事件立案调查。事件的起点是3月1日，一位消费者在北京门头沟区长安天街商场的日本连锁回转寿司店“寿司郎”用餐。该消费者在社交媒体上发布视频称，自己排队三小时后，在点的金枪鱼（赤身）寿司上发现了大量白色颗粒状异物，疑似寄生虫卵。视频迅速在微博、抖音等平台传播，标签#寿司郎吃出金枪鱼寄生虫卵#阅读量在24小时内突破2.3亿。</p>
+                    
+                    <details class="group mb-4">
+                        <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                            📖 阅读完整报道
+                        </summary>
+                        <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                            <p>冲突的爆发点在于店家的初步处理方式与消费者的预期严重不符。据消费者描述，发现问题后，店员提出可以免单，但拒绝承担其后续可能需要的体检费用，并强调“需要消费者自己证明身体不适与食用该产品有直接因果关系”。这种“傲慢”的回应激怒了网友。一方观点（消费者及大量网友）认为，这是典型的店大欺客，将食品安全风险和责任完全转嫁给消费者，且寿司郎作为知名连锁品牌，对生食水产品的寄生虫风险管控存在严重漏洞。另一方观点（部分餐饮从业者及品牌支持者）则认为，视频中的白色物质是否为寄生虫卵有待专业鉴定，金枪鱼在超低温冷冻后寄生虫风险极低，消费者可能过度反应，且“免单”已是常规处理，店家无权承诺无限责任。</p>
+                            <p>官方的介入成为关键转折。门头沟区市监局的通报显示，执法人员已于3月4日晚间第一时间赶赴现场，对店内剩余的同批次金枪鱼板块进行了证据保存，并正式立案调查。通报措辞严谨，称将“依法开展调查处理”。这一定性将事件从消费者维权纠纷，升级为行政执法案件。然而，争议并未平息。有法律博主指出，根据《食品安全法》第一百四十八条，生产不符合食品安全标准的食品，消费者除要求赔偿损失外，还可以向生产者或者经营者要求支付价款十倍或者损失三倍的赔偿金。但适用此条款的核心在于“不符合食品安全标准”的认定，而现行国标对于鱼类寄生虫的限量标准存在模糊地带，特别是针对特定虫卵的形态学鉴定需要专业机构完成，调查周期可能很长。</p>
+                            <p>更深层的社会冲突在于公众对“平价日料”食品安全信任体系的崩塌。寿司郎以相对亲民的价格和“新鲜”作为卖点，在中国快速扩张，此次事件击中了消费者对“性价比”背后可能牺牲“安全性”的长期焦虑。社交媒体上，大量用户开始分享在其他日料店、自助餐遭遇类似问题的经历，形成了一场对连锁餐饮业食材供应链的集体质疑。与此同时，也有声音认为这是对日系品牌的“过度围剿”，体现了经济下行期民众积累的消费怨气寻找出口。事件后续走向取决于官方调查结论：若确认是寄生虫卵且源头在供应链，寿司郎将面临巨额罚款和品牌声誉的重创；若鉴定为非寄生虫卵，则可能引发对消费者“维权过度”和网络舆论审判的反向争议。无论如何，这场由一块金枪鱼引发的风暴，已经演变为2026年初中国消费领域公共信任危机的一个标志性案例。</p>
                         </div>
+                    </details>
+                    
+                    <div class="mt-4 text-xs text-gray-400">
+                        <span class="font-semibold">信息来源 / Sources:</span>
+                        <a href="https://finance.sina.cn/2026-03-05/detail-inhpxnfn3214435.d.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        <a href="https://www.jjckb.cn/20260305/fc67592595bd4ab8957a1ee9a19d56e0/c.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
+                        <a href="https://global.hk01.com/%E5%A4%A7%E5%9B%BD%E5%B0%8F%E4%BA%8B/60327657/%E5%8C%97%E4%BA%AC%E5%AF%BF%E5%8F%B8%E9%83%8E-%E9%A1%BE%E5%AE%A2%E6%8E%92%E9%98%9F3%E5%B0%8F%E6%97%B6%E9%A3%9F%E5%90%9E%E6%8B%BF%E9%B1%BC%E5%8F%91%E7%8E%B0%E5%AF%84%E7%94%9F%E8%99%AB%E5%8D%B5-%E5%AE%98%E6%96%B9%E7%AB%8B%E6%A1%88%E8%B0%83%E6%9F%A5" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
                     </div>
-
-                    <!-- News 2 -->
-                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
-                        <h3 class="font-bold text-xl mb-2 text-stone-900">哈啰招聘设28岁年龄上限引年龄歧视争议，企业价值观遭质疑</h3>
-                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-04</p>
-                        <p class="mb-4 text-stone-700">2026年3月4日，共享出行巨头哈啰出行因一则招聘信息陷入严重的年龄歧视争议。事件起源于哈啰旗下广州分公司在Boss直聘平台发布的运营管理岗位招聘通知，明确要求应聘者出生年份在1998年后，即不超过28岁，并标注"若有能力可以将年龄限制放宽至29岁"。</p>
-                        
-                        <details class="group mb-4">
-                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
-                                📖 阅读完整报道
-                            </summary>
-                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                                2026年3月4日，共享出行巨头哈啰出行因一则招聘信息陷入严重的年龄歧视争议。事件起源于哈啰旗下广州分公司在Boss直聘平台发布的运营管理岗位招聘通知，明确要求应聘者出生年份在1998年后，即不超过28岁，并标注"若有能力可以将年龄限制放宽至29岁"。
-
-这一招聘要求被网友截图曝光后，在3月4日上午迅速引发舆论风暴。争议的核心在于，哈啰作为一家估值数百亿的科技企业，公然设置年龄限制的行为是否构成就业歧视，以及这反映了中国职场怎样的年龄焦虑现状。
-
-官方层面的反应相对迅速。哈啰出行在3月4日下午发布致歉声明，承认"以年龄作为筛选条件的方式是错误的"，并表示这与哈啰倡导的价值观严重不符。声明强调："公司坚决反对任何形式的就业歧视，重视人才的实际能力与岗位匹配度。"哈啰表示已对涉事团队进行严肃批评，并立即修正了相关招聘信息。
-
-然而，道歉并未平息争议。法律专家指出，根据《中华人民共和国就业促进法》第二十六条规定，用人单位招用人员应当向劳动者提供平等的就业机会和公平的就业条件，不得实施就业歧视。哈啰的招聘要求涉嫌违反这一法律规定。虽然中国法律对年龄歧视的具体处罚规定相对模糊，但此类行为明显违背了法律精神。
-
-社会各界的反应呈现明显分化。年轻求职者群体中，部分人认为年龄限制反映了互联网行业对"年轻血液"的实际需求，28岁以下的员工通常更具创新活力和学习能力。但30岁以上的职场人士则强烈反对，认为这是对中年职场人的系统性排斥，反映了中国职场日益严重的年龄焦虑。
-
-更深入的社会学分析揭示了这一争议背后的结构性矛盾。中国互联网行业经过二十多年发展，第一批从业者已步入中年，但行业文化仍停留在"青春崇拜"阶段。35岁危机、40岁失业等话题长期困扰中国职场人。哈啰事件只是这一深层矛盾的表象化爆发。
-
-企业价值观层面，哈啰的道歉声明与其实际行为之间的矛盾引发了信任危机。有评论指出，如果哈啰真正反对年龄歧视，为何会在招聘流程中设置如此明确的年龄限制？这是个别团队的行为，还是反映了公司深层的用人理念？
-
-行业影响方面，这一事件可能引发连锁反应。其他互联网企业可能重新审视自己的招聘政策，避免类似争议。同时，这也可能推动相关法律法规的完善。目前中国在就业年龄歧视方面的立法相对滞后，哈啰事件可能成为推动《反就业歧视法》立法的催化剂。
-
-从国际比较角度看，欧美国家在就业年龄歧视方面有更严格的法律规定。美国《就业年龄歧视法》明确禁止对40岁以上雇员的歧视。中国在这一领域的法律保护相对薄弱，哈啰事件暴露了这一制度缺陷。
-
-未来走向方面，哈啰需要采取更实质性的措施重建信任。单纯的道歉不足以解决问题，企业需要建立系统的反歧视机制，包括招聘流程审查、员工培训、投诉处理等。更重要的是，整个互联网行业需要反思"年轻至上"的文化，建立更加包容和多元的用人理念。
-
-这一争议也反映了中国经济转型期的深层矛盾。在经济增长放缓、就业压力增大的背景下，年龄歧视可能加剧社会不平等。如何平衡企业效率需求与社会公平正义，将成为中国职场面临的重要课题。
-                            </div>
-                        </details>
-                        
-                        <div class="mt-4 text-xs text-gray-400">
-                            <span class="font-semibold">信息来源 / Sources:</span>
-                            <a href="https://www.sznews.com/news/content/2026-03/04/content_31963167.htm" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
-                            <a href="https://www.nfnews.com/content/DorbKOYjoM.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
-                            <a href="https://cj.sina.com.cn/articles/view/7857201856/1d45362c001902sxuo?froms=ggmp" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
+                </div>
+                <!-- News Item 2 -->
+                <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm mb-4">
+                    <h3 class="font-bold text-xl mb-2 text-stone-900">《尘白禁区》深夜宣布无限期停服与中国邮政联名被紧急叫停</h3>
+                    <p class="text-sm text-gray-500 mb-2">日期: 2026-03-05</p>
+                    <p class="mb-4 text-stone-700">2026年3月2日深夜，金山软件旗下西山居工作室的二次元战术射击游戏《尘白禁区》发布公告，宣布游戏将进行“技术维护”，且未给出明确的重新开服时间，形同无限期停服。这一突如其来的决定，直接引爆了积蓄数日的舆论核弹。导火索是此前该游戏与中国邮政的一次跨界联名活动。2月26日，双方官宣联动，推出联名主题邮局、限定邮票及游戏内道具。然而，联动宣传物料中，游戏女性角色“芬妮”的造型被部分网友和媒体批评为“低俗擦边”，指责其姿势和服装设计刻意突出性暗示，与中国邮政作为国有机构的“正面、严肃”形象严重不符。</p>
+                    
+                    <details class="group mb-4">
+                        <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                            📖 阅读完整报道
+                        </summary>
+                        <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                            <p>冲突在3月1日至3月4日间全面爆发，并迅速超出游戏圈，演变为一场关于“性别审美”、“文化审查”和“国企营销边界”的全民论战。一方是以部分女性玩家、家长群体和主流媒体评论员为代表的“抵制派”。他们认为，游戏内容存在物化女性的嫌疑，这种“软色情”营销不应与具有公共服务属性的中国邮政绑定。东方卫视在报道中直接质问：“企业联名营销底线何在？” 此派观点将事件上升至“保护青少年身心健康”和“净化网络环境”的高度。另一方则是《尘白禁区》的核心玩家群体（以男性为主）和部分文化产业观察者构成的“捍卫派”。他们激烈反驳，认为角色设计符合二次元美术风格，批评者是“小题大做”、“举报上瘾”，本质是对亚文化的不容忍和审美霸权。他们进一步指出，联动被叫停是“舆论绑架商业”和“保守势力对创作自由的打压”。</p>
+                            <p>真正的风暴眼在于中国邮政的紧急切割。在舆论压力下，中国邮政方面于3月3日单方面暂停了所有联动活动，下架宣传物料。这一举动被“捍卫派”视为背叛和“甩锅”，激起了更强烈的反弹。玩家社群中弥漫着对“铁拳”和“不可抗力”的愤怒与无力感。最终，游戏运营方西山居在3月4日深夜的停服公告，被视为在巨大压力下的最终妥协。公告中提供的“超常规补偿”（大量付费货币）被玩家解读为“封口费”，反而坐实了停服并非技术原因，而是内容整改。</p>
+                            <p>这场冲突深刻揭示了当前中国文化产品面临的“监管-市场-社群”三重挤压困境。对于游戏厂商，迎合核心玩家的“宅男”审美是市场生存之道，但一旦出圈，就可能触碰更广泛社会群体的道德敏感线和监管红线。对于中国邮政这样的国企，尝试年轻化营销却因对合作伙伴的内容风险评估不足而引火烧身，暴露了体制内机构在新文化语境下的不适应。事件的后续影响是毁灭性的。《尘白禁区》的停服可能导致项目夭折，金山软件股价受挫。更深远的是，它为所有涉及国有资本或敏感行业的文娱跨界合作敲响了警钟，预示着未来联名营销的审查将空前严格，文化创作的“安全区”进一步收窄。这场由一张邮票和一张立绘引发的战争，没有赢家，只有一地鸡毛和更加分裂的舆论场。</p>
                         </div>
+                    </details>
+                    
+                    <div class="mt-4 text-xs text-gray-400">
+                        <span class="font-semibold">信息来源 / Sources:</span>
+                        <a href="https://finance.sina.com.cn/stock/aigcy/2026-03-05/doc-inhpxnfp9801336.shtml" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        <a href="https://www.nbd.com.cn/articles/2026-03-05/4280693.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
+                        <a href="http://news.17173.com/content/03032026/103250856.shtml" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
                     </div>
-
-                    <!-- News 3 -->
-                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
-                        <h3 class="font-bold text-xl mb-2 text-stone-900">鸿蒙智行两门店营销视频造假遭全国通报，汽车行业营销乱象引监管关注</h3>
-                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-04</p>
-                        <p class="mb-4 text-stone-700">2026年3月4日，华为鸿蒙智行因上海两家区域门店的营销视频造假事件，被内部处罚并予以全国通报。事件的核心是这两家门店在展示车辆性能时使用了视频加速与倒放手法，且未作任何标注，涉嫌误导消费者。</p>
-                        
-                        <details class="group mb-4">
-                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
-                                📖 阅读完整报道
-                            </summary>
-                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                                2026年3月4日，华为鸿蒙智行因上海两家区域门店的营销视频造假事件，被内部处罚并予以全国通报。事件的核心是这两家门店在展示车辆性能时使用了视频加速与倒放手法，且未作任何标注，涉嫌误导消费者。
-
-具体时间线显示，争议视频最早于3月1日在社交媒体平台流传。视频中，鸿蒙智行车辆展示了异常出色的加速性能和操控表现，但很快有技术爱好者通过帧率分析发现视频存在明显的加速处理痕迹。更严重的是，部分展示车辆过弯稳定性的镜头被怀疑使用了倒放技术。
-
-3月4日，鸿蒙智行发布官方通报，确认上海两家区域门店存在违规营销行为。通报指出："经查实，上海区域两家门店在制作营销视频时，未经批准使用了视频加速和倒放技术，严重违反了公司营销规范。"鸿蒙智行表示已对涉事门店进行内部处罚，并在全国范围内通报批评。
-
-然而，这场由区域门店出面的道歉与下架，并未完全打消外界质疑。争议的焦点在于：这是个别门店的违规行为，还是反映了整个汽车行业营销的普遍乱象？
-
-汽车行业专家指出，视频造假在汽车营销中并非孤例。随着短视频平台的兴起，许多车企和经销商为了吸引流量，会使用各种技术手段美化车辆表现。常见的做法包括：使用专业车手驾驶但宣称是普通用户、在特定路况下拍摄但宣称是日常使用、通过视频剪辑制造性能假象等。
-
-法律层面，这种行为可能涉嫌违反《中华人民共和国广告法》和《消费者权益保护法》。根据广告法第四条规定，广告不得含有虚假或者引人误解的内容。消费者权益保护法第二十条也规定，经营者向消费者提供有关商品或者服务的质量、性能、用途、有效期限等信息，应当真实、全面，不得作虚假或者引人误解的宣传。
-
-社会舆论对此事件的反应呈现复杂态势。一方面，消费者对汽车营销的不信任感加剧。许多网友表示，在看过太多"照骗"和"视频骗"后，对车企宣传已持怀疑态度。另一方面，也有声音认为，在激烈市场竞争中，车企面临巨大的营销压力，适当的美化可以理解。
-
-更深层的争议在于汽车行业评价体系的可靠性。传统上，消费者依赖专业媒体评测和官方数据购车，但随着自媒体和短视频的兴起，信息渠道日益碎片化，真假难辨。鸿蒙智行事件暴露了行业监管的缺失。
-
-从行业影响看，这一事件可能推动汽车营销规范的完善。有消息称，市场监管总局已开始关注汽车短视频营销的合规性问题，未来可能出台更具体的监管规定。同时，汽车行业协会也在考虑建立行业自律机制，规范营销行为。
-
-技术伦理方面，视频编辑技术的普及使得造假越来越容易，但监管却相对滞后。如何平衡技术创新与商业伦理，成为汽车行业面临的新挑战。特别是对于智能电动汽车这类技术密集型产品，营销宣传的真实性直接关系到消费者安全。
-
-未来走向方面，鸿蒙智行需要采取更严格的内部管控措施。单纯的处罚不足以重建信任，企业需要建立从视频制作到发布的全流程审核机制。更重要的是，整个汽车行业需要反思营销文化的转型——从夸大宣传转向真实沟通。
-
-这一事件也反映了中国消费市场成熟度的提升。消费者不再轻易被华丽营销所迷惑，而是更加注重产品真实性能和长期口碑。对于车企而言，这意味着营销策略需要从短期流量获取转向长期品牌建设。
-                            </div>
-                        </details>
-                        
-                        <div class="mt-4 text-xs text-gray-400">
-                            <span class="font-semibold">信息来源 / Sources:</span>
-                            <a href="https://k.sina.com.cn/article_2516866423_96045577001018iws.html?from=news" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
-                            <a href="https://www.163.com/dy/article/KN421U6K05508W4F.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
-                            <a href="https://tags.sina.com.cn/brand_zunjie" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
+                </div>
+                <!-- News Item 3 -->
+                <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm mb-4">
+                    <h3 class="font-bold text-xl mb-2 text-stone-900">高铁“自备椅凳”争议：公共空间的舒适权与秩序边界在哪里？</h3>
+                    <p class="text-sm text-gray-500 mb-2">日期: 2026-03-05</p>
+                    <p class="mb-4 text-stone-700">2026年3月5日，一则“男子高铁自带折叠椅坐过道”的视频在微博热搜榜上居高不下，阅读量迅速突破2亿。视频显示，在一趟高铁列车的车厢连接处，一名男子打开自带的便携折叠椅坐下，占据了部分通道空间。几乎同时，另一条“G2307次列车一家三口使用一次性座套后留下满座垃圾”的视频也登上热搜。两件事交织，引爆了关于中国公共交通文明、个人权利与公共秩序边界的大辩论。</p>
+                    
+                    <details class="group mb-4">
+                        <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                            📖 阅读完整报道
+                        </summary>
+                        <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                            <p>事件起因简单直接：高铁运力紧张，尤其是节假日期间，无座旅客体验差。自带椅凳者，往往是购买了无座票但寻求基本舒适度的乘客。冲突的核心是两套权利话语的激烈碰撞。一方是“舒适权与卫生权”的主张者。他们认为，在支付了票价（即便是无座票）的前提下，乘客有权在不妨碍他人的前提下，采用合理方式提升旅途舒适度。面对高铁座椅卫生状况的普遍担忧，使用一次性座套也被视为合理的个人卫生防护行为。他们质问：“难道无座票就只能站完全程？”“面对可能残留的污渍，自我保护有错吗？”</p>
+                            <p>另一方则是“公共秩序与安全权”的捍卫者。他们指出，在车厢过道、连接处等应急通道放置椅凳，明显侵占了公共空间，阻碍了其他乘客通行和乘务员作业，更在紧急疏散时构成严重安全隐患。而随意丢弃的座套垃圾，则增加了保洁负担，是“自私自利”和“素质低下”的表现。他们批评这是将“私家领域”的行为习惯粗暴带入“公共领域”，是规则意识的缺失。</p>
+                            <p>官方的回应——国铁集团12306的客服答复——成为了新的争议焦点。客服表示，允许携带长宽高不超过130厘米的椅凳上车，但需经乘务员确认“不影响安全通行”。这个回应被网友戏称为“像对待自家沙发”的智慧，实则充满了模糊性。什么叫“不影响”？由谁判定？标准何在？这种模糊性恰恰反映了管理层面的两难：既要体现服务的人性化，又要守住安全的底线，最终却把裁定矛盾的责任推给了基层乘务员。</p>
+                            <p>这场争论远不止于椅凳和垃圾。它是一面镜子，映照出中国社会在公共资源相对稀缺且分配不均的背景下，个体与集体、权利与义务的持续紧张关系。它也是社会阶层分化在微观空间的体现：能轻松购买商务座的人无需此虑，而选择廉价无座票并自带椅凳的，往往是经济上更拮据的群体。舆论场上的相互指责，掩盖了公共服务供给不足和精细化管理制度缺失的结构性问题。后续，铁路部门可能被迫出台更细致的规定，但任何试图清晰划界的努力，都可能被指责为“不近人情”或“管理僵化”。这场发生在高铁车厢里的“椅凳战争”，注定没有简单的答案，它将成为中国城市化进程中，公共生活伦理的一个长期辩题。</p>
                         </div>
+                    </details>
+                    
+                    <div class="mt-4 text-xs text-gray-400">
+                        <span class="font-semibold">信息来源 / Sources:</span>
+                        <a href="https://k.sina.com.cn/article_7857201856_1d45362c001902uzqm.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        <a href="https://news.cctv.com/2026/02/05/ARTIlgtQfGJOK677Ra2ZrR0J260205.shtml" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
+                        <span class="inline-block px-2 py-1 bg-stone-100 text-stone-500 rounded text-xs mr-2">[3] 相关微博热搜话题讨论截图</span>
                     </div>
-
-                    <!-- News 4 -->
-                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
-                        <h3 class="font-bold text-xl mb-2 text-stone-900">伊能静力挺16岁儿子进娱乐圈遭全网抵制，星二代特权与教育伦理引争议</h3>
-                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-04</p>
-                        <p class="mb-4 text-stone-700">2026年3月4日，55岁女星伊能静因高调支持16岁儿子恩利进入娱乐圈，遭遇全网范围的抵制浪潮。这场争议不仅涉及明星家庭的教育选择，更触及了中国社会对星二代特权、未成年人保护以及娱乐圈生态的深层焦虑。</p>
-                        
-                        <details class="group mb-4">
-                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
-                                📖 阅读完整报道
-                            </summary>
-                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                                2026年3月4日，55岁女星伊能静因高调支持16岁儿子恩利进入娱乐圈，遭遇全网范围的抵制浪潮。这场争议不仅涉及明星家庭的教育选择，更触及了中国社会对星二代特权、未成年人保护以及娱乐圈生态的深层焦虑。
-
-事件始于3月3日晚间，伊能静在社交媒体平台发布长文，宣称儿子恩利"天生就是吃这碗饭的"，并动用全部人脉资源为其铺路。争议的导火索是恩利发布的首支单曲《nihilistic joy》。为了给儿子造势，伊能静动用了压箱底的人脉资源：朱一龙工作室转发支持，成龙据传亲自指导，连前夫庾澄庆都被拉出来"躺枪"。
-
-这种全方位的资源倾斜迅速引发公众反感。3月4日，"抵制伊能静儿子进圈"的话题登上微博热搜榜首，阅读量突破5亿。争议的核心在于：星二代是否应该享有普通人无法企及的特权？父母动用娱乐圈资源为未成年子女铺路是否公平？
-
-官方层面虽未直接介入，但相关讨论触及了未成年人保护的法律边界。根据《未成年人保护法》，父母应当尊重未成年人受教育的权利，保障未成年人身心健康发展。伊能静将16岁儿子推向娱乐圈聚光灯下的行为，是否违背了这一原则，成为法律专家讨论的焦点。
-
-社会各界的反应呈现明显代际差异。年轻网民普遍持反对态度，认为这是典型的"拼爹妈"行为，破坏了娱乐圈的公平竞争环境。有网友评论："如果每个星二代都这样靠资源上位，那普通人还有什么机会？"而部分中年网民则相对宽容，认为父母为子女铺路是人之常情。
-
-更深层的争议在于教育伦理的冲突。支持者认为，伊能静作为母亲，全力支持儿子的音乐梦想值得肯定，而且恩利确实展现了一定的艺术天赋。反对者则指出，16岁正值学业关键期，过早进入娱乐圈可能影响正常成长，而且这种"直升机父母"式的过度干预可能剥夺孩子的自主选择权。
-
-娱乐圈内部对此事件的态度也出现分裂。部分业内人士私下表示理解，认为在竞争激烈的娱乐圈，资源和人脉本就是重要资本。但更多从业者公开批评，认为这种行为破坏了行业生态，让真正有才华但无背景的新人更难出头。
-
-从社会学角度看，这一事件反映了中国社会阶层固化的焦虑。星二代凭借家庭资源轻松获得机会，而普通家庭的孩子则需要付出数倍努力。这种不平等在娱乐圈这个高度曝光的行业被放大，引发了广泛的社会共鸣。
-
-未成年人心理健康方面，专家担忧过早暴露在娱乐圈压力下可能对恩利造成负面影响。16岁的青少年正处于自我认同形成的关键期，面对网络暴力和公众 scrutiny可能产生心理问题。伊能静作为母亲，是否充分考虑了这些风险，成为争议焦点。
-
-未来走向方面，这一事件可能推动娱乐圈对星二代管理的规范。有建议提出，应当建立更公平的选拔机制，减少家庭背景对机会分配的影响。同时，对于未成年人进入娱乐圈，应当有更严格的年龄限制和心理评估要求。
-
-文化价值观层面，这一争议触及了中国社会对"公平"与"亲情"的权衡。一方面，中国人重视家庭纽带和亲情支持；另一方面，社会公平又是核心价值观之一。如何在两者间找到平衡，成为这一事件引发的深层思考。
-
-从国际比较看，欧美娱乐圈对星二代的态度相对复杂。既有批评特权的声音，也有认可天赋的努力。但普遍共识是，星二代需要证明自己超越父母的光环，而不仅仅是依靠家庭资源。
-                            </div>
-                        </details>
-                        
-                        <div class="mt-4 text-xs text-gray-400">
-                            <span class="font-semibold">信息来源 / Sources:</span>
-                            <a href="https://m.yule.360.com/content/4940794" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
-                            <a href="https://www.163.com/dy/article/KN7II2E605566LY2.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
-                            <a href="https://m.yule.360.com/content/3991219" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
+                </div>
+                <!-- News Item 4 -->
+                <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm mb-4">
+                    <h3 class="font-bold text-xl mb-2 text-stone-900">山东泰山退赛风波：政治风波下的体育决策？</h3>
+                    <p class="text-sm text-gray-500 mb-2">日期: 2026-03-05</p>
+                    <p class="mb-4 text-stone-700">2026年3月5日，中国足坛和舆论场被一颗重磅炸弹震动：山东泰山足球俱乐部在亚冠精英联赛16强赛客场对阵韩国蔚山HD队比赛前两小时，突然宣布退赛。俱乐部官方微博给出的理由是“球队出现人员身体严重不适情况，经医疗团队评估，球员无法组成一支上场队伍”。然而，这一解释在国内外媒体和球迷看来苍白无力，迅速被更汹涌的“政治风波”猜测所淹没。</p>
+                    
+                    <details class="group mb-4">
+                        <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                            📖 阅读完整报道
+                        </summary>
+                        <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                            <p>真正的冲突根源要追溯到2月11日山东泰山主场对阵韩国光州FC的亚冠小组赛。那场比赛中，部分山东球迷在看台上高举了韩国前总统全斗焕的照片。全斗焕是1980年“光州事件”的镇压者，在韩国被视为独裁者。这一行为被韩国媒体和球迷视为极其严重的政治挑衅和侮辱，引发了韩方的强烈抗议。尽管中国俱乐部和足协方面未就此公开表态，但外界普遍认为，此举埋下了巨大的隐患。</p>
+                            <p>退赛事件发生后，舆论迅速分裂。国际媒体（如韩联社、路透社）和许多中国自媒体分析认为，退赛的真实原因并非健康问题，而是中方为了避免在客场遭遇韩国球迷更激烈的、可能涉及敏感政治符号（如天安门画像）的报复性举动，从而引发不可控的外交和舆论危机，被迫做出的“战略性撤退”。这种观点认为，体育已被政治绑架，俱乐部在巨大的潜在风险前选择了“弃赛保平安”。</p>
+                            <p>另一派观点则坚决维护俱乐部的官方说法，指责国际媒体和“唱衰者”恶意揣测，将简单的体育事件政治化，损害中国足球形象。他们强调球员健康是第一位的，退赛是无奈但负责任的决定。然而，这种声音在证据链面前显得薄弱：为何不适集中爆发在赛前两小时？为何不提前申请延期？</p>
+                            <p>官方的沉默加剧了猜疑。中国足协至今未对退赛原因做出详细说明，也未对球迷此前的不当行为进行公开谴责或处罚。这种“冷处理”被解读为默许了退赛背后的政治逻辑。冲突的本质，是民族主义情绪在国际体育赛场上的失控与反噬。中国球迷用历史伤疤刺激对手，最终可能导致自己的球队被剥夺竞赛机会（亚足联已启动调查，可能面临重罚）。这反映了部分极端球迷将体育赛场视为“民族尊严”角力场的危险倾向，以及体育管理机构在面对此类行为时的管控失位与事后绥靖。</p>
+                            <p>事件的走向对中国足球的国际形象是灾难性的。山东泰山可能面临亚足联的巨额罚款、扣分甚至禁赛。更重要的是，它向世界传递了一个信号：中国足球无法将体育与政治分离。这将对未来中国俱乐部和球员参与国际赛事造成长远的负面影响。这场退赛风波，表面上是一场体育竞赛的缺席，实质上是一场由民粹情绪引发、最终由职业体育买单的政治悲剧，暴露出中国足球在社会情绪管理和国际规则应对上的双重不成熟。</p>
                         </div>
+                    </details>
+                    
+                    <div class="mt-4 text-xs text-gray-400">
+                        <span class="font-semibold">信息来源 / Sources:</span>
+                        <a href="https://www.voachinese.com/a/shandong-team-withdraw-from-tournament-after-fans-display-images-of-korean-dictator/7983556.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        <a href="https://www.worldjournal.com/wj/story/121345/8567852" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
+                        <a href="https://www.sohu.com/a/861046763_463728" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
                     </div>
-
-                    <!-- News 5 -->
-                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
-                        <h3 class="font-bold text-xl mb-2 text-stone-900">600万网红那艺娜涉劣迹艺人同台遭全网封杀，网红经济监管收紧引行业震荡</h3>
-                        <p class="text-sm text-gray-500 mb-2">日期: 2026-03-04</p>
-                        <p class="mb-4 text-stone-700">2026年3月4日，拥有600万粉丝的网红歌手那艺娜因与涉毒劣迹艺人同台演出，遭遇全网封杀。这一事件不仅标志着一个网红职业生涯的终结，更反映了中国对网红经济监管的全面收紧，以及娱乐行业整顿的深化。</p>
-                        
-                        <details class="group mb-4">
-                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
-                                📖 阅读完整报道
-                            </summary>
-                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                                2026年3月4日，拥有600万粉丝的网红歌手那艺娜因与涉毒劣迹艺人同台演出，遭遇全网封杀。这一事件不仅标志着一个网红职业生涯的终结，更反映了中国对网红经济监管的全面收紧，以及娱乐行业整顿的深化。
-
-事件的具体时间线显示，那艺娜的彻底翻车源于2026年湖北中祥的一场群星演出。在这场演出中，她与涉毒的东来东往等劣迹艺人同台表演，这一行为被网友截图曝光后，迅速引发全网抵制。尽管团队最初不当回事，照样卖票不退，但舆论压力最终导致官方介入。
-
-3月4日，多个平台同步封禁那艺娜的账号，她的演出许可被正式撤销，被认定为劣迹艺人。那艺娜本名翟革英，湖北农妇出身，靠着网络直播和短视频走红，粉丝一度突破600万。从草根逆袭到全网封杀，她的经历成为网红经济风险与监管的典型案例。
-
-官方层面的处理体现了当前娱乐行业整顿的严厉态度。根据《网络表演经营活动管理办法》和《广播电视和网络视听领域从业人员管理办法》，与劣迹艺人同台演出可能被视为"为劣迹艺人提供平台"，违反行业管理规定。那艺娜的封杀反映了监管部门对网红行为的零容忍态度。
-
-社会舆论对此事件的态度相对一致。大多数网友支持封杀决定，认为网红作为公众人物应当承担社会责任，与劣迹艺人划清界限。有评论指出："流量不是免死金牌，网红更要守住底线。"
-
-然而，这一事件也引发了关于网红经济监管边界的讨论。支持严格监管的一方认为，网红行业乱象丛生，需要加强规范。反对过度监管的一方则担忧，过于严厉的处罚可能抑制行业创新，且标准不够透明可能产生选择性执法问题。
-
-更深层的争议在于网红经济的商业模式困境。那艺娜的案例暴露了网红对流量和商业利益的过度追逐，忽视了社会责任和法律法规。在流量为王的逻辑下，许多网红为了热度不惜触碰红线，最终导致职业生涯的崩溃。
-
-行业影响方面，这一事件可能引发网红经济的洗牌。中小网红开始重新评估自己的商业合作，避免与有争议的艺人或品牌关联。MCN机构也在加强合规审查，建立更严格的内容审核机制。
-
-从法律角度看，那艺娜事件涉及多个法律问题。首先是演出合同的法律效力问题，如果演出因艺人问题取消，相关经济损失如何分配。其次是平台封禁的法律依据，需要明确封禁标准和程序，避免任意执法。
-
-经济影响也不容忽视。那艺娜的封杀不仅影响她个人，还波及背后的团队、合作品牌和平台。有估算显示，这次事件造成的直接经济损失可能达到数千万元。这反映了网红经济生态的脆弱性——个人行为可能引发系统性风险。
-
-未来走向方面，网红经济可能进入更加规范的阶段。监管部门可能出台更具体的网红管理规范，明确行为红线和处罚标准。同时，行业自律机制也需要加强，建立从内容创作到商业合作的全流程合规体系。
-
-这一事件也反映了中国娱乐行业价值观的重塑。在追求经济效益的同时，社会效益和社会主义核心价值观的重要性日益凸显。网红作为文化传播的重要载体，需要承担起相应的社会责任。
-
-从国际比较看，各国对网红监管的态度差异较大。欧美国家相对宽松，更依赖行业自律；而中国则采取更主动的监管 approach。这种差异反映了不同的文化传统和治理理念。
-
-长期来看，那艺娜事件可能成为网红经济发展的转折点。行业将从野蛮生长转向规范发展，网红需要更加注重内容质量和社会责任，而不是单纯追求流量和商业利益。
-                            </div>
-                        </details>
-                        
-                        <div class="mt-4 text-xs text-gray-400">
-                            <span class="font-semibold">信息来源 / Sources:</span>
-                            <a href="https://m.yule.360.com/content/4931018" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
-                            <a href="https://www.163.com/dy/article/KN5KA4KJ05567N2K.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
-                            <a href="https://atvnewsonline.com/world/%E5%89%8D%E4%BD%93%E6%93%8D%E5%86%A0%E5%86%9B%E5%8F%98%E7%BD%91%E7%BA%A2-%E5%B8%90%E5%8F%B7%E8%A7%A3%E7%A6%81%E7%B2%89%E4%B8%9D%E7%A0%B4600%E4%B8%87/" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
+                </div>
+                <!-- News Item 5 -->
+                <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm mb-4">
+                    <h3 class="font-bold text-xl mb-2 text-stone-900">王楚然工作室文案引争议 被指影射迪丽热巴滞留迪拜</h3>
+                    <p class="text-sm text-gray-500 mb-2">日期: 2026-03-05</p>
+                    <p class="mb-4 text-stone-700">2026年3月5日，演员王楚然的工作室因一条巴黎时装周的宣传微博，卷入了舆论漩涡，被指文案“茶味十足”，影射同期因转机滞留迪拜而缺席活动的另一位顶流女星迪丽热巴。事件始于3月3日，王楚然工作室发布一组王楚然在巴黎时装周的美图，文案开篇写道：“巴黎不是用来转机的。” 巧合的是，另一位女星迪丽热巴原定参加同一场活动，却因2月28日在迪拜转机时遭遇航班问题而滞留，最终未能抵达巴黎。迪丽热巴于3月4日晚在微博报平安，引发粉丝心疼和广泛关注。</p>
+                    
+                    <details class="group mb-4">
+                        <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                            📖 阅读完整报道
+                        </summary>
+                        <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                            <p>时间点的微妙重合，让王楚然工作室的这句“巴黎不是用来转机的”立刻被解读为对迪丽热巴的暗讽和拉踩。冲突在双方粉丝群体和围观网友间爆发。“热巴粉”和大量路人网友指责王楚然方“吃人血馒头”、“情商低下”、“恶意营销”，在他人遇到不便时非但不表达同情，反而借机抬高自己，行为low穿地心。他们认为，这句文案绝非无心之失，而是团队精心策划的“踩一捧一”营销，暴露了行业内部恶性竞争的丑陋。</p>
+                            <p>王楚然的粉丝则全力辩护，认为这是“过度解读”、“对号入座”。他们强调文案本意是突出巴黎作为时尚之都的“目的地”属性，赞美王楚然行程的专注与完整，与任何人无关。他们反击称，是迪丽热巴粉丝“被害妄想”，将一切视为对自家偶像的攻击，并反过来指责对方粉丝网络暴力。</p>
+                            <p>这场看似娱乐八卦的骂战，触及了更深层的行业生态和社会心理冲突。首先，它反映了内娱“85花”、“90花”代际和后起之秀之间日益白热化的资源竞争。一句模棱两可的文案，成为粉丝经济时代“战争”的导火索。其次，它展现了社交媒体时代，明星公关团队面临的“文字狱”风险。任何带有潜在双关、对比意味的表述，都可能被置于放大镜下解读，引发公关危机。最后，它也折射出公众对娱乐圈“虚假姐妹情”和“暗箭伤人”文化的高度厌恶和敏感。</p>
+                            <p>截至目前，王楚然工作室尚未对争议文案进行修改或解释，保持了沉默。迪丽热巴方面也未就此作出回应。这种冷处理或许能让事件热度自然消退，但已经造成的负面印象难以抹去。对于王楚然而言，此次事件损害了其路人缘，坐实了部分网友对其“情商”的质疑。对于行业而言，这是一次经典的失败营销案例，提醒所有公关团队：在社交媒体上，尤其是在同行遭遇舆论关注时，文案的敏感性必须提到最高级别。这场由八个字引发的风波，本质是流量焦虑下的行业内卷，以及公众对娱乐圈虚伪人际关系的又一次辛辣嘲讽。</p>
                         </div>
+                    </details>
+                    
+                    <div class="mt-4 text-xs text-gray-400">
+                        <span class="font-semibold">信息来源 / Sources:</span>
+                        <a href="https://www.sina.cn/news/detail/5272799859179651.html" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        <span class="inline-block px-2 py-1 bg-stone-100 text-stone-500 rounded text-xs mr-2">[2] 迪丽热巴报平安微博及相关话题讨论</span>
+                        <span class="inline-block px-2 py-1 bg-stone-100 text-stone-500 rounded text-xs mr-2">[3] 相关娱乐自媒体评论截图</span>
                     </div>
                 </div>
             </section>
 
             <!-- Column 2: 全球新闻 -->
             <section>
-                <h2 class="text-2xl font-bold mb-4 pb-2 border-b border-stone-300 font-serif">全球新闻</h2>
-                <div class="space-y-6">
-                    <!-- News 1 -->
-                    <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm">
-                        <h3 class="font-bold text-xl mb-2 text-stone-900">Court sides with parents in dispute over California policies on transgender students</h3>
-                        <p class="text-sm text-gray-500 mb-2">Date: 2026-03-04</p>
-                        <p class="mb-4 text-stone-700">2026年3月4日，美国最高法院以6比3的投票结果，在加州跨性别学生政策争议中支持了家长权利。这一裁决立即在全美范围内引发激烈的文化战争，触及了LGBTQ+权利、家长权利、学校自主权之间的根本冲突。</p>
-                        
-                        <details class="group mb-4">
-                            <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
-                                📖 Read Deep Analysis
-                            </summary>
-                            <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                                2026年3月4日，美国最高法院以6比3的投票结果，在加州跨性别学生政策争议中支持了家长权利。这一裁决立即在全美范围内引发激烈的文化战争，触及了LGBTQ+权利、家长权利、学校自主权之间的根本冲突。
-
-案件的核心是加州教育部门的一项政策，该政策允许学校在未通知家长的情况下，支持跨性别学生使用与其性别认同相符的姓名、代词和设施。一群家长提起诉讼，认为这项政策侵犯了他们的宪法权利，包括抚养子女的权利和知情权。
-
-最高法院的裁决部分恢复了第九巡回上诉法院先前批准的禁令。大法官布雷特·卡瓦诺撰写了多数意见，认为"当州政策可能影响父母对子女教育的基本决定时，必须给予父母适当的通知和参与机会"。多数派包括首席大法官约翰·罗伯茨以及大法官克拉伦斯·托马斯、塞缪尔·阿利托、尼尔·戈萨奇和艾米·科尼·巴雷特。
-
-反对意见由大法官索尼娅·索托马约尔撰写，得到大法官埃琳娜·卡根和凯坦吉·布朗·杰克逊的支持。索托马约尔大法官警告说，这一裁决"将危及跨性别学生的安全和福祉"，并指出"对于许多跨性别青少年来说，家庭环境可能不安全，强制出柜可能导致家庭暴力或无家可归"。
-
-这一裁决立即在政治光谱两端引发强烈反应。保守派团体欢呼这是"家长权利的胜利"。家庭研究委员会主席托尼·珀金斯称这是"保护儿童免受激进意识形态侵害的重要一步"。自由派组织则谴责这一决定。人权运动主席凯利·罗宾逊表示："最高法院今天将政治置于儿童安全之上，这将使脆弱的跨性别青少年面临真实的风险。"
-
-从法律角度看，这一裁决涉及多个宪法原则的冲突。多数派主要依据第十四修正案的正当程序条款，强调父母在抚养子女方面的基本权利。反对派则强调平等保护条款和州在保护弱势学生方面的利益。
-
-更深层的争议在于联邦制与州权的平衡。加州作为自由派堡垒，在教育政策上享有广泛自主权。最高法院的干预被视为联邦司法机构对州权的侵蚀。加州总检察长罗布·邦塔发表声明，谴责裁决"破坏了加州保护所有学生的努力"。
-
-社会影响方面，这一裁决可能产生连锁反应。至少15个共和党控制的州正在考虑或已经通过类似"家长权利法案"的立法。这些法律通常要求学校在涉及性别认同问题时通知家长。最高法院的裁决可能为这些法律提供宪法依据。
-
-教育工作者面临两难困境。全国教育协会主席贝基·普林格尔表示："教师现在被困在保护学生隐私和遵守法律要求之间。对于可能面临家庭拒绝或暴力的跨性别学生，这一裁决使我们的工作更加困难。"
-
-医学和心理健康专家的意见也出现分歧。美国儿科学会发表声明，强调"肯定性护理"对跨性别青少年心理健康的重要性。但一些批评者引用研究，质疑青春期阻断剂和激素治疗的长期影响。
-
-从国际比较看，这一争议反映了全球范围内关于跨性别权利的极化。在欧洲，一些国家如英国和瑞典正在重新评估对未成年人的性别肯定医疗。在美国，这一议题已成为文化战争的核心战场。
-
-经济影响也不容忽视。加州一些学区可能面临法律挑战和额外行政负担。企业界也密切关注，许多公司在多元化政策中包括对跨性别员工的支持，现在需要重新评估与保守州的业务关系。
-
-未来走向方面，这一裁决可能只是更广泛法律斗争的开始。自由派组织已经在准备挑战其他州的家长通知法律。同时，保守派团体计划利用这一先例，推动更多限制学校在性别和性取向教育方面自主权的立法。
-
-从历史视角看，这一争议让人联想到20世纪关于学校祈祷和性教育的类似斗争。每次社会价值观发生重大转变时，教育系统都成为文化战争的战场。跨性别权利可能是我们这个时代最具分裂性的社会议题。
-
-长期来看，这一裁决可能影响2026年中期选举和2028年总统大选。民主党可能将保护LGBTQ+权利作为核心议题，而共和党则可能强调家长权利和传统价值观。最高法院的组成可能成为未来选举的关键因素。
-                            </div>
-                        </details>
-                        
-                        <div class="mt-4 text-xs text-gray-400">
-                            <span class="font-semibold">Sources:</span>
-                            <a href="https://www.scotusblog.com/2026/03/divided-court-sides-with-parents-in-dispute-over-california-policies-on-transgender-students/" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
-                            <a href="https://www.latimes.com/california/story/2026-03-03/what-supreme-court-ruling-on-gender-identity-means-for-parents" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
-                            <a href="https://molawyersmedia.com/2026/03/04/supreme-court-blocks-california-transgender-student-privacy/"
+                <h2 class="text-2xl font-bold mb-6 pb-2 border-b border-stone-300">全球新闻</h2>
+                <!-- News Item 1 -->
+                <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm mb-4">
+                    <h3 class="font-bold text-xl mb-2 text-stone-900">Controversial Hepatitis B Vaccine Study in Africa Continues Despite Ethical Concerns</h3>
+                    <p class="text-sm text-gray-500 mb-2">Date: 2026-03-05</p>
+                    <p class="mb-4 text-stone-700">The scientific community is embroiled in a heated controversy over a U.S.-funded hepatitis B vaccine study in Africa that continues despite mounting ethical concerns. Published this week in Scientific American, the investigation reveals that the CDC will proceed with a controversial birth-dose hepatitis B vaccine safety trial in Guinea-Bissau, Africa, despite objections from medical ethicists and public health experts who question the study's design and ethical implications.</p>
+                    
+                    <details class="group mb-4">
+                        <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                            📖 Read Deep Analysis
+                        </summary>
+                        <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                            <p>The study, officially titled "Birth-Dose Hepatitis B Vaccine Safety and Efficacy in Low-Resource Settings," involves administering hepatitis B vaccines to newborns in Guinea-Bissau. The controversy centers on the study's methodology and ethical framework. Proponents argue that the research is essential for understanding vaccine safety in African populations and could save thousands of lives by preventing mother-to-child transmission of hepatitis B. They point to data showing that hepatitis B causes approximately 820,000 deaths annually worldwide, with the highest burden in sub-Saharan Africa and East Asia.</p>
+                            <p>However, critics raise several fundamental concerns. First, they question whether the study design adequately protects vulnerable populations. The trial involves comparing different vaccine schedules and formulations in a resource-limited setting where healthcare infrastructure is already strained. Critics argue that the study may be exploiting vulnerable populations who lack access to comprehensive healthcare and may not fully understand the risks involved.</p>
+                            <p>Second, there are concerns about informed consent. In communities with low literacy rates and limited understanding of medical research, obtaining truly informed consent becomes problematic. Some ethicists argue that the consent process may not adequately convey the potential risks and benefits, particularly when dealing with complex immunological concepts.</p>
+                            <p>Third, the study's timing has raised eyebrows. The controversy comes amid broader debates about vaccine research ethics in low-income countries. Some experts question whether similar studies would be approved in high-income countries with stricter regulatory frameworks. This raises questions about ethical double standards in global health research.</p>
+                            <p>The methodological debate is equally intense. The study employs a randomized controlled trial design with three arms: standard birth-dose vaccination, delayed vaccination, and alternative vaccine formulation. Critics argue that the delayed vaccination arm raises ethical concerns, as it potentially denies timely protection to vulnerable infants. Proponents counter that this design is necessary to establish the optimal timing for vaccination in resource-limited settings.</p>
+                            <p>Statistical concerns have also emerged. Some biostatisticians question the study's power calculations and sample size determinations. With an estimated enrollment of 5,000 newborns, critics argue that the study may be underpowered to detect rare adverse events, potentially missing important safety signals.</p>
+                            <p>The political dimension adds another layer of complexity. The study is funded by U.S. government agencies, raising questions about neocolonialism in global health research. Critics argue that Western institutions continue to conduct research in African countries without adequate local ownership or capacity building. Proponents counter that international collaboration is essential for addressing global health challenges and that the study includes significant local researcher involvement.</p>
+                            <p>Practical implications are substantial. If the study finds that delayed vaccination is safe and effective, it could revolutionize hepatitis B prevention strategies in resource-limited settings. However, if safety concerns emerge, it could undermine confidence in vaccination programs across Africa. The controversy has already affected public trust, with some communities expressing reluctance to participate in vaccination programs.</p>
+                            <p>The scientific community is divided. Some researchers argue that the study represents important progress in global health equity, while others see it as a step backward in research ethics. The debate touches on fundamental questions about who benefits from medical research, who bears the risks, and how power dynamics shape global health priorities.</p>
+                            <p>As the study continues, monitoring mechanisms will be crucial. Independent ethical oversight committees have been established, but their effectiveness remains to be seen. The controversy highlights the ongoing tension between scientific progress and ethical responsibility in global health research. It serves as a case study in the complex interplay of science, ethics, and politics in the 21st century.</p>
+                        </div>
+                    </details>
+                    
+                    <div class="mt-4 text-xs text-gray-400">
+                        <span class="font-semibold">Sources:</span>
+                        <a href="https://www.scientificamerican.com/article/a-controversial-u-s-study-of-hepatitis-b-vaccines-will-continue-in-africa/" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[1]</a>
+                        <a href="https://www.theguardian.com/us-news/2026/jan/15/hepatitis-b-vaccines-study-africa-cancel" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[2]</a>
+                        <a href="https://www.washingtonpost.com/ripple/2026/02/25/hhs-controversial-vaccine-research/" class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs mr-2 hover:bg-blue-200">[3]</a>
+                    </div>
+                </div>
+                <!-- News Item 2 -->
+                <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm mb-4">
+                    <h3 class="font-bold text-xl mb-2 text-stone-900">Glyphosate Cancer Link Study Retracted Amid Scientific Controversy</h3>
+                    <p class="text-sm text-gray-500 mb-2">Date: 2026-03-04</p>
+                    <p class="mb-4 text-stone-700">A major study on glyphosate, the active ingredient in Roundup weedkiller, has been retracted this week, reigniting one of the most contentious debates in environmental health science. Published in Nature and subsequently retracted, the study claimed that glyphosate posed no significant cancer risk to humans, directly contradicting previous research and regulatory assessments.</p>
+                    
+                    <details class="group mb-4">
+                        <summary class="cursor-pointer text-blue-600 font-semibold hover:underline list-none">
+                            📖 Read Deep Analysis
+                        </summary>
+                        <div class="mt-4 prose prose-sm max-w-none text-gray-800 bg-gray-50 p-4 rounded border-l-4 border-blue-500">
+                            <p>The study, conducted by an international team of researchers, employed a comprehensive meta-analysis of epidemiological data from agricultural workers across North America and Europe. The researchers analyzed data from over 100,000 participants exposed to glyphosate through occupational use, tracking cancer incidence over 20 years. Their conclusion: no statistically significant association between glyphosate exposure and non-Hodgkin lymphoma or other cancers.</p>
+                            <p>The retraction came after intense scrutiny from the scientific community. Critics identified several methodological flaws that undermined the study's conclusions. First, exposure assessment methods were questioned. The study relied on self-reported exposure data, which can be subject to recall bias and misclassification. Agricultural workers may not accurately remember or report their exposure levels over decades, potentially diluting any true association.</p>
+                            <p>Second, the study's statistical power was challenged. While the sample size appeared large, critics argued that the exposure gradient was insufficient to detect subtle effects. Many participants had low-level exposure, making it difficult to distinguish between exposed and unexposed groups. This could mask true risks, particularly for rare cancers like non-Hodgkin lymphoma.</p>
+                            <p>Third, confounding factors were inadequately addressed. Agricultural workers are exposed to multiple pesticides and environmental contaminants, making it difficult to isolate the effects of glyphosate specifically. The study attempted to control for these factors, but critics argued that residual
