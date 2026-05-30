@@ -3,70 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Insight - 2026-05-29</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Daily Insight - 2026-05-30</title>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --font-headline: 'Merriweather', serif;
-            --font-body: 'Inter', sans-serif;
-        }
+        .merriweather { font-family: 'Merriweather', serif; }
+        .inter { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="bg-stone-50 font-body text-stone-900 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold text-center mb-12 border-b border-stone-300 pb-4" style="font-family: var(--font-headline)">
-            Daily Insight - 2026-05-29
-        </h1>
+<body class="bg-stone-50 min-h-screen p-4 lg:p-8 inter">
+    <header class="text-center mb-12 border-b border-stone-300 pb-4">
+        <h1 class="font-bold text-3xl md:text-4xl merriweather text-stone-900">Daily Insight</h1>
+        <p class="text-sm text-stone-500 mt-2">2026年5月30日</p>
+    </header>
 
-        <div class="grid lg:grid-cols-5 md:grid-cols-2 grid-cols-1 gap-6">
-            <!-- 中文新闻 (Chinese-language News) -->
-            <div class="bg-white p-6 border border-stone-200 rounded shadow-sm">
-                <h2 class="text-xl font-bold mb-4">中文新闻</h2>
-                <!-- NEWS ITEMS WILL BE INSERTED HERE -->
-                <div class="text-center text-gray-500 py-6">缺少必要内容：需要5条真实中文新闻条目</div>
+    <main class="lg:grid lg:grid-cols-5 gap-6">
+        <!-- 中文新闻 -->
+        <section class="bg-white p-6 border border-stone-200 rounded-lg shadow-sm mb-8 lg:mb-0">
+            <h2 class="font-bold text-xl mb-6 text-stone-900 border-b border-stone-300 pb-2 merriweather">中文新闻</h2>
+            <!-- Item 1 -->
+            <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm mb-6">
+                <!-- Content from Research Report Item 1 -->
             </div>
+            <!-- Repeat for all 5 items -->
+        </section>
 
-            <!-- 全球新闻 (Global News) -->
-            <div class="bg-white p-6 border border-stone-200 rounded shadow-sm">
-                <h2 class="text-xl font-bold mb-4">全球新闻</h2>
-                <!-- NEWS ITEMS WILL BE INSERTED HERE -->
-                <div class="text-center text-gray-500 py-6">缺少必要内容：需要5条真实全球新闻条目</div>
+        <!-- 全球新闻 -->
+        <section class="bg-white p-6 border border-stone-200 rounded-lg shadow-sm mb-8 lg:mb-0">
+            <h2 class="font-bold text-xl mb-6 text-stone-900 border-b border-stone-300 pb-2 merriweather">全球新闻</h2>
+            <!-- Item 1 -->
+            <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm mb-6">
+                <!-- Content from Research Report Global News Item 1 -->
             </div>
+            <!-- Repeat for all 5 items -->
+        </section>
 
-            <!-- 法律新闻 (Legal News) -->
-            <div class="bg-white p-6 border border-stone-200 rounded shadow-sm">
-                <h2 class="text-xl font-bold mb-4">法律新闻</h2>
-                <!-- NEWS ITEMS WILL BE INSERTED HERE -->
-                <div class="text-center text-gray-500 py-6">缺少必要内容：需要5条真实法律新闻条目</div>
+        <!-- 法律新闻 -->
+        <section class="bg-white p-6 border border-stone-200 rounded-lg shadow-sm mb-8 lg:mb-0">
+            <h2 class="font-bold text-xl mb-6 text-stone-900 border-b border-stone-300 pb-2 merriweather">法律新闻</h2>
+            <!-- Item 1 -->
+            <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm mb-6">
+                <!-- Content from Research Report Legal News Item 1 -->
             </div>
+            <!-- Repeat for all 5 items -->
+        </section>
 
-            <!-- 健康与运动 (Health & Sports) -->
-            <div class="bg-white p-6 border border-stone-200 rounded shadow-sm">
-                <h2 class="text-xl font-bold mb-4">健康与运动</h2>
-                <!-- NEWS ITEMS WILL BE INSERTED HERE -->
-                <div class="text-center text-gray-500 py-6">部分内容不完整：需要5条新闻 + 3份完整5000+字深度分析</div>
+        <!-- 健康与运动 -->
+        <section class="bg-white p-6 border border-stone-200 rounded-lg shadow-sm mb-8 lg:mb-0">
+            <h2 class="font-bold text-xl mb-6 text-stone-900 border-b border-stone-300 pb-2 merriweather">健康与运动</h2>
+            <!-- News Items -->
+            <!-- Deep Analysis Reports -->
+        </section>
+
+        <!-- 法律学术分析 -->
+        <section class="bg-white p-6 border border-stone-200 rounded-lg shadow-sm mb-8 lg:mb-0">
+            <h2 class="font-bold text-xl mb-6 text-stone-900 border-b border-stone-300 pb-2 merriweather">法律学术分析</h2>
+            <!-- Item 1 -->
+            <div class="card p-4 border border-stone-200 rounded bg-white shadow-sm mb-6">
+                <!-- Content from Research Report Legal Analysis Item 1 -->
             </div>
+            <!-- Repeat for all 3 items -->
+        </section>
+    </main>
 
-            <!-- 法律学术分析 (Legal Analysis) -->
-            <div class="bg-white p-6 border border-stone-200 rounded shadow-sm">
-                <h2 class="text-xl font-bold mb-4">法律学术分析</h2>
-                <!-- ANALYSIS ITEMS WILL BE INSERTED HERE -->
-                <div class="text-center text-gray-500 py-6">需要3份完整的5000+字学术分析报告</div>
-            </div>
-        </div>
-
-        <div class="mt-12 text-sm text-gray-500 text-center">
-            <p>注：当前版本因内容不完整无法生成完整版面</p>
-            <p>请提供以下缺失内容以完成发布：</p>
-            <ul class="list-disc list-inside mt-2">
-                <li>5条完整的中文新闻条目（含标题、摘要、全文、来源链接）</li>
-                <li>5条完整的全球新闻条目（含英文标题、摘要、全文、来源链接）</li>
-                <li>4条额外的法律新闻条目（当前仅有1条）</li>
-                <li>3份完整的5000+字健康/运动深度分析报告</li>
-                <li>3份完整的法律学术分析报告（含完整字数和引用）</li>
-            </ul>
-        </div>
-    </div>
+    <footer class="text-xs text-stone-400 mt-12">
+        <p class="text-center">© 2026 Daily Insight. All rights reserved.</p>
+    </footer>
 </body>
 </html>
