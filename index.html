@@ -1,24 +1,42 @@
-ERROR: CANNOT GENERATE COMPLETE HTML REPORT AS REQUIRED
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Insight - 2026-07-01</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .merriweather { font-family: 'Merriweather', serif; }
+        .inter { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-stone-50 min-h-screen p-4 lg:p-8">
+    <header class="text-center mb-12 border-b border-stone-300 pb-4">
+        <h1 class="font-bold text-3xl md:text-4xl text-stone-900 merriweather">Daily Insight - 2026-07-01</h1>
+    </header>
 
-REASON: INCOMPLETE DATA IN SOURCE MATERIAL
-
-SPECIFIC DEFICIENCIES:
-1. 中文新闻 (Chinese-language News): Missing 3/5 required news items
-2. 全球新闻 (Global News): Missing 2/5 required news items
-3. 法律新闻 (Legal News): Complete section missing (0/5 items)
-4. 健康与运动 (Health & Sports): 5 news items mentioned but no content provided
-5. 法律学术分析 (Legal Analysis): Missing 2/3 required deep analyses
-
-REQUIRED ACTION: Please provide complete source material containing:
-- All 5 Chinese-language news items with full content
-- All 5 Global news items with English headlines and content
-- Complete Legal News section with 5 items
-- Full content for all Health & Sports news items
-- Missing 2 Legal Analysis reports (5000+ words each)
-
-Without complete source data, I cannot fulfill the requirement to:
-1. Display all 5 items per section
-2. Use actual content (not placeholders)
-3. Maintain data integrity and academic rigor
-
-Please provide the complete research report before requesting HTML generation.
+    <main class="lg:grid lg:grid-cols-5 gap-6">
+        <!-- Error Message Container -->
+        <div class="bg-red-50 border-red-500 border p-6 rounded-lg lg:col-span-5">
+            <h2 class="font-bold text-xl text-red-700 mb-4">错误: 源内容不足</h2>
+            <p class="text-red-600 mb-6">根据指定约束，无法生成完整报告，因为研究报告存在以下关键问题：</p>
+            <ul class="list-disc list-inside text-red-700 space-y-2">
+                <li>所有新闻摘要（如中文新闻第1项）实际为300-500字，远低于要求的1000+字</li>
+                <li>深度分析报告（如《运动与认知衰退》）结构为5000字但内容被截断</li>
+                <li>法律新闻第4-5项（《欧盟委员会诉特斯拉汽车》、《土耳其宪法法院案号2026/56》）缺少摘要和来源链接</li>
+                <li>全球新闻仅完整提供2项，后3项使用占位符文本（“（后续四项新闻内容因篇幅限制未全列）”）</li>
+                <li>所有来源链接为示例占位符（example.com），非有效链接</li>
+            </ul>
+            <p class="mt-6 text-red-600">请提供完整内容后重试:</p>
+            <ul class="list-disc list-inside text-red-700 space-y-2">
+                <li>所有新闻的完整1000+字摘要</li>
+                <li>完整的5000+字分析报告（无截断）</li>
+                <li>有效的来源链接</li>
+                <li>全球新闻所有5项的完整内容</li>
+                <li>法律新闻第4-5项的完整摘要和来源</li>
+            </ul>
+        </div>
+    </main>
+</body>
+</html>
